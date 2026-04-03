@@ -1,0 +1,1545 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Table.in 서비스 소개 — 화면 기획안</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: { primary: "#FF2D78", light: "#FFF0F5" },
+              youtube: { primary: "#FF0000", light: "#FFF5F5" },
+              text: { primary: "#1a1a1a", secondary: "#666" },
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap");
+      * {
+        font-family: "Noto Sans KR", sans-serif;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      .section-divider {
+        position: relative;
+      }
+      .section-divider::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
+      }
+      /* 탭 관련 스타일 제거됨 — 세로 나열 방식으로 변경 */
+
+      /* 기획안 표시용 */
+      .mockup-badge {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 9999;
+        background: #1a1a1a;
+        color: #fff;
+        text-align: center;
+        padding: 8px;
+        font-size: 13px;
+        font-weight: 500;
+      }
+      body {
+        padding-top: 36px;
+      }
+    </style>
+  </head>
+  <body class="bg-white text-text-primary">
+    <!-- 기획안 표시 배너 -->
+    <div class="mockup-badge">
+      Table.in 서비스 소개 페이지 — 화면 기획안 (유튜브 섹션 추가) | 2026.03.23
+    </div>
+
+    <!-- ================================================
+       HEADER (기존 유지)
+       ================================================ -->
+    <header class="sticky top-9 z-50 bg-white border-b border-gray-100">
+      <div
+        class="max-w-[1440px] mx-auto flex items-center justify-between h-16 px-8"
+      >
+        <div class="flex items-center gap-2">
+          <span class="text-2xl font-extrabold text-brand-primary"
+            >Table.in</span
+          >
+        </div>
+        <nav class="flex items-center gap-8">
+          <a
+            href="#hero"
+            class="text-sm font-medium text-text-primary hover:text-brand-primary"
+            >서비스 소개</a
+          >
+          <a
+            href="#pricing"
+            class="text-sm font-medium text-gray-500 hover:text-brand-primary"
+            >요금제</a
+          >
+          <a
+            href="#"
+            class="text-sm font-medium text-white bg-brand-primary px-4 py-2 rounded-lg"
+            >시작하기</a
+          >
+          <a
+            href="#"
+            class="text-sm font-medium text-gray-500 hover:text-text-primary"
+            >로그인</a
+          >
+        </nav>
+      </div>
+    </header>
+
+    <!-- ================================================
+       SECTION 1: HERO (기존 유지)
+       ================================================ -->
+    <section id="hero" class="pt-24 pb-20 px-8">
+      <div class="max-w-[1440px] mx-auto text-center">
+        <h1 class="text-5xl font-bold leading-tight mb-6">
+          데이터 기반 크리에이터 마케팅의<br />새로운 표준
+        </h1>
+        <p class="text-xl text-gray-600 mb-2">
+          캠페인 기획부터 크리에이터 섭외·추적·성과 분석까지
+        </p>
+        <p class="text-xl text-gray-600 mb-2">테이블인에서 끝냅니다.</p>
+        <p class="text-lg text-gray-400 mb-10">
+          AI 기반 자동화로 더 빠르고 더 정확하게.
+        </p>
+        <button
+          class="bg-brand-primary text-white px-8 py-4 rounded-xl text-lg font-semibold hover:opacity-90 transition"
+        >
+          무료로 체험하기
+        </button>
+        <div class="mt-16 relative max-w-[900px] mx-auto">
+          <div
+            class="bg-gray-100 rounded-2xl h-[400px] flex items-center justify-center text-gray-400"
+          >
+            [기존 히어로 대시보드 이미지]
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================
+       SECTION 1.5: 핵심 메시지 3개 (PPTX 메시지 플로우 반영)
+       ================================================ -->
+    <section class="py-24 px-8 bg-[#FAFAFA]">
+      <div class="max-w-[1200px] mx-auto">
+        <!-- 메시지 도입부 -->
+        <div class="text-center mb-20">
+          <p
+            class="text-brand-primary text-base font-semibold mb-3 tracking-wider"
+          >
+            Why Table.in
+          </p>
+          <h2 class="text-4xl font-bold leading-snug mb-4">
+            문제는 '운영'이 아니라<br /><span class="text-brand-primary"
+              >'성과'</span
+            >입니다
+          </h2>
+          <p class="text-lg text-gray-500 max-w-[640px] mx-auto">
+            크리에이터는 많습니다. 하지만 우리 타겟과 맞고, 광고 성과에 강하고,
+            실제 성과로 이어질 사람을 가려내는 일은 여전히 어렵습니다.
+          </p>
+        </div>
+
+        <!-- 3개 핵심 메시지 카드 -->
+        <div class="grid grid-cols-3 gap-8">
+          <!-- 메시지 01 -->
+          <div
+            class="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+          >
+            <div
+              class="w-14 h-14 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-6"
+            >
+              <svg
+                class="w-7 h-7 text-brand-primary"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                />
+              </svg>
+            </div>
+            <p class="text-sm text-brand-primary font-semibold mb-2">01</p>
+            <h3 class="text-xl font-bold mb-3 leading-snug">
+              데이터로 검증된<br />크리에이터 DB
+            </h3>
+            <p class="text-gray-500 text-[15px] leading-relaxed">
+              팔로워수가 아니라 광고 성과로 판단합니다. 유효 팔로워, 참여율,
+              오디언스, 광고 콘텐츠 성과까지 분석하여 '누가 광고에 강한
+              크리에이터인지' 데이터로 확인할 수 있습니다.
+            </p>
+          </div>
+
+          <!-- 메시지 02 -->
+          <div
+            class="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+          >
+            <div
+              class="w-14 h-14 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-6"
+            >
+              <svg
+                class="w-7 h-7 text-brand-primary"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                />
+              </svg>
+            </div>
+            <p class="text-sm text-brand-primary font-semibold mb-2">02</p>
+            <h3 class="text-xl font-bold mb-3 leading-snug">
+              26년 운영기반<br />실무적인 업무설계
+            </h3>
+            <p class="text-gray-500 text-[15px] leading-relaxed">
+              검색부터 검증, AI 콘텐츠 가이드 생성, 캠페인 실행과 업로드 추적,
+              활동 성과 요약까지. 별도 스프레드 시트 없이 테이블인 안에서 하나로
+              완성할 수 있습니다.
+            </p>
+          </div>
+
+          <!-- 메시지 03 -->
+          <div
+            class="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+          >
+            <div
+              class="w-14 h-14 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-6"
+            >
+              <svg
+                class="w-7 h-7 text-brand-primary"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                />
+              </svg>
+            </div>
+            <p class="text-sm text-brand-primary font-semibold mb-2">03</p>
+            <h3 class="text-xl font-bold mb-3 leading-snug">
+              시행착오는 줄이고<br />협업 데이터는 자산으로
+            </h3>
+            <p class="text-gray-500 text-[15px] leading-relaxed">
+              협업은 끝나는 게 아니라 쌓여야 가치 있습니다. 관리 이력, 캠페인
+              참여 기록, 성과 데이터가 축적되어 다음 캠페인의 의사결정 자산이
+              됩니다.
+            </p>
+          </div>
+        </div>
+
+        <!-- 하단 보조 수치 -->
+        <div class="mt-16 flex items-center justify-center gap-16">
+          <div class="text-center">
+            <p class="text-4xl font-extrabold text-brand-primary">70%</p>
+            <p class="text-sm text-gray-400 mt-1">리서치 시간 절감</p>
+          </div>
+          <div class="w-px h-12 bg-gray-200"></div>
+          <div class="text-center">
+            <p class="text-4xl font-extrabold text-brand-primary">30%</p>
+            <p class="text-sm text-gray-400 mt-1">캠페인 리드타임 단축</p>
+          </div>
+          <div class="w-px h-12 bg-gray-200"></div>
+          <div class="text-center">
+            <p class="text-4xl font-extrabold text-brand-primary">40%</p>
+            <p class="text-sm text-gray-400 mt-1">장기적 ROI 증가</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================
+       SECTION 2: 키워드 태그 (유튜브 키워드 추가)
+       ================================================ -->
+    <section class="py-20 px-8">
+      <div class="max-w-[1440px] mx-auto text-center">
+        <div class="flex flex-col items-center gap-3 mb-14">
+          <h2 class="text-4xl font-bold">키워드로 보는</h2>
+          <span class="text-3xl font-extrabold text-brand-primary"
+            >Table.in</span
+          >
+        </div>
+
+        <!-- 기존 키워드 -->
+        <div class="flex flex-wrap gap-3 justify-center mb-4">
+          <span
+            class="bg-white border border-gray-200 rounded-full px-5 py-2.5 text-base font-medium text-gray-700 shadow-sm"
+            >크리에이터 검색</span
+          >
+          <span
+            class="bg-white border border-gray-200 rounded-full px-5 py-2.5 text-base font-medium text-gray-700 shadow-sm"
+            >AI 크리에이터 추천</span
+          >
+          <span
+            class="bg-white border border-gray-200 rounded-full px-5 py-2.5 text-base font-medium text-gray-700 shadow-sm"
+            >크리에이터 AI 상세 분석</span
+          >
+        </div>
+        <div class="flex flex-wrap gap-3 justify-center mb-4">
+          <span
+            class="bg-white border border-gray-200 rounded-full px-5 py-2.5 text-base font-medium text-gray-700 shadow-sm"
+            >콘텐츠·캠페인 성과 AI 자동 분석</span
+          >
+          <span
+            class="bg-white border border-gray-200 rounded-full px-5 py-2.5 text-base font-medium text-gray-700 shadow-sm"
+            >크리에이터 CRM</span
+          >
+          <span
+            class="bg-white border border-gray-200 rounded-full px-5 py-2.5 text-base font-medium text-gray-700 shadow-sm"
+            >크리에이터 광고 콘텐츠 분석</span
+          >
+        </div>
+        <div class="flex flex-wrap gap-3 justify-center mb-4">
+          <span
+            class="bg-white border border-gray-200 rounded-full px-5 py-2.5 text-base font-medium text-gray-700 shadow-sm"
+            >크리에이터 캠페인 생성</span
+          >
+          <span
+            class="bg-white border border-gray-200 rounded-full px-5 py-2.5 text-base font-medium text-gray-700 shadow-sm"
+            >캠페인 콘텐츠 추적</span
+          >
+        </div>
+
+        <!-- 추가 키워드 (유튜브) — 빨간 포인트 -->
+        <div class="flex flex-wrap gap-3 justify-center mb-4 mt-6">
+          <span
+            class="bg-red-50 border border-red-200 rounded-full px-5 py-2.5 text-base font-medium text-red-700 shadow-sm"
+            >유튜브 채널 인사이트</span
+          >
+          <span
+            class="bg-red-50 border border-red-200 rounded-full px-5 py-2.5 text-base font-medium text-red-700 shadow-sm"
+            >PPL 자동 탐지·분석</span
+          >
+          <span
+            class="bg-red-50 border border-red-200 rounded-full px-5 py-2.5 text-base font-medium text-red-700 shadow-sm"
+            >브랜드 PPL 성과 분석</span
+          >
+        </div>
+        <div class="flex flex-wrap gap-3 justify-center">
+          <span
+            class="bg-red-50 border border-red-200 rounded-full px-5 py-2.5 text-base font-medium text-red-700 shadow-sm"
+            >경쟁사 벤치마킹</span
+          >
+          <span
+            class="bg-red-50 border border-red-200 rounded-full px-5 py-2.5 text-base font-medium text-red-700 shadow-sm"
+            >트렌드·급상승 영상</span
+          >
+          <span
+            class="bg-red-50 border border-red-200 rounded-full px-5 py-2.5 text-base font-medium text-red-700 shadow-sm"
+            >유튜브 채널 랭킹</span
+          >
+        </div>
+
+        <!-- 신규 표시 -->
+        <p class="mt-6 text-sm text-red-400">
+          * 빨간색 키워드 = 유튜브 관련 신규 추가
+        </p>
+      </div>
+    </section>
+
+    <!-- ================================================
+       SECTION 3: 인스타그램 핵심기능 (기존 + 플랫폼 헤더 추가)
+       ================================================ -->
+
+    <!-- 인스타그램 플랫폼 헤더 -->
+    <div class="max-w-[1440px] mx-auto px-8 mb-4" id="instagram-features">
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-11 h-11 rounded-xl flex items-center justify-center"
+            style="
+              background: linear-gradient(135deg, #f9ce34, #ee2a7b, #6228d7);
+            "
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
+              <path
+                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+              />
+            </svg>
+          </div>
+          <h2 class="text-[28px] font-bold">Instagram 인플루언서 마케팅</h2>
+        </div>
+        <div class="h-px flex-1 bg-gray-200"></div>
+        <p class="text-gray-400 text-sm">
+          인스타그램 크리에이터 검색부터 캠페인 관리까지
+        </p>
+      </div>
+    </div>
+
+    <!-- 인스타그램 핵심기능 — 세로 나열 (지그재그) -->
+    <section class="py-16 px-8" id="ig-section">
+      <div class="max-w-[1200px] mx-auto flex flex-col gap-28">
+        <!-- 핵심기능 01: 텍스트 좌 / 이미지 우 -->
+        <div class="flex items-center gap-16">
+          <div class="w-[45%] flex flex-col gap-6">
+            <span
+              class="inline-block bg-pink-50 text-brand-primary text-sm font-medium px-3 py-1.5 rounded-full w-fit"
+              >핵심기능 01</span
+            >
+            <h3 class="text-[28px] font-semibold leading-snug">
+              더 이상 SNS를 뒤지며 찾지 않아도 됩니다. Table.in에서 바로
+              발견하세요
+            </h3>
+            <p class="text-lg text-gray-600 leading-relaxed">
+              팔로워·카테고리·타겟연령대 등 핵심 정량 데이터로 수천 명의
+              인스타그램 크리에이터를 빠르게 필터링합니다. 검색이 어렵다면 AI
+              추천 검색으로 원하는 조건을 자유롭게 입력해 보세요. 매칭도와 함께
+              AI 코멘트까지 바로 추천 받을 수 있습니다.
+            </p>
+            <a
+              href="https://www.tablein.co.kr/influencer/instagram"
+              class="text-gray-700 text-lg font-medium hover:text-brand-primary"
+              >View more →</a
+            >
+          </div>
+          <div class="w-[55%]">
+            <div
+              class="bg-gray-50 rounded-2xl shadow-lg border border-gray-100 h-[400px] flex items-center justify-center text-gray-300 text-lg"
+            >
+              [기존 section_2_1.png — AI 추천 검색 이미지]
+            </div>
+          </div>
+        </div>
+
+        <!-- 핵심기능 02: 이미지 좌 / 텍스트 우 (반전) -->
+        <div class="flex items-center gap-16 flex-row-reverse">
+          <div class="w-[45%] flex flex-col gap-6">
+            <span
+              class="inline-block bg-pink-50 text-brand-primary text-sm font-medium px-3 py-1.5 rounded-full w-fit"
+              >핵심기능 02</span
+            >
+            <h3 class="text-[28px] font-semibold leading-snug">
+              감이 아니라 성과가능성으로 크리에이터를 구분할 수 있습니다.
+            </h3>
+            <p class="text-lg text-gray-600 leading-relaxed">
+              크리에이터 인스타그램 계정을 분석하고, 알기 쉽게 데이터 시각화
+              하여 보여줍니다. AI 분석 데이터를 통해 알고 싶은 부분을 명확하게
+              확인할 수 있어요.
+            </p>
+            <a
+              href="https://www.tablein.co.kr/influencer/instagram"
+              class="text-gray-700 text-lg font-medium hover:text-brand-primary"
+              >View more →</a
+            >
+          </div>
+          <div class="w-[55%]">
+            <div
+              class="bg-gray-50 rounded-2xl shadow-lg border border-gray-100 h-[400px] flex items-center justify-center text-gray-300 text-lg"
+            >
+              [기존 section_2_2.png — 성과 인사이트 이미지]
+            </div>
+          </div>
+        </div>
+
+        <!-- 핵심기능 03: 텍스트 좌 / 이미지 우 -->
+        <div class="flex items-center gap-16">
+          <div class="w-[45%] flex flex-col gap-6">
+            <span
+              class="inline-block bg-pink-50 text-brand-primary text-sm font-medium px-3 py-1.5 rounded-full w-fit"
+              >핵심기능 03</span
+            >
+            <h3 class="text-[28px] font-semibold leading-snug">
+              콘텐츠 업로드 확인을 위해 크리에이터 프로필을 들락날락 하지 않아도
+              됩니다.
+            </h3>
+            <p class="text-lg text-gray-600 leading-relaxed">
+              크리에이터 인스타그램 콘텐츠 업로드 모니터링을 자동화하여, 콘텐츠
+              등록 현황을 테이블인 활동관리에서 바로 파악할 수 있습니다. AI가
+              업로드된 콘텐츠를 캠페인 목적과 콘텐츠 가이드에 맞게 분석 피드백을
+              제공합니다.
+            </p>
+            <a
+              href="https://www.tablein.co.kr/influencer/instagram"
+              class="text-gray-700 text-lg font-medium hover:text-brand-primary"
+              >View more →</a
+            >
+          </div>
+          <div class="w-[55%]">
+            <div
+              class="bg-gray-50 rounded-2xl shadow-lg border border-gray-100 h-[400px] flex items-center justify-center text-gray-300 text-lg"
+            >
+              [기존 section_2_3.png — 활동관리 이미지]
+            </div>
+          </div>
+        </div>
+
+        <!-- 핵심기능 04: 이미지 좌 / 텍스트 우 (반전) -->
+        <div class="flex items-center gap-16 flex-row-reverse">
+          <div class="w-[45%] flex flex-col gap-6">
+            <span
+              class="inline-block bg-pink-50 text-brand-primary text-sm font-medium px-3 py-1.5 rounded-full w-fit"
+              >핵심기능 04</span
+            >
+            <h3 class="text-[28px] font-semibold leading-snug">
+              캠페인을 함께한 크리에이터, 체계적으로 관리할 수 있습니다.
+            </h3>
+            <p class="text-lg text-gray-600 leading-relaxed">
+              캠페인을 함께 진행한 크리에이터를 즐겨찾기, 그룹 관리, 캠페인
+              히스토리 자동 기록 뿐 아니라 인플루언서에 대한 담당자 메모까지
+              확인하여 관리할 수 있습니다.
+            </p>
+            <a
+              href="https://www.tablein.co.kr/campaign"
+              class="text-gray-700 text-lg font-medium hover:text-brand-primary"
+              >View more →</a
+            >
+          </div>
+          <div class="w-[55%]">
+            <div
+              class="bg-gray-50 rounded-2xl shadow-lg border border-gray-100 h-[400px] flex items-center justify-center text-gray-300 text-lg"
+            >
+              [기존 section_2_4.png — 캠페인 이미지]
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================
+       SECTION 4: 유튜브 핵심기능 (신규)
+       ================================================ -->
+
+    <!-- 유튜브 플랫폼 헤더 -->
+    <div class="max-w-[1440px] mx-auto px-8 mt-20 mb-4" id="youtube-features">
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-11 h-11 rounded-xl bg-[#FF0000] flex items-center justify-center"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
+              <path
+                d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"
+              />
+            </svg>
+          </div>
+          <h2 class="text-[28px] font-bold">Youtube 크리에이터 마케팅</h2>
+          <span
+            class="ml-2 bg-red-100 text-red-600 text-xs font-bold px-2 py-0.5 rounded"
+            >NEW</span
+          >
+        </div>
+        <div class="h-px flex-1 bg-gray-200"></div>
+        <p class="text-gray-400 text-sm">
+          수 천개의 크리에이터, 10,300개 이상의 브랜드 PPL 데이터를 한 눈에
+        </p>
+      </div>
+    </div>
+
+    <!-- 유튜브 핵심기능 — 세로 나열 (지그재그) -->
+    <section class="py-16 px-8" id="yt-section">
+      <div class="max-w-[1200px] mx-auto flex flex-col gap-28">
+        <!-- 유튜브 01: 텍스트 좌 / 이미지 우 -->
+        <div class="flex items-center gap-16">
+          <div class="w-[45%] flex flex-col gap-6">
+            <span
+              class="inline-block bg-red-50 text-[#FF0000] text-sm font-medium px-3 py-1.5 rounded-full w-fit"
+              >핵심기능 01</span
+            >
+            <h3 class="text-[28px] font-semibold leading-snug">
+              유튜브에 있는 수많은 크리에이터를 데이터로 비교하고 발견하세요.
+            </h3>
+            <p class="text-lg text-gray-600 leading-relaxed">
+              구독자수, 평균 조회수, 참여율, 오디언스 성별·연령 분포까지.
+              크리에이터의 진짜 영향력을 수치로 확인할 수 있습니다.
+              카테고리·키워드·구독자수 등 다양한 필터 검색을 통해 원하는
+              크리에이터 채널을 빠르게 찾아보세요.
+            </p>
+            <a
+              href="https://www.tablein.co.kr/influencer/youtube/channels"
+              class="text-gray-700 text-lg font-medium hover:text-[#FF0000]"
+              >View more →</a
+            >
+          </div>
+          <div class="w-[55%]">
+            <img
+              src="screenshots/yt-channels.png"
+              alt="채널 인사이트 - 1,440명 크리에이터 검색 및 필터링"
+              class="rounded-2xl shadow-lg border border-gray-100 w-full object-cover"
+            />
+          </div>
+        </div>
+
+        <!-- 유튜브 02: 이미지 좌 / 텍스트 우 (반전) -->
+        <div class="flex items-center gap-16 flex-row-reverse">
+          <div class="w-[45%] flex flex-col gap-6">
+            <span
+              class="inline-block bg-red-50 text-[#FF0000] text-sm font-medium px-3 py-1.5 rounded-full w-fit"
+              >핵심기능 02</span
+            >
+            <h3 class="text-[28px] font-semibold leading-snug">
+              경쟁 브랜드는 어떤 크리에이터와 협업하고 있을까요?
+            </h3>
+            <p class="text-lg text-gray-600 leading-relaxed">
+              10,300개 이상의 브랜드 PPL 데이터를 보유하고 있어 조회수, 비용,
+              반응까지 경쟁사 대비 성과를 한눈에 확인하고 상대적으로 비교할 수
+              있습니다.
+            </p>
+            <a
+              href="https://www.tablein.co.kr/influencer/youtube/brands"
+              class="text-gray-700 text-lg font-medium hover:text-[#FF0000]"
+              >View more →</a
+            >
+          </div>
+          <div class="w-[55%]">
+            <img
+              src="screenshots/yt-brands.png"
+              alt="브랜드 목록 - 10,375개 브랜드 PPL 성과 데이터"
+              class="rounded-2xl shadow-lg border border-gray-100 w-full object-cover"
+            />
+          </div>
+        </div>
+
+        <!-- 유튜브 03: 텍스트 좌 / 이미지 우 -->
+        <div class="flex items-center gap-16">
+          <div class="w-[45%] flex flex-col gap-6">
+            <span
+              class="inline-block bg-red-50 text-[#FF0000] text-sm font-medium px-3 py-1.5 rounded-full w-fit"
+              >핵심기능 03</span
+            >
+            <h3 class="text-[28px] font-semibold leading-snug">
+              지금 유튜브에서 뜨고 있는 콘텐츠 AI가 알려드립니다.
+            </h3>
+            <p class="text-lg text-gray-600 leading-relaxed">
+              실시간 트렌드 유튜브 영상, 실시간 급상승 크리에이터, PPL
+              크리에이터 랭킹, AI 트렌드 인기 키워드 까지. 시장의 흐름을 먼저
+              읽고 캠페인 전략에 반영하세요.
+            </p>
+            <a
+              href="https://www.tablein.co.kr/influencer/youtube/trending"
+              class="text-gray-700 text-lg font-medium hover:text-[#FF0000]"
+              >View more →</a
+            >
+          </div>
+          <div class="w-[55%]">
+            <img
+              src="screenshots/yt-trending.png"
+              alt="트렌드 - 실시간 급상승 영상"
+              class="rounded-2xl shadow-lg border border-gray-100 w-full object-cover"
+            />
+          </div>
+        </div>
+
+        <!-- 유튜브 04: 이미지 좌 / 텍스트 우 (반전) -->
+        <div class="flex items-center gap-16 flex-row-reverse">
+          <div class="w-[45%] flex flex-col gap-6">
+            <span
+              class="inline-block bg-red-50 text-[#FF0000] text-sm font-medium px-3 py-1.5 rounded-full w-fit"
+              >핵심기능 04</span
+            >
+            <h3 class="text-[28px] font-semibold leading-snug">
+              키워드 하나만 입력하세요. 원하는 영상과 채널을 즉시 분석합니다.
+            </h3>
+            <p class="text-lg text-gray-600 leading-relaxed">
+              키워드 하나만 입력하면 관련 유튜브 콘텐츠를 탐색하고 조회수,
+              좋아요, 댓글과 광고 성과를 확인하고 조회수·좋아요·광고 여부로
+              필터링 할 수 있습니다. 채널 URL을 입력하면 DB에 없는 채널도 바로
+              분석하여 실시간 분석 리포트로 확인할 수 있어요.
+            </p>
+            <a
+              href="https://www.tablein.co.kr/influencer/youtube/search/videos"
+              class="text-gray-700 text-lg font-medium hover:text-[#FF0000]"
+              >View more →</a
+            >
+          </div>
+          <div class="w-[55%]">
+            <img
+              src="screenshots/yt-search.png"
+              alt="콘텐츠 탐색 - 영상 검색"
+              class="rounded-2xl shadow-lg border border-gray-100 w-full object-cover"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================
+       SECTION 5: 구독 플랜 (탭 구조: 구독 상품 / 포인트 충전)
+       ================================================ -->
+    <section class="py-20 px-8" id="pricing">
+      <div class="max-w-[1440px] mx-auto text-center">
+        <h2 class="text-4xl font-bold mb-8">업무에 맞게 선택하는 구독 플랜</h2>
+
+        <!-- 탭 버튼 -->
+        <div class="flex justify-center gap-2 mb-10">
+          <button
+            onclick="switchPricingTab('subscription')"
+            id="tab-subscription"
+            class="px-6 py-2.5 rounded-full text-sm font-semibold bg-brand-primary text-white transition"
+          >
+            구독 상품
+          </button>
+          <button
+            onclick="switchPricingTab('points')"
+            id="tab-points"
+            class="px-6 py-2.5 rounded-full text-sm font-semibold bg-gray-100 text-gray-500 hover:bg-gray-200 transition"
+          >
+            포인트 충전
+          </button>
+        </div>
+
+        <!-- 탭 1: 구독 상품 -->
+        <div id="panel-subscription">
+          <p class="text-gray-500 text-sm mb-8">
+            멤버십 구독상품으로 테이블인에서 매달 효율적인 마케팅 캠페인을
+            진행할 수 있습니다.
+          </p>
+          <div class="grid grid-cols-3 gap-8">
+            <!-- Starter -->
+            <div
+              class="bg-white border border-gray-200 rounded-2xl p-8 text-left"
+            >
+              <h3 class="text-xl font-bold mb-1">테이블인 Starter</h3>
+              <p class="text-2xl font-bold text-brand-primary mb-1">
+                39,000원
+                <span class="text-sm font-normal text-gray-400">/1개월</span>
+              </p>
+              <p class="text-xs text-gray-400 mb-2">부가세 별도</p>
+              <p class="text-sm text-gray-500 mb-6">
+                적은 예산으로 인플루언서 마케팅을 직접 운영해야 하는
+                소상공인/중소 브랜드 실무자
+              </p>
+
+              <!-- 인스타그램 -->
+              <div class="mb-4">
+                <p
+                  class="text-xs font-bold text-brand-primary uppercase tracking-wider mb-2 flex items-center gap-1.5"
+                >
+                  <span
+                    class="w-1.5 h-1.5 rounded-full bg-brand-primary inline-block"
+                  ></span
+                  >인스타그램
+                </p>
+                <ul
+                  class="space-y-1.5 text-sm text-gray-600 pl-3 border-l-2 border-pink-100"
+                >
+                  <li>인스타그램 크리에이터 무제한 검색</li>
+                  <li>
+                    팔로워, 카테고리, 지역, 릴스 좋아요 수 등 정량 기준 검색
+                  </li>
+                  <li>AI 추천 검색 (포인트 구입 가능)</li>
+                  <li>크리에이터 인사이트 상세분석 데이터 열람</li>
+                  <li>크리에이터 광고 분석 조회 월 10건</li>
+                  <li>크리에이터 즐겨찾기 최대 50명</li>
+                  <li>최대 5개 그룹 생성 및 저장</li>
+                  <li>캠페인 생성 월 3건</li>
+                  <li>콘텐츠 업로드 모니터링 및 AI 분석</li>
+                  <li>캠페인 활동 관리 및 기본 리포트 제공</li>
+                </ul>
+              </div>
+
+              <!-- 유튜브 -->
+              <div class="mb-4">
+                <p
+                  class="text-xs font-bold text-[#FF0000] uppercase tracking-wider mb-2 flex items-center gap-1.5"
+                >
+                  <span
+                    class="w-1.5 h-1.5 rounded-full bg-[#FF0000] inline-block"
+                  ></span
+                  >유튜브
+                </p>
+                <ul
+                  class="space-y-1.5 text-sm text-gray-600 pl-3 border-l-2 border-red-100"
+                >
+                  <li>유튜브 크리에이터 무제한 검색</li>
+                  <li>유튜브 채널 광고 및 퍼포먼스 분석 무제한</li>
+                  <li>브랜드 인사이트 조회 월 20회</li>
+                  <li>경쟁사 비교 월 5회</li>
+                  <li>PPL 모아보기 무제한</li>
+                  <li>유튜브 트렌딩 및 랭킹 정보 무제한 조회</li>
+                  <li>콘텐츠 영상 검색 월 10회</li>
+                </ul>
+              </div>
+
+              <!-- 계정관리 -->
+              <div>
+                <p
+                  class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-2 flex items-center gap-1.5"
+                >
+                  <span
+                    class="w-1.5 h-1.5 rounded-full bg-gray-500 inline-block"
+                  ></span
+                  >계정관리
+                </p>
+                <ul
+                  class="space-y-1.5 text-sm text-gray-600 pl-3 border-l-2 border-gray-200"
+                >
+                  <li>팀 좌석 수 1명</li>
+                  <li>구독 포인트 제공 25,000,000P</li>
+                </ul>
+              </div>
+              <button
+                class="w-full mt-6 bg-gray-100 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-200"
+              >
+                구독하기
+              </button>
+            </div>
+            <!-- Pro -->
+            <div
+              class="bg-white border-2 border-brand-primary rounded-2xl p-8 text-left relative"
+            >
+              <div
+                class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-primary text-white text-xs font-bold px-4 py-1 rounded-full"
+              >
+                인기
+              </div>
+              <h3 class="text-xl font-bold mb-1">테이블인 Pro</h3>
+              <p class="text-2xl font-bold text-brand-primary mb-1">
+                199,000원
+                <span class="text-sm font-normal text-gray-400">/1개월</span>
+              </p>
+              <p class="text-xs text-gray-400 mb-2">부가세 별도</p>
+              <p class="text-sm text-gray-500 mb-6">
+                더 정교한 성과 관리와 확장이 필요한 브랜드/마케팅팀에게
+                추천합니다.
+              </p>
+
+              <!-- 인스타그램 -->
+              <div class="mb-4">
+                <p
+                  class="text-xs font-bold text-brand-primary uppercase tracking-wider mb-2 flex items-center gap-1.5"
+                >
+                  <span
+                    class="w-1.5 h-1.5 rounded-full bg-brand-primary inline-block"
+                  ></span
+                  >인스타그램
+                </p>
+                <ul
+                  class="space-y-1.5 text-sm text-gray-600 pl-3 border-l-2 border-pink-100"
+                >
+                  <li>인스타그램 크리에이터 무제한 검색</li>
+                  <li>
+                    팔로워, 카테고리, 지역, 릴스 좋아요 수 등 정량 기준 검색
+                  </li>
+                  <li>AI 추천 검색 (포인트 구입 가능)</li>
+                  <li>크리에이터 인사이트 분석 데이터 열람</li>
+                  <li>크리에이터 광고 분석 조회 무제한</li>
+                  <li>크리에이터 즐겨찾기 최대 200명</li>
+                  <li>최대 20개 그룹 생성 및 저장</li>
+                  <li>캠페인 생성 월 20건</li>
+                  <li>AI 콘텐츠 가이드 생성 (포인트 구입 가능)</li>
+                  <li>콘텐츠 업로드 모니터링 및 AI 분석</li>
+                  <li>캠페인 활동 관리 및 기본 리포트 제공</li>
+                </ul>
+              </div>
+
+              <!-- 유튜브 -->
+              <div class="mb-4">
+                <p
+                  class="text-xs font-bold text-[#FF0000] uppercase tracking-wider mb-2 flex items-center gap-1.5"
+                >
+                  <span
+                    class="w-1.5 h-1.5 rounded-full bg-[#FF0000] inline-block"
+                  ></span
+                  >유튜브
+                </p>
+                <ul
+                  class="space-y-1.5 text-sm text-gray-600 pl-3 border-l-2 border-red-100"
+                >
+                  <li>유튜브 크리에이터 무제한 검색</li>
+                  <li>유튜브 채널 광고 및 퍼포먼스 분석 무제한</li>
+                  <li>브랜드 인사이트 조회 월 100회</li>
+                  <li>경쟁사 비교 월 50회</li>
+                  <li>PPL 모아보기 무제한</li>
+                  <li>유튜브 트렌딩 및 랭킹 정보 무제한 조회</li>
+                  <li>콘텐츠 영상 검색 무제한</li>
+                </ul>
+              </div>
+
+              <!-- 계정관리 -->
+              <div>
+                <p
+                  class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-2 flex items-center gap-1.5"
+                >
+                  <span
+                    class="w-1.5 h-1.5 rounded-full bg-gray-500 inline-block"
+                  ></span
+                  >계정관리
+                </p>
+                <ul
+                  class="space-y-1.5 text-sm text-gray-600 pl-3 border-l-2 border-gray-200"
+                >
+                  <li>팀 좌석 수 최대 3명</li>
+                  <li>구독 포인트 제공 100,000,000P</li>
+                </ul>
+              </div>
+              <button
+                class="w-full mt-6 bg-brand-primary text-white py-3 rounded-lg font-medium hover:opacity-90"
+              >
+                구독하기
+              </button>
+            </div>
+            <!-- Premium -->
+            <div
+              class="bg-white border border-gray-200 rounded-2xl p-8 text-left"
+            >
+              <h3 class="text-xl font-bold mb-1">테이블인 Premium</h3>
+              <p class="text-2xl font-bold text-brand-primary mb-1">
+                599,000원
+                <span class="text-sm font-normal text-gray-400">/1개월</span>
+              </p>
+              <p class="text-xs text-gray-400 mb-2">부가세 별도</p>
+              <p class="text-sm text-gray-500 mb-6">
+                대규모 캠페인을 상시 운영하며 팀 단위 협업과 고도화된 분석이
+                필요한 에이전시/대형 브랜드
+              </p>
+
+              <!-- 인스타그램 -->
+              <div class="mb-4">
+                <p
+                  class="text-xs font-bold text-brand-primary uppercase tracking-wider mb-2 flex items-center gap-1.5"
+                >
+                  <span
+                    class="w-1.5 h-1.5 rounded-full bg-brand-primary inline-block"
+                  ></span
+                  >인스타그램
+                </p>
+                <ul
+                  class="space-y-1.5 text-sm text-gray-600 pl-3 border-l-2 border-pink-100"
+                >
+                  <li>인스타그램 크리에이터 무제한 검색</li>
+                  <li>
+                    팔로워, 카테고리, 지역, 릴스 좋아요 수 등 정량 기준 검색
+                  </li>
+                  <li>AI 추천 검색 (포인트 구입 가능)</li>
+                  <li>크리에이터 인사이트 분석 데이터 열람</li>
+                  <li>크리에이터 광고 분석 조회 무제한</li>
+                  <li>크리에이터 즐겨찾기 최대 500명</li>
+                  <li>그룹 무제한 생성 및 저장</li>
+                  <li>캠페인 생성 무제한</li>
+                  <li>AI 콘텐츠 가이드 생성 (포인트 구입 가능)</li>
+                  <li>콘텐츠 업로드 모니터링 및 AI 분석</li>
+                  <li>캠페인 활동 관리 및 기본 리포트 제공</li>
+                </ul>
+              </div>
+
+              <!-- 유튜브 -->
+              <div class="mb-4">
+                <p
+                  class="text-xs font-bold text-[#FF0000] uppercase tracking-wider mb-2 flex items-center gap-1.5"
+                >
+                  <span
+                    class="w-1.5 h-1.5 rounded-full bg-[#FF0000] inline-block"
+                  ></span
+                  >유튜브
+                </p>
+                <ul
+                  class="space-y-1.5 text-sm text-gray-600 pl-3 border-l-2 border-red-100"
+                >
+                  <li>유튜브 크리에이터 무제한 검색</li>
+                  <li>유튜브 채널 광고 및 퍼포먼스 분석 무제한</li>
+                  <li>브랜드 인사이트 조회 무제한</li>
+                  <li>경쟁사 비교 무제한</li>
+                  <li>PPL 모아보기 무제한</li>
+                  <li>유튜브 트렌딩 및 랭킹 정보 무제한 조회</li>
+                  <li>콘텐츠 영상 검색 무제한</li>
+                </ul>
+              </div>
+
+              <!-- 계정관리 -->
+              <div>
+                <p
+                  class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-2 flex items-center gap-1.5"
+                >
+                  <span
+                    class="w-1.5 h-1.5 rounded-full bg-gray-500 inline-block"
+                  ></span
+                  >계정관리
+                </p>
+                <ul
+                  class="space-y-1.5 text-sm text-gray-600 pl-3 border-l-2 border-gray-200"
+                >
+                  <li>팀 좌석 수 최대 6명</li>
+                  <li>구독 포인트 제공 600,000,000P</li>
+                </ul>
+              </div>
+              <button
+                class="w-full mt-6 bg-gray-100 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-200"
+              >
+                구독하기
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 탭 2: 포인트 충전 -->
+        <div id="panel-points" class="hidden">
+          <p class="text-gray-500 text-sm mb-8">
+            AI 캠페인 생성, AI 인플루언서 추천, AI 고급 분석, AI 성과 리포트
+            등에 사용할 수 있습니다.
+          </p>
+          <div class="grid grid-cols-3 gap-8 max-w-[900px] mx-auto">
+            <div
+              class="bg-white border border-gray-200 rounded-2xl p-8 text-center"
+            >
+              <p class="text-2xl font-bold mb-2">50,000,000P</p>
+              <p class="text-xl font-bold text-brand-primary mb-1">5,000원</p>
+              <p class="text-xs text-gray-400 mb-6">부가세 별도</p>
+              <button
+                class="w-full bg-gray-100 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-200"
+              >
+                충전하기
+              </button>
+            </div>
+            <div
+              class="bg-white border border-gray-200 rounded-2xl p-8 text-center"
+            >
+              <p class="text-2xl font-bold mb-2">150,000,000P</p>
+              <p class="text-xl font-bold text-brand-primary mb-1">14,000원</p>
+              <p class="text-xs text-gray-400 mb-6">부가세 별도</p>
+              <button
+                class="w-full bg-gray-100 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-200"
+              >
+                충전하기
+              </button>
+            </div>
+            <div
+              class="bg-white border border-gray-200 rounded-2xl p-8 text-center"
+            >
+              <p class="text-2xl font-bold mb-2">500,000,000P</p>
+              <p class="text-xl font-bold text-brand-primary mb-1">45,000원</p>
+              <p class="text-xs text-gray-400 mb-6">부가세 별도</p>
+              <button
+                class="w-full bg-gray-100 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-200"
+              >
+                충전하기
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 사용 안내 -->
+        <div class="mt-16 text-left max-w-[1200px] mx-auto space-y-10">
+          <!-- 구독상품 사용 안내 -->
+          <div>
+            <h4 class="text-sm font-bold text-gray-700 mb-3">
+              구독상품 사용 안내
+            </h4>
+            <ul class="space-y-2 text-sm text-gray-500 list-disc pl-5">
+              <li>구독 상품은 결제 즉시 적용 됩니다.</li>
+              <li>
+                구독 상품은 선택한 결제 주기에 따라 자동으로 갱신됩니다. 다음
+                결제일 이전에 해지하지 않을 경우 동일한 요금제로 자동 결제가
+                진행됩니다.
+              </li>
+              <li>
+                구독 해지는 언제든지 가능하며, 해지 시에는 현재 결제 기간
+                종료일까지 서비스를 이용한 후 다음 결제일부터 자동결제가
+                진행되지 않습니다.
+              </li>
+              <li>
+                구독 상품 업그레이드 시 구독상품 포인트는 남은 기간을 기준으로
+                포인트가 재산정 됩니다.
+              </li>
+              <li>
+                서비스의 안정적인 운영을 위해 비정상적인 사용이 감지될 경우 일부
+                기능이 제한될 수 있습니다. 이용시 문제가 발생한다면 고객센터에
+                문의하세요.
+              </li>
+            </ul>
+          </div>
+
+          <!-- 포인트 사용 안내 -->
+          <div>
+            <h4 class="text-sm font-bold text-gray-700 mb-3">
+              포인트 사용 안내
+            </h4>
+            <ul class="space-y-2 text-sm text-gray-500 list-disc pl-5">
+              <li>
+                구독 상품에 포함된 포인트는 매월 제공되며, 다음 달로 이월되지
+                않습니다.
+              </li>
+              <li>별도로 구매한 포인트는 5년간 유효합니다.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 구독 상품 비교 -->
+        <div class="mt-20 text-left max-w-[1200px] mx-auto">
+          <div class="mb-6">
+            <h2 class="text-2xl font-bold">구독 상품 비교</h2>
+            <p class="text-sm text-gray-500 mt-1">
+              업무 환경에 필요한 기능을 비교하고 선택하세요.
+            </p>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm border-collapse">
+              <thead>
+                <tr class="border-b-2 border-gray-200">
+                  <th
+                    class="py-4 px-4 text-left text-gray-500 font-medium w-[28%]"
+                  ></th>
+                  <th class="py-4 px-4 text-center font-bold w-[24%]">
+                    <p class="text-base">테이블인 Starter</p>
+                    <p class="text-brand-primary text-sm mt-1">39,000 원/월</p>
+                  </th>
+                  <th class="py-4 px-4 text-center font-bold w-[24%]">
+                    <p class="text-base">테이블인 Pro</p>
+                    <p class="text-brand-primary text-sm mt-1">199,000 원/월</p>
+                  </th>
+                  <th class="py-4 px-4 text-center font-bold w-[24%]">
+                    <p class="text-base">테이블인 Premium</p>
+                    <p class="text-brand-primary text-sm mt-1">599,000 원/월</p>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="text-gray-600">
+                <tr class="border-b border-gray-100">
+                  <td class="py-3.5 px-4 font-medium text-gray-700">
+                    월간 포인트 제공
+                  </td>
+                  <td class="py-3.5 px-4 text-center">25,000,000P</td>
+                  <td class="py-3.5 px-4 text-center">100,000,000P</td>
+                  <td class="py-3.5 px-4 text-center">600,000,000P</td>
+                </tr>
+                <tr class="border-b border-gray-100 bg-gray-50/50">
+                  <td class="py-3.5 px-4 font-medium text-gray-700">
+                    팀 계정 활성 수
+                  </td>
+                  <td class="py-3.5 px-4 text-center">1</td>
+                  <td class="py-3.5 px-4 text-center">3</td>
+                  <td class="py-3.5 px-4 text-center">6</td>
+                </tr>
+                <tr class="border-b border-gray-100">
+                  <td class="py-3.5 px-4 font-medium text-gray-700">
+                    인플루언서 검색
+                  </td>
+                  <td class="py-3.5 px-4 text-center">무제한</td>
+                  <td class="py-3.5 px-4 text-center">무제한</td>
+                  <td class="py-3.5 px-4 text-center">무제한</td>
+                </tr>
+                <tr class="border-b border-gray-100 bg-gray-50/50">
+                  <td class="py-3.5 px-4 font-medium text-gray-700">
+                    AI 추천 검색
+                  </td>
+                  <td class="py-3.5 px-4 text-center">포인트 소모</td>
+                  <td class="py-3.5 px-4 text-center">포인트 소모</td>
+                  <td class="py-3.5 px-4 text-center">포인트 소모</td>
+                </tr>
+                <tr class="border-b border-gray-100">
+                  <td class="py-3.5 px-4 font-medium text-gray-700">
+                    인플루언서 인사이트
+                  </td>
+                  <td class="py-3.5 px-4 text-center text-brand-primary">✓</td>
+                  <td class="py-3.5 px-4 text-center text-brand-primary">✓</td>
+                  <td class="py-3.5 px-4 text-center text-brand-primary">✓</td>
+                </tr>
+                <tr class="border-b border-gray-100 bg-gray-50/50">
+                  <td class="py-3.5 px-4 font-medium text-gray-700">
+                    인플루언서 광고 분석
+                  </td>
+                  <td class="py-3.5 px-4 text-center">월 10건</td>
+                  <td class="py-3.5 px-4 text-center text-brand-primary">✓</td>
+                  <td class="py-3.5 px-4 text-center text-brand-primary">✓</td>
+                </tr>
+                <tr class="border-b border-gray-100">
+                  <td class="py-3.5 px-4 font-medium text-gray-700">
+                    캠페인 생성
+                  </td>
+                  <td class="py-3.5 px-4 text-center">월 3건</td>
+                  <td class="py-3.5 px-4 text-center text-brand-primary">✓</td>
+                  <td class="py-3.5 px-4 text-center text-brand-primary">✓</td>
+                </tr>
+                <tr class="border-b border-gray-100 bg-gray-50/50">
+                  <td class="py-3.5 px-4 font-medium text-gray-700">
+                    캠페인 AI 활동 가이드
+                  </td>
+                  <td class="py-3.5 px-4 text-center">포인트 소모</td>
+                  <td class="py-3.5 px-4 text-center">포인트 소모</td>
+                  <td class="py-3.5 px-4 text-center">포인트 소모</td>
+                </tr>
+                <tr class="border-b border-gray-100">
+                  <td class="py-3.5 px-4 font-medium text-gray-700">
+                    콘텐츠 업로드 추적
+                  </td>
+                  <td class="py-3.5 px-4 text-center">기본 모니터링</td>
+                  <td class="py-3.5 px-4 text-center">기본 모니터링</td>
+                  <td class="py-3.5 px-4 text-center text-sm leading-snug">
+                    기본 모니터링<br />+ 광고 콘텐츠 분석
+                  </td>
+                </tr>
+                <tr class="border-b border-gray-100 bg-gray-50/50">
+                  <td class="py-3.5 px-4 font-medium text-gray-700">
+                    인플루언서 CRM
+                  </td>
+                  <td class="py-3.5 px-4 text-center text-sm leading-snug">
+                    그룹 5개<br />(그룹 최대 10명)
+                  </td>
+                  <td class="py-3.5 px-4 text-center text-sm leading-snug">
+                    그룹 20개<br />(그룹 최대 30명)
+                  </td>
+                  <td class="py-3.5 px-4 text-center text-sm leading-snug">
+                    그룹 무제한<br />(그룹 최대 100명)
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================
+       SECTION 6: CTA
+       ================================================ -->
+    <section class="py-24 px-8 bg-[#242424] text-white text-center">
+      <div class="max-w-[800px] mx-auto">
+        <h2 class="text-3xl font-bold mb-4">
+          AI 기반 인플루언서 마케팅,<br />시작하는 데 1분이면 충분합니다.
+        </h2>
+        <p class="text-gray-400 mb-10">
+          AI 기반 인플루언서 마케팅을 가장 빠르고 정확하게 경험해 보세요
+        </p>
+        <button
+          class="bg-brand-primary text-white px-8 py-4 rounded-xl text-lg font-semibold hover:opacity-90 transition"
+        >
+          무료로 시작하기
+        </button>
+      </div>
+    </section>
+
+    <!-- ================================================
+       SECTION 7: FAQ (유튜브 질문 2개 추가)
+       ================================================ -->
+    <section class="py-20 px-8">
+      <div class="max-w-[900px] mx-auto">
+        <h2 class="text-3xl font-bold text-center mb-12">자주 묻는 질문</h2>
+
+        <!-- 기존 FAQ -->
+        <div class="border-b border-gray-200">
+          <button
+            class="faq-btn flex items-center justify-between w-full py-5 cursor-pointer"
+            onclick="toggleFaq(this)"
+          >
+            <span class="text-lg font-medium text-left"
+              >인스타그램에 있는 모든 인플루언서를 검색할 수 있나요?</span
+            >
+            <svg
+              class="w-5 h-5 text-gray-400 transition-transform faq-icon"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+              />
+            </svg>
+          </button>
+          <p class="text-gray-600 leading-relaxed pb-5 hidden faq-answer">
+            네, 인스타그램에 있는 모든 인플루언서를 검색할 수 있습니다.
+          </p>
+        </div>
+
+        <div class="border-b border-gray-200">
+          <button
+            class="faq-btn flex items-center justify-between w-full py-5 cursor-pointer"
+            onclick="toggleFaq(this)"
+          >
+            <span class="text-lg font-medium text-left"
+              >구독 상품은 언제부터 적용되나요?</span
+            >
+            <svg
+              class="w-5 h-5 text-gray-400 transition-transform faq-icon"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+              />
+            </svg>
+          </button>
+          <p class="text-gray-600 leading-relaxed pb-5 hidden faq-answer">
+            구독 상품은 결제 완료 즉시 적용됩니다. 기능, 검색 한도, 포인트 등은
+            결제 시점부터 변경된 구독 상품 기준으로 이용할 수 있습니다.
+          </p>
+        </div>
+
+        <div class="border-b border-gray-200">
+          <button
+            class="faq-btn flex items-center justify-between w-full py-5 cursor-pointer"
+            onclick="toggleFaq(this)"
+          >
+            <span class="text-lg font-medium text-left"
+              >구독을 해지하면 바로 사용이 중단되나요?</span
+            >
+            <svg
+              class="w-5 h-5 text-gray-400 transition-transform faq-icon"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+              />
+            </svg>
+          </button>
+          <p class="text-gray-600 leading-relaxed pb-5 hidden faq-answer">
+            아니요. 구독을 해지하더라도 현재 결제 주기 종료일까지는 서비스를
+            이용할 수 있습니다. 종료일 이후 자동 결제가 이루어지지 않습니다.
+          </p>
+        </div>
+
+        <div class="border-b border-gray-200">
+          <button
+            class="faq-btn flex items-center justify-between w-full py-5 cursor-pointer"
+            onclick="toggleFaq(this)"
+          >
+            <span class="text-lg font-medium text-left"
+              >구독 상품을 업그레이드하면 어떻게 적용되나요?</span
+            >
+            <svg
+              class="w-5 h-5 text-gray-400 transition-transform faq-icon"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+              />
+            </svg>
+          </button>
+          <p class="text-gray-600 leading-relaxed pb-5 hidden faq-answer">
+            업그레이드는 즉시 적용됩니다. 남은 결제 기간을 기준으로 상위 상품의
+            조건이 반영되며, 포인트는 내부 정책에 따라 재산정되어 지급됩니다.
+          </p>
+        </div>
+
+        <div class="border-b border-gray-200">
+          <button
+            class="faq-btn flex items-center justify-between w-full py-5 cursor-pointer"
+            onclick="toggleFaq(this)"
+          >
+            <span class="text-lg font-medium text-left"
+              >포인트는 현금처럼 환불할 수 있나요?</span
+            >
+            <svg
+              class="w-5 h-5 text-gray-400 transition-transform faq-icon"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+              />
+            </svg>
+          </button>
+          <p class="text-gray-600 leading-relaxed pb-5 hidden faq-answer">
+            별도 구매한 포인트의 경우, 결제일로부터 7일 이내이며 사용하지 않은
+            경우에 한하여 환불 신청이 가능합니다. 구독을 통해 제공되는 포인트는
+            환불되지 않으며, 해당 기간 내에만 사용할 수 있습니다.
+          </p>
+        </div>
+
+        <div class="border-b border-gray-200">
+          <button
+            class="faq-btn flex items-center justify-between w-full py-5 cursor-pointer"
+            onclick="toggleFaq(this)"
+          >
+            <span class="text-lg font-medium text-left"
+              >포인트 유효기간은 어떻게 되나요?</span
+            >
+            <svg
+              class="w-5 h-5 text-gray-400 transition-transform faq-icon"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+              />
+            </svg>
+          </button>
+          <p class="text-gray-600 leading-relaxed pb-5 hidden faq-answer">
+            구독 제공 포인트는 해당 구독 기간 내에만 유효하며, 이월되지
+            않습니다. 별도로 구매한 포인트는 충전일로부터 5년간 유효합니다.
+          </p>
+        </div>
+
+        <!-- 유튜브 관련 FAQ (신규 추가) -->
+        <div class="border-b border-gray-200 bg-red-50/30">
+          <button
+            class="faq-btn flex items-center justify-between w-full py-5 px-4 cursor-pointer"
+            onclick="toggleFaq(this)"
+          >
+            <span class="text-lg font-medium text-left flex items-center gap-2">
+              <span
+                class="text-xs bg-red-100 text-red-600 font-bold px-2 py-0.5 rounded"
+                >NEW</span
+              >
+              유튜브 채널 분석은 모든 채널을 할 수 있나요?
+            </span>
+            <svg
+              class="w-5 h-5 text-gray-400 transition-transform faq-icon"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+              />
+            </svg>
+          </button>
+          <p class="text-gray-600 leading-relaxed pb-5 px-4 hidden faq-answer">
+            현재 1,440개 이상의 크리에이터 채널이 DB에 등록되어 있으며, 등록되지
+            않은 채널도 URL을 입력하면 실시간으로 분석할 수 있습니다. 실시간
+            분석 후 상세 분석을 위해 채널을 DB에 등록할 수도 있습니다.
+          </p>
+        </div>
+
+        <div class="border-b border-gray-200 bg-red-50/30">
+          <button
+            class="faq-btn flex items-center justify-between w-full py-5 px-4 cursor-pointer"
+            onclick="toggleFaq(this)"
+          >
+            <span class="text-lg font-medium text-left flex items-center gap-2">
+              <span
+                class="text-xs bg-red-100 text-red-600 font-bold px-2 py-0.5 rounded"
+                >NEW</span
+              >
+              PPL 광고는 어떻게 탐지하나요?
+            </span>
+            <svg
+              class="w-5 h-5 text-gray-400 transition-transform faq-icon"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+              />
+            </svg>
+          </button>
+          <p class="text-gray-600 leading-relaxed pb-5 px-4 hidden faq-answer">
+            Vision AI가 영상 콘텐츠를 분석하여 PPL, 협찬, 브랜디드 콘텐츠를
+            자동으로 탐지합니다. 현재 10,300개 이상 브랜드의 PPL 데이터를
+            보유하고 있으며, 브랜드별 협찬 수, 총 조회수, 평균 CPV(조회당 단가),
+            참여율 등을 확인할 수 있습니다.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================
+       SECTION 8: 추천 대상
+       ================================================ -->
+    <section class="py-20 px-8 text-center">
+      <p class="text-2xl text-gray-500 mb-2">이런 고민을 가진</p>
+      <p class="text-3xl font-bold text-brand-primary mb-2">
+        월 수십 명의 인플루언서를 운영해야 하는 브랜드
+      </p>
+      <p class="text-2xl text-gray-500">기업에게 추천합니다.</p>
+    </section>
+
+    <!-- ================================================
+       SECTION 9: 하단 CTA
+       ================================================ -->
+    <section
+      class="py-20 px-8 text-center"
+      style="background: linear-gradient(135deg, #ff2d78 0%, #ff6b9d 100%)"
+    >
+      <h2 class="text-3xl font-bold text-white mb-8">
+        테이블인 서비스와 관련하여 더 궁금한 점이 있다면<br />지금 문의하세요!
+      </h2>
+      <div class="flex gap-4 justify-center">
+        <button
+          class="bg-white text-brand-primary px-8 py-4 rounded-xl text-lg font-semibold hover:opacity-90"
+        >
+          무료로 체험하기
+        </button>
+        <button
+          class="bg-white/20 text-white border border-white/40 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-white/30"
+        >
+          문의하기
+        </button>
+      </div>
+    </section>
+
+    <!-- ================================================
+       FOOTER
+       ================================================ -->
+    <footer class="bg-gray-50 py-12 px-8">
+      <div class="max-w-[1440px] mx-auto">
+        <div class="flex items-center gap-6 mb-6">
+          <a
+            href="https://www.tablein.co.kr/"
+            class="text-sm font-medium text-gray-700"
+            >서비스 소개</a
+          >
+          <span class="text-sm text-gray-400">개인정보처리방침</span>
+          <span class="text-sm text-gray-400">이용약관</span>
+        </div>
+        <div class="text-sm text-gray-400 space-y-1">
+          <p>(주)이너스커뮤니티 | 대표자. 황인영</p>
+          <p>주소. 서울특별시 마포구 양화로 147, 5층 (동교동, 아일렉스빌딩)</p>
+          <p>전화. 02-519-1200 | 이메일. ad@inuscomm.co.kr</p>
+          <p class="mt-4">
+            copyrights 2025 Inuscommunity co.,Ltd. All rights reserved
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ================================================
+       JavaScript: 탭 전환
+       ================================================ -->
+    <script>
+      function switchPricingTab(tab) {
+        const subPanel = document.getElementById("panel-subscription");
+        const ptPanel = document.getElementById("panel-points");
+        const subTab = document.getElementById("tab-subscription");
+        const ptTab = document.getElementById("tab-points");
+        if (tab === "subscription") {
+          subPanel.classList.remove("hidden");
+          ptPanel.classList.add("hidden");
+          subTab.className =
+            "px-6 py-2.5 rounded-full text-sm font-semibold bg-brand-primary text-white transition";
+          ptTab.className =
+            "px-6 py-2.5 rounded-full text-sm font-semibold bg-gray-100 text-gray-500 hover:bg-gray-200 transition";
+        } else {
+          subPanel.classList.add("hidden");
+          ptPanel.classList.remove("hidden");
+          ptTab.className =
+            "px-6 py-2.5 rounded-full text-sm font-semibold bg-brand-primary text-white transition";
+          subTab.className =
+            "px-6 py-2.5 rounded-full text-sm font-semibold bg-gray-100 text-gray-500 hover:bg-gray-200 transition";
+        }
+      }
+
+      function toggleFaq(btn) {
+        const answer = btn.nextElementSibling;
+        const icon = btn.querySelector(".faq-icon");
+        answer.classList.toggle("hidden");
+        icon.style.transform = answer.classList.contains("hidden")
+          ? ""
+          : "rotate(180deg)";
+      }
+    </script>
+  </body>
+</html>

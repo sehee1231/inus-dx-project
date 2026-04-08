@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>에듀AI — 카테고리</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['"Pretendard Variable"', 'Pretendard', 'system-ui', 'sans-serif'] },
+          fontSize: { '2xs': ['0.6875rem', { lineHeight: '1rem' }] },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <style>
+    body { font-feature-settings: "ss01" on; -webkit-tap-highlight-color: transparent; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="min-h-screen bg-zinc-100 font-sans text-zinc-900 antialiased">
+  <header class="sticky top-0 z-50 border-b border-zinc-200/80 bg-zinc-50/95 backdrop-blur-xl">
+    <div class="mx-auto flex h-12 max-w-[960px] items-center justify-between gap-3 px-4">
+      <a href="project.html" class="flex items-center gap-2">
+        <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-zinc-900 text-xs font-bold text-white">AI</span>
+        <span class="text-sm font-semibold">에듀AI</span>
+      </a>
+      <div class="flex gap-1">
+        <a href="search.html" class="flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 hover:bg-zinc-200/70" aria-label="검색">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </a>
+        <a href="notifications.html" class="relative flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 hover:bg-zinc-200/70" aria-label="알림">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+          <span class="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-zinc-50"></span>
+        </a>
+        <a href="profile.html" class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-amber-200 to-orange-200 text-xs font-bold text-amber-950">김</a>
+      </div>
+    </div>
+    <div class="border-t border-zinc-100/80">
+      <div class="no-scrollbar mx-auto flex max-w-[960px] gap-1.5 overflow-x-auto px-4 py-2.5" id="chips"></div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-[960px] px-4 pb-20 pt-4">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+      <div class="min-w-0 flex-1">
+        <h1 id="h1" class="text-xl font-bold tracking-tight sm:text-2xl"></h1>
+        <p id="desc" class="mt-1.5 text-sm leading-relaxed text-zinc-500"></p>
+      </div>
+      <div id="view-wrap" class="hidden shrink-0">
+        <div class="flex items-center gap-2" role="group" aria-label="보기 방식">
+          <button type="button" id="v-list" class="view-btn inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-500 shadow-sm transition hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-800" aria-label="리스트로 보기" title="리스트">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10" />
+            </svg>
+          </button>
+          <button type="button" id="v-feed" class="view-btn inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-500 shadow-sm transition hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-800" aria-label="피드로 보기" title="피드">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zM14 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="root" class="mt-4"></div>
+    <p class="mt-10 text-center text-2xs text-zinc-400">
+      <a href="project.html" class="font-medium text-zinc-500 underline underline-offset-2 hover:text-zinc-800">전체 피드</a>
+      ·
+      <a href="compose.html" class="font-medium text-zinc-500 underline underline-offset-2 hover:text-zinc-800">새 글</a>
+    </p>
+  </main>
+
+  <template id="icon-check-tpl">
+    <svg class="h-4 w-4 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+  </template>
+
+  <script>
+    var LABEL = {
+      curriculum: { name: '커리큘럼', desc: '로드맵·학습 설계 중심 글입니다.' },
+      video: { name: '영상', desc: '튜토리얼·강의형 콘텐츠입니다.' },
+      prompt: { name: '프롬프트', desc: '바로 써 볼 수 있는 프롬프트 모음입니다.' },
+      output: { name: '결과물', desc: '루브릭·퀴즈 등 완성 예시입니다.' },
+      insight: { name: '인사이트', desc: '현장 노하우·운영 팁입니다.' },
+      community: { name: '커뮤니티', desc: '질문·모임·소통 글이 모여 있습니다.' },
+      planning: { name: '기획', desc: '요구사항·우선순위·지표·로드맵을 다룹니다.' },
+      design: { name: '디자인', desc: 'UI·브랜딩·프로토타입·접근성 사례입니다.' },
+      development: { name: '개발', desc: '구현·코드·연동·배포 노트입니다.' },
+    };
+    var ITEMS = {
+      curriculum: [{ slug: 'automation-roadmap', t: '생성형 AI로 끝내는 업무 자동화 · 8주 로드맵', sub: '한소희 · 커리큘럼' }],
+      video: [{ slug: 'rag-video', t: 'RAG 아키텍처 한 번에 이해하기', sub: '김나연 · 영상' }],
+      prompt: [
+        { slug: 'prompt-lesson', t: '50분 수업안 프롬프트', sub: '이하은 · 프롬프트' },
+        { slug: 'prompt-reading', t: '비판적 읽기 요약 프롬프트', sub: '오세훈 · 프롬프트' },
+      ],
+      output: [
+        { slug: 'result-rubric', t: '과학 수행평가 AI 피드백 루브릭', sub: '민지 · 결과물' },
+        { slug: 'result-quiz', t: '학급 맞춤 퀴즈 JSON 세트', sub: '도윤 · 결과물' },
+      ],
+      insight: [
+        { slug: 'chatbot-eval', t: '챗봇 과제를 학습 과정 평가로 바꾼 3가지 방법', sub: '박서준 · 인사이트' },
+        { slug: 'insight-consent', t: '교실에서 생성형 AI 동의서 체크리스트', sub: '동아리 운영' },
+        { slug: 'insight-version', t: '프롬프트 공유 시 버전 관리 팁', sub: '정비서' },
+      ],
+      community: [],
+      planning: [{ slug: 'prd-ai-classroom', t: '교실 AI 도입 PRD 초안 — 목표·비기능·리스크', sub: '서준 · 기획' }],
+      design: [{ slug: 'design-tokens-edu', t: '교육 앱 디자인 토큰 · 컬러·타이포 스케일', sub: '나연 · 디자인' }],
+      development: [{ slug: 'dev-api-integration', t: '학급 API 연동 체크리스트 · 인증·오류 처리', sub: '도윤 · 개발' }],
+    };
+
+    var PROMPT_SNIP = {
+      'prompt-lesson': '너는 교육 설계자다. [학년/과목]을 받아 50분 수업안을 써라. 학습목표 3개, 활동 순서, AI 역할, 형성평가를 불릿으로.',
+      'prompt-reading': '아래 텍스트를 요약하고, 반박 가능한 논점 3개를 한국어로 제시해 줘. 출처가 불명확한 문장은 [검증 필요]로 표시해.',
+    };
+
+    var CAT_THEME = {
+      curriculum: { av: 'bg-emerald-100 text-emerald-900', chip: 'bg-emerald-50 text-emerald-800', wide: 'from-emerald-600 to-teal-800' },
+      video: { av: 'bg-violet-100 text-violet-900', chip: 'bg-violet-50 text-violet-800', wide: 'from-violet-700 to-indigo-900' },
+      prompt: { av: 'bg-fuchsia-100 text-fuchsia-900', chip: 'bg-fuchsia-50 text-fuchsia-900', wide: 'from-fuchsia-600 to-purple-900' },
+      output: { av: 'bg-orange-100 text-orange-900', chip: 'bg-orange-50 text-orange-900', wide: 'from-orange-400 to-rose-600' },
+      insight: { av: 'bg-amber-100 text-amber-950', chip: 'bg-amber-50 text-amber-900', wide: 'from-amber-200 to-zinc-400' },
+      community: { av: 'bg-rose-100 text-rose-900', chip: 'bg-rose-50 text-rose-900', wide: 'from-rose-500 to-orange-700' },
+      planning: { av: 'bg-indigo-100 text-indigo-900', chip: 'bg-indigo-50 text-indigo-900', wide: 'from-indigo-600 to-slate-800' },
+      design: { av: 'bg-pink-100 text-pink-900', chip: 'bg-pink-50 text-pink-900', wide: 'from-pink-400 to-violet-600' },
+      development: { av: 'bg-teal-100 text-teal-900', chip: 'bg-teal-50 text-teal-900', wide: 'from-teal-600 to-emerald-800' },
+    };
+
+    var TIMES = ['방금', '3시간 전', '어제', '2일 전', '5분 전', '1일 전'];
+
+    function esc(s) {
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function hashNum(slug, min, max) {
+      var h = 0;
+      for (var i = 0; i < slug.length; i++) h = (h << 5) - h + slug.charCodeAt(i);
+      return min + (Math.abs(h) % (max - min + 1));
+    }
+
+    function parseAuthor(sub) {
+      var parts = String(sub).split('·');
+      var name = parts[0].trim() || '익명';
+      return { name: name, initial: name.charAt(0) };
+    }
+
+    function fakeStats(slug) {
+      return {
+        like: hashNum(slug, 120, 2400),
+        cmt: hashNum(slug + 'c', 8, 120),
+        save: hashNum(slug + 's', 200, 4000),
+      };
+    }
+    function loadUserPosts() {
+      try {
+        var raw = localStorage.getItem('eduai_posts_v1');
+        var arr = JSON.parse(raw || '[]');
+        return Array.isArray(arr) ? arr : [];
+      } catch (e) {
+        return [];
+      }
+    }
+    function userPostsByCat(cat) {
+      return loadUserPosts()
+        .filter(function (p) { return p && p.cat === cat; })
+        .map(function (p) {
+          return {
+            slug: p.slug,
+            t: p.title || '제목 없음',
+            sub: (p.authorName || '김에듀') + ' · ' + (LABEL[cat] ? LABEL[cat].name : '커뮤니티'),
+          };
+        });
+    }
+
+    function userCommentCount(slug) {
+      try {
+        var raw = localStorage.getItem('eduai_comments_v1');
+        var map = JSON.parse(raw || '{}');
+        if (!map || typeof map !== 'object') return 0;
+        var arr = map[slug];
+        return Array.isArray(arr) ? arr.length : 0;
+      } catch (e) {
+        return 0;
+      }
+    }
+
+    function formatCompact(n) {
+      if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+      return String(n);
+    }
+
+    function excerptFor(it, cat) {
+      if (cat === 'insight') return '현장에서 바로 적용해 볼 수 있는 요약과 팁을 담았습니다.';
+      if (cat === 'prompt') return '복사해서 바로 써 볼 수 있어요.';
+      if (cat === 'output') return '수업·평가에 바로 연결할 수 있는 결과물 예시입니다.';
+      if (cat === 'video') return '핵심 개념을 짧게 정리한 영상입니다.';
+      if (cat === 'curriculum') return '주차별로 따라가며 익힐 수 있게 구성했어요.';
+      if (cat === 'planning') return '문제 정의·범위·성공 지표까지 한 번에 정리했습니다.';
+      if (cat === 'design') return '화면 규칙과 톤을 맞추기 위한 참고용입니다.';
+      if (cat === 'development') return '연동·예외 처리·배포 시 유의할 점을 담았습니다.';
+      return '커뮤니티에서 나누는 이야기입니다.';
+    }
+
+    var likeOutline = '<svg class="ic-outline h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>';
+    var likeSolid = '<svg class="ic-solid hidden h-4 w-4 shrink-0 text-rose-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+    var cmtSvg = '<svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>';
+    var saveOutline = '<svg class="ic-outline h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>';
+    var saveSolid = '<svg class="ic-solid hidden h-4 w-4 shrink-0 text-amber-600" fill="currentColor" viewBox="0 0 24 24"><path d="M5 3a2 2 0 012-2h10a2 2 0 012 2v18l-7-4-7 4V3z"/></svg>';
+    var shareSvg = '<svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.59 13.51L15.42 17.5M15.41 6.5L8.59 10.49M18 21a3 3 0 100-6 3 3 0 000 6zM6 14a3 3 0 100-6 3 3 0 000 6zM18 9a3 3 0 100-6 3 3 0 000 6z"/></svg>';
+    var moreSvg = '<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>';
+
+    function actionsBar(slug, title, stats) {
+      var enc = encodeURIComponent(slug);
+      var tEsc = esc(title).replace(/'/g, '&#39;');
+      return (
+        '<div class="flex items-center justify-between border-t border-zinc-100 px-3 py-2.5 sm:px-4">' +
+        '<div class="flex items-center gap-3 text-2xs sm:text-xs">' +
+        '<button type="button" data-reaction="like" data-base="' +
+        stats.like +
+        '" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50">' +
+        likeOutline +
+        likeSolid +
+        '<span class="js-react-count tabular-nums font-medium">' +
+        formatCompact(stats.like) +
+        '</span></button>' +
+        '<a href="post-detail.html?slug=' +
+        enc +
+        '#comments" class="relative z-10 inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50 hover:text-zinc-800" aria-label="댓글 보기">' +
+        cmtSvg +
+        '<span class="tabular-nums font-medium">' +
+        stats.cmt +
+        '</span></a>' +
+        '<button type="button" data-reaction="save" data-base="' +
+        stats.save +
+        '" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50">' +
+        saveOutline +
+        saveSolid +
+        '<span class="js-react-count tabular-nums font-medium">' +
+        formatCompact(stats.save) +
+        '</span></button>' +
+        '<button type="button" data-share-path="post-detail.html?slug=' +
+        enc +
+        '" data-share-title="' +
+        tEsc +
+        '" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50" aria-label="공유">' +
+        shareSvg +
+        '</button></div>' +
+        '<a href="post-detail.html?slug=' +
+        enc +
+        '" class="rounded-full p-1.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700" aria-label="상세">' +
+        moreSvg +
+        '</a></div>'
+      );
+    }
+
+    function actionsInline(slug, title, stats) {
+      var enc = encodeURIComponent(slug);
+      var tEsc = esc(title).replace(/'/g, '&#39;');
+      return (
+        '<div class="mt-3 flex items-center justify-between border-t border-zinc-50 pt-3">' +
+        '<div class="flex items-center gap-3 text-2xs sm:text-xs">' +
+        '<button type="button" data-reaction="like" data-base="' +
+        stats.like +
+        '" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50">' +
+        likeOutline +
+        likeSolid +
+        '<span class="js-react-count tabular-nums font-medium">' +
+        formatCompact(stats.like) +
+        '</span></button>' +
+        '<a href="post-detail.html?slug=' +
+        enc +
+        '#comments" class="relative z-10 inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50 hover:text-zinc-800" aria-label="댓글 보기">' +
+        cmtSvg +
+        '<span class="tabular-nums font-medium">' +
+        stats.cmt +
+        '</span></a>' +
+        '<button type="button" data-reaction="save" data-base="' +
+        stats.save +
+        '" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50">' +
+        saveOutline +
+        saveSolid +
+        '<span class="js-react-count tabular-nums font-medium">' +
+        formatCompact(stats.save) +
+        '</span></button>' +
+        '<button type="button" data-share-path="post-detail.html?slug=' +
+        enc +
+        '" data-share-title="' +
+        tEsc +
+        '" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50" aria-label="공유">' +
+        shareSvg +
+        '</button></div></div>'
+      );
+    }
+
+    function cardFeed(it, cat) {
+      var th = CAT_THEME[cat] || CAT_THEME.insight;
+      var L = LABEL[cat];
+      var au = parseAuthor(it.sub);
+      var time = TIMES[hashNum(it.slug, 0, TIMES.length - 1)];
+      var stats = fakeStats(it.slug);
+      stats.cmt += userCommentCount(it.slug);
+      var chip = esc(L.name);
+      var title = esc(it.t);
+      var ex = esc(excerptFor(it, cat));
+      var slugQ = encodeURIComponent(it.slug);
+      var head =
+        '<div class="flex gap-3 p-3.5 sm:p-4">' +
+        '<span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl text-sm font-bold ' +
+        th.av +
+        '">' +
+        esc(au.initial) +
+        '</span>' +
+        '<div class="min-w-0 flex-1">' +
+        '<div class="flex flex-wrap items-center gap-x-2 gap-y-1">' +
+        '<span class="text-sm font-semibold text-zinc-900">' +
+        esc(au.name) +
+        '</span>' +
+        '<span class="rounded-md px-1.5 py-0.5 text-2xs font-semibold ' +
+        th.chip +
+        '">' +
+        chip +
+        '</span>' +
+        '<span class="text-2xs text-zinc-400">· ' +
+        esc(time) +
+        '</span></div>' +
+        '<h2 class="mt-2 text-[15px] font-semibold leading-snug text-zinc-900 sm:text-base">' +
+        '<a href="post-detail.html?slug=' +
+        slugQ +
+        '" class="hover:underline">' +
+        title +
+        '</a></h2>';
+
+      if (cat === 'prompt') {
+        var sn = PROMPT_SNIP[it.slug] || it.t.slice(0, 120);
+        head +=
+          '<div class="relative mt-2 rounded-xl border border-zinc-100 bg-zinc-50">' +
+          '<p class="px-3 py-2.5 pr-14 font-mono text-2xs leading-relaxed text-zinc-800 sm:text-xs">' +
+          esc(sn) +
+          '</p>' +
+          '<a href="post-detail.html?slug=' +
+          slugQ +
+          '" class="block border-t border-zinc-100 px-3 py-2 text-2xs font-semibold text-violet-700 hover:bg-zinc-100/80">상세에서 전체 보기</a></div>' +
+          '<div class="mt-2.5 flex flex-wrap gap-1.5">' +
+          '<span class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600">#' +
+          esc(L.name) +
+          '</span></div>' +
+          actionsInline(it.slug, it.t, stats) +
+          '</div></div>';
+        return (
+          '<article class="post-card rounded-2xl bg-white p-3.5 shadow-sm ring-1 ring-zinc-900/[0.04] sm:p-4">' +
+          head +
+          '</article>'
+        );
+      }
+
+      if (cat === 'insight' || cat === 'community' || cat === 'planning' || cat === 'design' || cat === 'development') {
+        head +=
+          '<p class="mt-1.5 line-clamp-3 text-sm leading-relaxed text-zinc-500">' +
+          ex +
+          '</p>' +
+          '<div class="mt-2.5 flex flex-wrap gap-1.5">' +
+          '<span class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600">#' +
+          esc(L.name) +
+          '</span>' +
+          '<span class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600">#에듀AI</span></div>' +
+          actionsInline(it.slug, it.t, stats) +
+          '</div></div>';
+        return (
+          '<article class="post-card rounded-2xl bg-white p-3.5 shadow-sm ring-1 ring-zinc-900/[0.04] sm:p-4">' +
+          head +
+          '</article>'
+        );
+      }
+
+      head +=
+        '<p class="mt-1.5 line-clamp-2 text-sm leading-relaxed text-zinc-500">' +
+        ex +
+        '</p>' +
+        '<div class="mt-2.5 flex flex-wrap gap-1.5">' +
+        '<span class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600">#' +
+        esc(L.name) +
+        '</span>' +
+        '<span class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600">#피드</span></div></div></div>';
+
+      var media = '';
+      if (cat === 'video') {
+        if (it.slug === 'rag-video') {
+          media =
+            '<a href="post-detail.html?slug=' +
+            slugQ +
+            '" class="relative block aspect-video overflow-hidden bg-zinc-900">' +
+            '<img src="https://img.youtube.com/vi/sVcwVQRHIc8/hqdefault.jpg" alt="" class="h-full w-full object-cover" loading="lazy" />' +
+            '<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20"></div>' +
+            '<span class="absolute bottom-2 left-2 rounded bg-red-600 px-1.5 py-0.5 text-[0.625rem] font-semibold text-white">YouTube</span>' +
+            '<span class="absolute bottom-2 right-2 rounded-md bg-black/65 px-1.5 py-0.5 text-2xs font-medium text-white">18:42</span>' +
+            '<div class="absolute inset-0 flex items-center justify-center">' +
+            '<span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-zinc-900 shadow-lg">' +
+            '<svg class="ml-1 h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div></a>';
+        } else {
+          media =
+            '<a href="post-detail.html?slug=' +
+            slugQ +
+            '" class="relative block aspect-video overflow-hidden bg-gradient-to-br ' +
+            th.wide +
+            '">' +
+            '<div class="absolute inset-0 flex items-center justify-center">' +
+            '<span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-zinc-900 shadow-lg">' +
+            '<svg class="ml-1 h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div></a>';
+        }
+      } else if (cat === 'curriculum') {
+        media =
+          '<a href="post-detail.html?slug=' +
+          slugQ +
+          '" class="relative block aspect-[21/9] bg-gradient-to-r ' +
+          th.wide +
+          '">' +
+          '<div class="absolute inset-0 bg-[url(\'data:image/svg+xml,%3Csvg width=\\\'40\\\' height=\\\'40\\\' xmlns=\\\'http://www.w3.org/2000/svg\\\'%3E%3Cpath d=\\\'M0 40h40V0H0v40z\\\' fill=\\\'%23ffffff\\\' fill-opacity=\\\'.04\\\'/%3E%3C/svg%3E\')] opacity-50"></div></a>';
+      } else if (cat === 'output') {
+        media =
+          '<a href="post-detail.html?slug=' +
+          slugQ +
+          '" class="relative block aspect-[5/4] bg-gradient-to-br ' +
+          th.wide +
+          '"></a>';
+      }
+
+      return (
+        '<article class="post-card overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-zinc-900/[0.04]">' +
+        head +
+        media +
+        actionsBar(it.slug, it.t, stats) +
+        '</article>'
+      );
+    }
+
+    function rowList(it) {
+      return (
+        '<li><a class="flex items-center justify-between rounded-2xl bg-white px-4 py-3 text-sm font-medium shadow-sm ring-1 ring-zinc-900/[0.04] hover:bg-zinc-50" href="post-detail.html?slug=' +
+        encodeURIComponent(it.slug) +
+        '">' +
+        '<span class="min-w-0 pr-2">' +
+        esc(it.t) +
+        '</span><span class="shrink-0 text-zinc-300">→</span></a></li>'
+      );
+    }
+
+    var params = new URLSearchParams(location.search);
+    var c = params.get('c') || '';
+    var LS_KEY = 'eduai_browse_view';
+    var viewParam = params.get('view');
+    var view = viewParam === 'feed' || viewParam === 'list' ? viewParam : localStorage.getItem(LS_KEY) || 'feed';
+
+    var keys = ['', 'planning', 'design', 'development', 'curriculum', 'video', 'prompt', 'output', 'insight', 'community'];
+    var labels = ['전체', '기획', '디자인', '개발', '커리큘럼', '영상', '프롬프트', '결과물', '인사이트', '커뮤니티'];
+    document.getElementById('chips').innerHTML = keys.map(function (k, i) {
+      var href = k ? 'browse.html?c=' + encodeURIComponent(k) : 'project.html';
+      var on = (k === '' && !c) || k === c;
+      return '<a href="' + href + '" class="shrink-0 rounded-full px-3.5 py-1.5 text-2xs ring-1 ring-zinc-200/80 ' + (on ? 'bg-zinc-900 font-semibold text-white ring-zinc-900' : 'bg-white font-medium text-zinc-600 hover:bg-zinc-50') + '">' + labels[i] + '</a>';
+    }).join('');
+
+    var viewBtnOff =
+      'view-btn inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-500 shadow-sm transition hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-800';
+    var viewBtnOn =
+      'view-btn inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-900 bg-zinc-900 text-white shadow-md transition';
+
+    function setView(v, save) {
+      view = v;
+      if (save) {
+        try {
+          localStorage.setItem(LS_KEY, v);
+        } catch (e) {}
+      }
+      var u = new URL(window.location.href);
+      if (c) {
+        u.searchParams.set('c', c);
+        u.searchParams.set('view', v);
+        history.replaceState({}, '', u.pathname + '?' + u.searchParams.toString());
+      }
+      var bL = document.getElementById('v-list');
+      var bF = document.getElementById('v-feed');
+      bL.className = v === 'list' ? viewBtnOn : viewBtnOff;
+      bF.className = v === 'feed' ? viewBtnOn : viewBtnOff;
+      bL.setAttribute('aria-pressed', v === 'list' ? 'true' : 'false');
+      bF.setAttribute('aria-pressed', v === 'feed' ? 'true' : 'false');
+      render();
+    }
+
+    function render() {
+      var h1 = document.getElementById('h1');
+      var desc = document.getElementById('desc');
+      var root = document.getElementById('root');
+      var wrap = document.getElementById('view-wrap');
+      if (!c) {
+        h1.textContent = '카테고리';
+        desc.textContent = '주제를 고르면 해당 글만 볼 수 있어요. 리스트는 빠르게, 피드는 홈과 같은 카드 형태로 볼 수 있습니다.';
+        wrap.classList.add('hidden');
+        root.innerHTML =
+          '<div class="grid gap-3 sm:grid-cols-2">' +
+          keys
+            .filter(function (k) {
+              return k;
+            })
+            .map(function (k) {
+              var n = (ITEMS[k] || []).length + userPostsByCat(k).length;
+              return (
+                '<a href="browse.html?c=' +
+                k +
+                '" class="flex items-center justify-between rounded-2xl bg-white px-4 py-4 shadow-sm ring-1 ring-zinc-900/[0.04] transition hover:ring-zinc-300"><span class="font-semibold">' +
+                LABEL[k].name +
+                '</span><span class="text-2xs text-zinc-400">' +
+                n +
+                '개</span></a>'
+              );
+            })
+            .join('') +
+          '</div>';
+        document.title = '에듀AI — 카테고리';
+        return;
+      }
+
+      if (!LABEL[c]) {
+        h1.textContent = '카테고리';
+        desc.textContent = '주소를 확인해 주세요.';
+        wrap.classList.add('hidden');
+        root.innerHTML = '';
+        return;
+      }
+
+      var L = LABEL[c];
+      h1.textContent = L.name;
+      desc.textContent = L.desc;
+      document.title = '에듀AI — ' + L.name;
+      wrap.classList.remove('hidden');
+
+      var rows = userPostsByCat(c).concat(ITEMS[c] || []);
+      if (!rows.length) {
+        root.innerHTML =
+          '<div class="rounded-2xl border border-dashed border-zinc-300 bg-white px-6 py-14 text-center"><p class="text-sm font-semibold text-zinc-800">아직 글이 없어요</p><a href="compose.html" class="mt-4 inline-flex rounded-full bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-zinc-800">글 작성하기</a></div>';
+        return;
+      }
+
+      if (view === 'feed') {
+        root.innerHTML = '<div class="feed space-y-3 sm:space-y-4">' + rows.map(function (it) { return cardFeed(it, c); }).join('') + '</div>';
+      } else {
+        root.innerHTML = '<ul class="space-y-2">' + rows.map(rowList).join('') + '</ul>';
+      }
+      wireBrowseInteractions();
+    }
+
+    function wireBrowseInteractions() {
+      function formatCompact(n) {
+        if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+        return String(n);
+      }
+      function parseCompact(s) {
+        s = String(s).trim();
+        if (s.endsWith('k')) return Math.round(parseFloat(s) * 1000);
+        var n = parseInt(s.replace(/,/g, ''), 10);
+        return isNaN(n) ? 0 : n;
+      }
+      var shareSvg =
+        '<svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.59 13.51L15.42 17.5M15.41 6.5L8.59 10.49M18 21a3 3 0 100-6 3 3 0 000 6zM6 14a3 3 0 100-6 3 3 0 000 6zM18 9a3 3 0 100-6 3 3 0 000 6z"/></svg>';
+      document.querySelectorAll('#root [data-reaction]').forEach(function (btn) {
+        if (btn.dataset.wired) return;
+        btn.dataset.wired = '1';
+        var raw = btn.getAttribute('data-base');
+        var base = parseInt(raw, 10);
+        if (isNaN(base)) base = parseCompact(raw);
+        var countEl = btn.querySelector('.js-react-count');
+        var outline = btn.querySelector('.ic-outline');
+        var solid = btn.querySelector('.ic-solid');
+        var active = false;
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          active = !active;
+          btn.setAttribute('aria-pressed', active);
+          if (outline) outline.classList.toggle('hidden', active);
+          if (solid) solid.classList.toggle('hidden', !active);
+          var kind = btn.getAttribute('data-reaction');
+          if (kind === 'like') {
+            btn.classList.toggle('text-rose-500', active);
+            btn.classList.toggle('text-zinc-500', !active);
+          }
+          if (kind === 'save') {
+            btn.classList.toggle('text-amber-600', active);
+            btn.classList.toggle('text-zinc-500', !active);
+          }
+          if (countEl) countEl.textContent = formatCompact(base + (active ? 1 : 0));
+        });
+      });
+      document.querySelectorAll('#root [data-share-path]').forEach(function (btn) {
+        if (btn.dataset.wired) return;
+        btn.dataset.wired = '1';
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          var url = new URL(btn.getAttribute('data-share-path') || 'project.html', window.location.href).href;
+          var title = btn.getAttribute('data-share-title') || document.title;
+          var checkHtml = document.getElementById('icon-check-tpl').innerHTML;
+          function flash() {
+            btn.innerHTML = checkHtml;
+            btn.disabled = true;
+            setTimeout(function () {
+              btn.innerHTML = shareSvg;
+              btn.disabled = false;
+            }, 1400);
+          }
+          if (navigator.share) {
+            navigator.share({ title: title, url: url }).catch(function () {});
+            return;
+          }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(flash).catch(function () {
+              window.prompt('공유 링크:', url);
+            });
+          } else {
+            window.prompt('공유 링크:', url);
+          }
+        });
+      });
+    }
+
+    document.getElementById('v-list').addEventListener('click', function () {
+      setView('list', true);
+    });
+    document.getElementById('v-feed').addEventListener('click', function () {
+      setView('feed', true);
+    });
+
+    if (viewParam !== 'feed' && viewParam !== 'list' && c) {
+      var u0 = new URL(window.location.href);
+      u0.searchParams.set('c', c);
+      u0.searchParams.set('view', view);
+      history.replaceState({}, '', u0.pathname + '?' + u0.searchParams.toString());
+    }
+
+    setView(view, false);
+  </script>
+</body>
+</html>

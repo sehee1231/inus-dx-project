@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>에듀AI — 새 글</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['"Pretendard Variable"', 'Pretendard', 'system-ui', 'sans-serif'] },
+          fontSize: { '2xs': ['0.6875rem', { lineHeight: '1rem' }] },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <style>
+    body { font-feature-settings: "ss01" on; -webkit-tap-highlight-color: transparent; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="min-h-screen bg-zinc-100 font-sans text-zinc-900 antialiased">
+  <header class="sticky top-0 z-50 border-b border-zinc-200/80 bg-zinc-50/95 backdrop-blur-xl">
+    <div class="mx-auto flex h-12 max-w-[960px] items-center justify-between gap-3 px-4">
+      <a href="project.html" class="inline-flex items-center gap-1.5 rounded-lg py-1.5 pl-1 pr-2 text-sm font-medium text-zinc-600 transition hover:bg-zinc-200/60 hover:text-zinc-900">
+        <span class="flex h-8 w-8 items-center justify-center rounded-lg text-zinc-500">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        </span>
+        나가기
+      </a>
+      <span id="page-title" class="text-sm font-semibold tracking-tight text-zinc-900">새 글</span>
+      <button type="button" id="btn-publish" class="rounded-lg bg-zinc-900 px-4 py-2 text-2xs font-semibold text-white shadow-sm transition hover:bg-zinc-800">게시</button>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-[640px] px-4 pb-28 pt-6 sm:pt-8">
+    <p id="page-sub" class="text-center text-2xs font-medium text-zinc-400">커뮤니티에 공개되는 글입니다</p>
+
+    <div class="mt-6 overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-zinc-900/[0.06]">
+      <div class="border-b border-zinc-100 px-5 py-4 sm:px-6">
+        <p class="text-2xs font-semibold uppercase tracking-wider text-zinc-400">카테고리</p>
+        <div class="no-scrollbar mt-3 flex gap-2 overflow-x-auto pb-0.5">
+          <button type="button" class="cat-chip shrink-0 rounded-lg bg-zinc-50 px-3.5 py-1.5 text-2xs font-medium text-zinc-600 ring-1 ring-zinc-200/90 transition hover:bg-zinc-100" data-cat="planning">기획</button>
+          <button type="button" class="cat-chip shrink-0 rounded-lg bg-zinc-50 px-3.5 py-1.5 text-2xs font-medium text-zinc-600 ring-1 ring-zinc-200/90 transition hover:bg-zinc-100" data-cat="design">디자인</button>
+          <button type="button" class="cat-chip shrink-0 rounded-lg bg-zinc-50 px-3.5 py-1.5 text-2xs font-medium text-zinc-600 ring-1 ring-zinc-200/90 transition hover:bg-zinc-100" data-cat="development">개발</button>
+          <button type="button" class="cat-chip shrink-0 rounded-lg bg-zinc-900 px-3.5 py-1.5 text-2xs font-semibold text-white ring-1 ring-zinc-900" data-cat="curriculum">커리큘럼</button>
+          <button type="button" class="cat-chip shrink-0 rounded-lg bg-zinc-50 px-3.5 py-1.5 text-2xs font-medium text-zinc-600 ring-1 ring-zinc-200/90 transition hover:bg-zinc-100" data-cat="video">영상</button>
+          <button type="button" class="cat-chip shrink-0 rounded-lg bg-zinc-50 px-3.5 py-1.5 text-2xs font-medium text-zinc-600 ring-1 ring-zinc-200/90 transition hover:bg-zinc-100" data-cat="prompt">프롬프트</button>
+          <button type="button" class="cat-chip shrink-0 rounded-lg bg-zinc-50 px-3.5 py-1.5 text-2xs font-medium text-zinc-600 ring-1 ring-zinc-200/90 transition hover:bg-zinc-100" data-cat="output">결과물</button>
+          <button type="button" class="cat-chip shrink-0 rounded-lg bg-zinc-50 px-3.5 py-1.5 text-2xs font-medium text-zinc-600 ring-1 ring-zinc-200/90 transition hover:bg-zinc-100" data-cat="insight">인사이트</button>
+          <button type="button" class="cat-chip shrink-0 rounded-lg bg-zinc-50 px-3.5 py-1.5 text-2xs font-medium text-zinc-600 ring-1 ring-zinc-200/90 transition hover:bg-zinc-100" data-cat="community">커뮤니티</button>
+        </div>
+      </div>
+
+      <div class="space-y-5 px-5 py-6 sm:px-6 sm:py-7">
+        <label class="block">
+          <span class="sr-only">제목</span>
+          <input id="in-title" type="text" placeholder="제목을 입력하세요" class="w-full border-0 bg-transparent text-xl font-semibold tracking-tight text-zinc-900 outline-none placeholder:text-zinc-300 sm:text-2xl" />
+        </label>
+        <label class="block">
+          <span class="text-2xs font-medium text-zinc-400">한 줄 소개 <span class="font-normal text-zinc-300">(선택)</span></span>
+          <input id="in-excerpt" type="text" placeholder="피드에 보이는 짧은 설명" class="mt-2 w-full rounded-lg border border-zinc-100 bg-zinc-50/80 px-4 py-3 text-sm text-zinc-800 outline-none ring-zinc-900/0 transition placeholder:text-zinc-400 focus:border-zinc-200 focus:bg-white focus:ring-2 focus:ring-zinc-900/5" />
+        </label>
+        <label class="block">
+          <span class="text-2xs font-medium text-zinc-400">본문</span>
+          <textarea id="in-body" rows="12" placeholder="내용을 작성해 보세요." class="mt-2 min-h-[200px] w-full resize-y rounded-lg border border-zinc-100 bg-zinc-50/50 px-4 py-3.5 text-sm leading-relaxed text-zinc-800 outline-none transition placeholder:text-zinc-400 focus:border-zinc-200 focus:bg-white focus:ring-2 focus:ring-zinc-900/5"></textarea>
+        </label>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-3 border-t border-zinc-100 bg-zinc-50/40 px-5 py-4 sm:px-6">
+        <div class="flex flex-wrap gap-2">
+          <button type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200/90 bg-white px-3 py-2 text-2xs font-medium text-zinc-600 shadow-sm transition hover:border-zinc-300 hover:bg-zinc-50" disabled title="준비 중">
+            <svg class="h-4 w-4 text-zinc-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14"/></svg>
+            이미지
+          </button>
+          <button type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200/90 bg-white px-3 py-2 text-2xs font-medium text-zinc-600 shadow-sm transition hover:border-zinc-300 hover:bg-zinc-50" disabled title="준비 중">
+            <svg class="h-4 w-4 text-zinc-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101M14.828 14.828a4 4 0 015.656 0l4 4a4 4 0 01-5.656 5.656l-1.1-1.1"/></svg>
+            링크
+          </button>
+        </div>
+        <p id="save-hint" class="text-2xs text-zinc-400">게시하면 이 브라우저에 저장됩니다.</p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    var params = new URLSearchParams(location.search);
+    var EDIT_SLUG = params.get('edit') || '';
+    var SELECTED_CAT = 'curriculum';
+    document.querySelectorAll('.cat-chip').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        SELECTED_CAT = btn.getAttribute('data-cat') || 'curriculum';
+        document.querySelectorAll('.cat-chip').forEach(function (b) {
+          b.classList.remove('bg-zinc-900', 'font-semibold', 'text-white', 'ring-zinc-900');
+          b.classList.add('bg-zinc-50', 'font-medium', 'text-zinc-600', 'ring-zinc-200/90');
+        });
+        btn.classList.remove('bg-zinc-50', 'font-medium', 'text-zinc-600', 'ring-zinc-200/90');
+        btn.classList.add('bg-zinc-900', 'font-semibold', 'text-white', 'ring-zinc-900');
+      });
+    });
+
+    function safeJsonParse(s, fallback) {
+      try { return JSON.parse(s); } catch (e) { return fallback; }
+    }
+    function slugifyAscii(s) {
+      s = String(s || '').trim();
+      if (!s) return 'post';
+      s = s.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-]+/g, '');
+      return s || 'post';
+    }
+    function nowIso() { return new Date().toISOString(); }
+
+    var LS_POSTS = 'eduai_posts_v1';
+    function loadPosts() {
+      var raw = localStorage.getItem(LS_POSTS);
+      var arr = safeJsonParse(raw, []);
+      return Array.isArray(arr) ? arr : [];
+    }
+    function savePosts(arr) {
+      localStorage.setItem(LS_POSTS, JSON.stringify(arr));
+    }
+
+    function findPost(slug) {
+      var posts = loadPosts();
+      for (var i = 0; i < posts.length; i++) {
+        if (posts[i] && posts[i].slug === slug) return posts[i];
+      }
+      return null;
+    }
+    function setCatUI(cat) {
+      SELECTED_CAT = cat || 'curriculum';
+      document.querySelectorAll('.cat-chip').forEach(function (b) {
+        b.classList.remove('bg-zinc-900', 'font-semibold', 'text-white', 'ring-zinc-900');
+        b.classList.add('bg-zinc-50', 'font-medium', 'text-zinc-600', 'ring-zinc-200/90');
+      });
+      var onBtn = document.querySelector('.cat-chip[data-cat=\"' + SELECTED_CAT + '\"]');
+      if (onBtn) {
+        onBtn.classList.remove('bg-zinc-50', 'font-medium', 'text-zinc-600', 'ring-zinc-200/90');
+        onBtn.classList.add('bg-zinc-900', 'font-semibold', 'text-white', 'ring-zinc-900');
+      }
+    }
+
+    function publish() {
+      var title = (document.getElementById('in-title').value || '').trim();
+      var excerpt = (document.getElementById('in-excerpt').value || '').trim();
+      var body = (document.getElementById('in-body').value || '').trim();
+
+      if (!title) { alert('제목을 입력해 주세요.'); document.getElementById('in-title').focus(); return; }
+      if (!body) { alert('본문을 입력해 주세요.'); document.getElementById('in-body').focus(); return; }
+
+      var posts = loadPosts();
+      if (EDIT_SLUG) {
+        var found = false;
+        for (var i = 0; i < posts.length; i++) {
+          if (posts[i] && posts[i].slug === EDIT_SLUG) {
+            posts[i].cat = SELECTED_CAT;
+            posts[i].title = title;
+            posts[i].excerpt = excerpt;
+            posts[i].body = body;
+            posts[i].updatedAt = nowIso();
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
+          alert('수정할 글을 찾지 못했습니다.');
+          return;
+        }
+        savePosts(posts);
+        window.location.href = 'post-detail.html?slug=' + encodeURIComponent(EDIT_SLUG);
+        return;
+      }
+
+      var base = slugifyAscii(title).slice(0, 24);
+      var slug = 'u-' + Date.now() + '-' + base;
+      var post = { slug: slug, cat: SELECTED_CAT, title: title, excerpt: excerpt, body: body, authorName: '김에듀', createdAt: nowIso() };
+      posts.unshift(post);
+      savePosts(posts);
+      window.location.href = 'post-detail.html?slug=' + encodeURIComponent(slug);
+    }
+
+    // edit mode init
+    if (EDIT_SLUG) {
+      var p = findPost(EDIT_SLUG);
+      if (p) {
+        document.getElementById('page-title').textContent = '글 수정';
+        document.title = '에듀AI — 글 수정';
+        document.getElementById('btn-publish').textContent = '저장';
+        document.getElementById('page-sub').textContent = '수정 사항을 저장합니다';
+        document.getElementById('save-hint').textContent = '저장하면 이 브라우저에 반영됩니다.';
+        document.getElementById('in-title').value = p.title || '';
+        document.getElementById('in-excerpt').value = p.excerpt || '';
+        document.getElementById('in-body').value = p.body || '';
+        setCatUI(p.cat || 'curriculum');
+      } else {
+        document.getElementById('page-title').textContent = '글 수정';
+        document.getElementById('btn-publish').textContent = '저장';
+        document.getElementById('page-sub').textContent = '수정할 글을 찾지 못했습니다.';
+        document.getElementById('btn-publish').disabled = true;
+        document.getElementById('btn-publish').classList.add('opacity-40');
+      }
+    }
+
+    document.getElementById('btn-publish').addEventListener('click', publish);
+    document.addEventListener('keydown', function (e) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') publish();
+    });
+  </script>
+</body>
+</html>

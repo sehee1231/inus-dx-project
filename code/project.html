@@ -1,355 +1,1184 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>에듀AI — 홈</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Pretendard Variable"', 'Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>에듀AI — 홈</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: [
+                '"Pretendard Variable"',
+                'Pretendard',
+                '-apple-system',
+                'BlinkMacSystemFont',
+                'system-ui',
+                'sans-serif',
+              ],
+            },
+            fontSize: { '2xs': ['0.6875rem', { lineHeight: '1rem' }] },
           },
-          fontSize: { '2xs': ['0.6875rem', { lineHeight: '1rem' }] },
         },
-      },
-    };
-  </script>
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-  <style>
-    body { font-feature-settings: "ss01" on; -webkit-tap-highlight-color: transparent; }
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    .snap-x-mandatory { scroll-snap-type: x mandatory; }
-    .snap-start { scroll-snap-align: start; }
-  </style>
-</head>
-<body class="min-h-screen bg-zinc-100 font-sans text-zinc-900 antialiased">
-  <!-- 심플 상단 바 (앱 상단 네비 느낌) -->
-  <header class="sticky top-0 z-50 border-b border-zinc-200/80 bg-zinc-50/95 backdrop-blur-xl">
-    <div class="mx-auto flex h-12 max-w-3xl items-center justify-between gap-3 px-4">
-      <div class="flex min-w-0 items-center gap-2">
-        <a href="#" class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-zinc-900 text-xs font-bold text-white">AI</a>
-        <span class="truncate text-sm font-semibold tracking-tight">에듀AI</span>
+      };
+    </script>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+    />
+    <style>
+      body {
+        font-feature-settings: 'ss01' on;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .snap-x-mandatory {
+        scroll-snap-type: x mandatory;
+      }
+      .snap-start {
+        scroll-snap-align: start;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-zinc-100 font-sans text-zinc-900 antialiased">
+    <!-- 심플 상단 바 (앱 상단 네비 느낌) -->
+    <header
+      class="sticky top-0 z-50 border-b border-zinc-200/80 bg-zinc-50/95 backdrop-blur-xl"
+    >
+      <div
+        class="mx-auto flex h-12 max-w-[960px] items-center justify-between gap-3 px-4"
+      >
+        <div class="flex min-w-0 items-center gap-2">
+          <a
+            href="project.html"
+            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-zinc-900 text-xs font-bold text-white"
+            >AI</a
+          >
+          <a
+            href="project.html"
+            class="truncate text-sm font-semibold tracking-tight hover:text-zinc-600"
+            >에듀AI</a
+          >
+        </div>
+        <div class="flex items-center gap-1">
+          <a
+            href="search.html"
+            class="flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 hover:bg-zinc-200/70"
+            aria-label="검색"
+          >
+            <svg
+              class="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </a>
+          <a
+            href="notifications.html"
+            class="relative flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 hover:bg-zinc-200/70"
+            aria-label="알림"
+          >
+            <svg
+              class="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+              />
+            </svg>
+            <span
+              class="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-zinc-50"
+            ></span>
+          </a>
+          <a
+            href="profile.html"
+            class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-amber-200 to-orange-200 text-xs font-bold text-amber-950"
+            aria-label="내 프로필"
+          >
+            김
+          </a>
+        </div>
       </div>
-      <div class="flex items-center gap-1">
-        <button type="button" class="flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 hover:bg-zinc-200/70" aria-label="검색">
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-        </button>
-        <button type="button" class="relative flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 hover:bg-zinc-200/70" aria-label="알림">
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
-          <span class="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-zinc-50"></span>
-        </button>
-        <button type="button" class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-amber-200 to-orange-200 text-xs font-bold text-amber-950" aria-label="내 프로필">김</button>
+      <!-- 필터 칩: 콘텐츠 탐색 (소개 아님) -->
+      <div class="border-t border-zinc-100/80">
+        <div
+          class="no-scrollbar mx-auto flex max-w-[960px] gap-1.5 overflow-x-auto px-4 py-2.5"
+        >
+          <a
+            href="project.html"
+            class="shrink-0 rounded-full bg-zinc-900 px-3.5 py-1.5 text-2xs font-semibold text-white"
+            >전체</a
+          >
+          <a
+            href="browse.html?c=planning"
+            class="shrink-0 rounded-full bg-white px-3.5 py-1.5 text-2xs font-medium text-zinc-600 ring-1 ring-zinc-200/80 hover:bg-zinc-50"
+            >기획</a
+          >
+          <a
+            href="browse.html?c=design"
+            class="shrink-0 rounded-full bg-white px-3.5 py-1.5 text-2xs font-medium text-zinc-600 ring-1 ring-zinc-200/80 hover:bg-zinc-50"
+            >디자인</a
+          >
+          <a
+            href="browse.html?c=development"
+            class="shrink-0 rounded-full bg-white px-3.5 py-1.5 text-2xs font-medium text-zinc-600 ring-1 ring-zinc-200/80 hover:bg-zinc-50"
+            >개발</a
+          >
+          <a
+            href="browse.html?c=curriculum"
+            class="shrink-0 rounded-full bg-white px-3.5 py-1.5 text-2xs font-medium text-zinc-600 ring-1 ring-zinc-200/80 hover:bg-zinc-50"
+            >커리큘럼</a
+          >
+          <a
+            href="browse.html?c=video"
+            class="shrink-0 rounded-full bg-white px-3.5 py-1.5 text-2xs font-medium text-zinc-600 ring-1 ring-zinc-200/80 hover:bg-zinc-50"
+            >영상</a
+          >
+          <a
+            href="browse.html?c=prompt"
+            class="shrink-0 rounded-full bg-white px-3.5 py-1.5 text-2xs font-medium text-zinc-600 ring-1 ring-zinc-200/80 hover:bg-zinc-50"
+            >프롬프트</a
+          >
+          <a
+            href="browse.html?c=output"
+            class="shrink-0 rounded-full bg-white px-3.5 py-1.5 text-2xs font-medium text-zinc-600 ring-1 ring-zinc-200/80 hover:bg-zinc-50"
+            >결과물</a
+          >
+          <a
+            href="browse.html?c=insight"
+            class="shrink-0 rounded-full bg-white px-3.5 py-1.5 text-2xs font-medium text-zinc-600 ring-1 ring-zinc-200/80 hover:bg-zinc-50"
+            >인사이트</a
+          >
+          <a
+            href="browse.html?c=community"
+            class="shrink-0 rounded-full bg-white px-3.5 py-1.5 text-2xs font-medium text-zinc-600 ring-1 ring-zinc-200/80 hover:bg-zinc-50"
+            >커뮤니티</a
+          >
+        </div>
       </div>
-    </div>
-    <!-- 필터 칩: 콘텐츠 탐색 (소개 아님) -->
-    <div class="no-scrollbar flex gap-1.5 overflow-x-auto border-t border-zinc-100/80 px-4 py-2.5">
-      <button type="button" class="shrink-0 rounded-full bg-zinc-900 px-3.5 py-1.5 text-2xs font-semibold text-white">전체</button>
-      <a href="#" class="shrink-0 rounded-full bg-white px-3.5 py-1.5 text-2xs font-medium text-zinc-600 ring-1 ring-zinc-200/80">커리큘럼</a>
-      <a href="#" class="shrink-0 rounded-full bg-white px-3.5 py-1.5 text-2xs font-medium text-zinc-600 ring-1 ring-zinc-200/80">영상</a>
-      <a href="#" class="shrink-0 rounded-full bg-white px-3.5 py-1.5 text-2xs font-medium text-zinc-600 ring-1 ring-zinc-200/80">프롬프트</a>
-      <a href="#" class="shrink-0 rounded-full bg-white px-3.5 py-1.5 text-2xs font-medium text-zinc-600 ring-1 ring-zinc-200/80">결과물</a>
-      <a href="#" class="shrink-0 rounded-full bg-white px-3.5 py-1.5 text-2xs font-medium text-zinc-600 ring-1 ring-zinc-200/80">인사이트</a>
-      <a href="#" class="shrink-0 rounded-full bg-white px-3.5 py-1.5 text-2xs font-medium text-zinc-600 ring-1 ring-zinc-200/80">커뮤니티</a>
-    </div>
-  </header>
+    </header>
 
-  <main class="mx-auto max-w-3xl px-3 pb-24 pt-3 sm:px-4 sm:pt-4">
-    <!-- 피드 라벨: 작은 섹션 타이틀만 -->
-    <p class="feed-label mb-3 px-1 text-2xs font-semibold uppercase tracking-wider text-zinc-400">추천 피드</p>
+    <main class="mx-auto max-w-[960px] px-4 pb-24 pt-3 sm:pt-4">
+      <!-- 피드 라벨: 작은 섹션 타이틀만 -->
+      <p
+        class="feed-label mb-3 px-1 text-2xs font-semibold uppercase tracking-wider text-zinc-400"
+      >
+        일간 피드
+      </p>
 
-    <div class="feed space-y-3 sm:space-y-4">
-      <!-- 게시물 카드: 커리큘럼 -->
-      <article class="post-card overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-zinc-900/[0.04]">
-        <div class="flex gap-3 p-3.5 sm:p-4">
-          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-emerald-100 text-sm font-bold text-emerald-900">한</span>
-          <div class="min-w-0 flex-1">
-            <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
-              <span class="text-sm font-semibold text-zinc-900">한소희</span>
-              <span class="rounded-md bg-emerald-50 px-1.5 py-0.5 text-2xs font-semibold text-emerald-800">커리큘럼</span>
-              <span class="text-2xs text-zinc-400">· 3시간 전</span>
-            </div>
-            <h2 class="mt-2 text-[15px] font-semibold leading-snug text-zinc-900 sm:text-base">생성형 AI로 끝내는 업무 자동화 · 8주 로드맵</h2>
-            <p class="mt-1.5 line-clamp-2 text-sm leading-relaxed text-zinc-500">프롬프트 설계부터 RAG까지 주차별로 바로 써먹을 수 있게 정리했어요.</p>
-            <div class="mt-2.5 flex flex-wrap gap-1.5">
-              <span class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600">#입문</span>
-              <span class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600">#업무자동화</span>
-            </div>
-          </div>
-        </div>
-        <div class="relative aspect-[21/9] bg-gradient-to-r from-emerald-600 to-teal-800 sm:aspect-[2.4/1]">
-          <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\'40\' height=\'40\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M0 40h40V0H0v40z\' fill=\'%23ffffff\' fill-opacity=\'.04\'/%3E%3C/svg%3E')] opacity-50"></div>
-        </div>
-        <div class="flex items-center justify-between border-t border-zinc-100 px-3 py-2.5 sm:px-4">
-          <div class="flex items-center gap-4 text-2xs text-zinc-500 sm:text-xs">
-            <button type="button" class="flex items-center gap-1.5 rounded-lg px-1 py-0.5 hover:bg-zinc-50 hover:text-zinc-800">
-              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-              <span class="font-medium tabular-nums">428</span>
-            </button>
-            <button type="button" class="flex items-center gap-1.5 rounded-lg px-1 py-0.5 hover:bg-zinc-50 hover:text-zinc-800">
-              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-              <span class="font-medium tabular-nums">36</span>
-            </button>
-            <button type="button" class="flex items-center gap-1.5 rounded-lg px-1 py-0.5 hover:bg-zinc-50 hover:text-zinc-800">
-              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
-              <span class="font-medium tabular-nums">1.2k</span>
-            </button>
-          </div>
-          <button type="button" class="rounded-full p-1.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700" aria-label="더보기">
-            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-          </button>
-        </div>
-      </article>
-
-      <!-- 게시물 카드: 영상 -->
-      <article class="post-card overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-zinc-900/[0.04]">
-        <div class="flex gap-3 p-3.5 sm:p-4">
-          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-violet-100 text-sm font-bold text-violet-900">김</span>
-          <div class="min-w-0 flex-1">
-            <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
-              <span class="text-sm font-semibold text-zinc-900">김나연</span>
-              <span class="rounded-md bg-violet-50 px-1.5 py-0.5 text-2xs font-semibold text-violet-800">영상</span>
-              <span class="text-2xs text-zinc-400">· 어제</span>
-            </div>
-            <h2 class="mt-2 text-[15px] font-semibold leading-snug text-zinc-900 sm:text-base">RAG 아키텍처 한 번에 이해하기</h2>
-            <div class="mt-2.5 flex flex-wrap gap-1.5">
-              <span class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600">#RAG</span>
-              <span class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600">#튜토리얼</span>
-            </div>
-          </div>
-        </div>
-        <div class="relative aspect-video bg-zinc-900">
-          <div class="absolute inset-0 bg-gradient-to-br from-zinc-700 via-zinc-800 to-zinc-950"></div>
-          <span class="absolute bottom-2 right-2 rounded-md bg-black/65 px-1.5 py-0.5 text-2xs font-medium text-white">18:42</span>
-          <div class="absolute inset-0 flex items-center justify-center">
-            <span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-zinc-900 shadow-lg">
-              <svg class="ml-1 h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </span>
-          </div>
-        </div>
-        <div class="flex items-center justify-between border-t border-zinc-100 px-3 py-2.5 sm:px-4">
-          <div class="flex items-center gap-4 text-2xs text-zinc-500 sm:text-xs">
-            <button type="button" class="flex items-center gap-1.5 rounded-lg px-1 py-0.5 hover:bg-zinc-50 hover:text-zinc-800">
-              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-              <span class="font-medium tabular-nums">892</span>
-            </button>
-            <button type="button" class="flex items-center gap-1.5 rounded-lg px-1 py-0.5 hover:bg-zinc-50 hover:text-zinc-800">
-              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-              <span class="font-medium tabular-nums">52</span>
-            </button>
-            <button type="button" class="flex items-center gap-1.5 rounded-lg px-1 py-0.5 hover:bg-zinc-50 hover:text-zinc-800">
-              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
-              <span class="font-medium tabular-nums">3.4k</span>
-            </button>
-          </div>
-          <button type="button" class="rounded-full p-1.5 text-zinc-400 hover:bg-zinc-100" aria-label="더보기">
-            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-          </button>
-        </div>
-      </article>
-
-      <!-- 게시물 카드: 인사이트 (텍스트 위주) -->
-      <article class="post-card rounded-2xl bg-white p-3.5 shadow-sm ring-1 ring-zinc-900/[0.04] sm:p-4">
-        <div class="flex gap-3">
-          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-amber-100 text-sm font-bold text-amber-950">박</span>
-          <div class="min-w-0 flex-1">
-            <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
-              <span class="text-sm font-semibold text-zinc-900">박서준</span>
-              <span class="rounded-md bg-amber-50 px-1.5 py-0.5 text-2xs font-semibold text-amber-900">인사이트</span>
-              <span class="text-2xs text-zinc-400">· 5분 전</span>
-            </div>
-            <h2 class="mt-2 text-[15px] font-semibold leading-snug text-zinc-900 sm:text-base">챗봇 과제를 학습 과정 평가로 바꾼 3가지 방법</h2>
-            <p class="mt-1.5 line-clamp-3 text-sm leading-relaxed text-zinc-500">제출물만 보지 않고 질문·수정 로그를 포트폴리오로 묶는 실제 사례를 적어봤어요.</p>
-            <div class="mt-2.5 flex flex-wrap gap-1.5">
-              <span class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600">#평가</span>
-              <span class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600">#챗봇</span>
-            </div>
-            <div class="mt-3 flex items-center justify-between border-t border-zinc-50 pt-3">
-              <div class="flex items-center gap-4 text-2xs text-zinc-500 sm:text-xs">
-                <button type="button" class="flex items-center gap-1.5 rounded-lg px-1 py-0.5 hover:bg-zinc-50 hover:text-zinc-800">
-                  <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                  <span class="font-medium tabular-nums">214</span>
-                </button>
-                <button type="button" class="flex items-center gap-1.5 rounded-lg px-1 py-0.5 hover:bg-zinc-50 hover:text-zinc-800">
-                  <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-                  <span class="font-medium tabular-nums">18</span>
-                </button>
-                <button type="button" class="flex items-center gap-1.5 rounded-lg px-1 py-0.5 hover:bg-zinc-50 hover:text-zinc-800">
-                  <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
-                  <span class="font-medium tabular-nums">640</span>
-                </button>
+      <div class="feed space-y-3 sm:space-y-4">
+        <!-- 게시물 카드: 커리큘럼 -->
+        <article
+          class="post-card overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-zinc-900/[0.04]"
+        >
+          <div class="flex gap-3 p-3.5 sm:p-4">
+            <span
+              class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-emerald-100 text-sm font-bold text-emerald-900"
+              >한</span
+            >
+            <div class="min-w-0 flex-1">
+              <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <span class="text-sm font-semibold text-zinc-900">한소희</span>
+                <span
+                  class="rounded-md bg-emerald-50 px-1.5 py-0.5 text-2xs font-semibold text-emerald-800"
+                  >커리큘럼</span
+                >
+                <span class="text-2xs text-zinc-400">· 3시간 전</span>
+              </div>
+              <h2
+                class="mt-2 text-[15px] font-semibold leading-snug text-zinc-900 sm:text-base"
+              >
+                <a
+                  href="post-detail.html?slug=automation-roadmap"
+                  class="hover:underline"
+                  >생성형 AI로 끝내는 업무 자동화 · 8주 로드맵</a
+                >
+              </h2>
+              <p
+                class="mt-1.5 line-clamp-2 text-sm leading-relaxed text-zinc-500"
+              >
+                프롬프트 설계부터 RAG까지 주차별로 바로 써먹을 수 있게
+                정리했어요.
+              </p>
+              <div class="mt-2.5 flex flex-wrap gap-1.5">
+                <span
+                  class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600"
+                  >#입문</span
+                >
+                <span
+                  class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600"
+                  >#업무자동화</span
+                >
               </div>
             </div>
           </div>
-        </div>
-      </article>
-    </div>
+          <a
+            href="post-detail.html?slug=automation-roadmap"
+            class="relative block aspect-[21/9] bg-gradient-to-r from-emerald-600 to-teal-800 sm:aspect-[2.4/1]"
+          >
+            <div
+              class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\'40\' height=\'40\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M0 40h40V0H0v40z\' fill=\'%23ffffff\' fill-opacity=\'.04\'/%3E%3C/svg%3E')] opacity-50"
+            ></div>
+          </a>
+          <div
+            class="flex items-center justify-between border-t border-zinc-100 px-3 py-2.5 sm:px-4"
+          >
+            <div
+              class="flex items-center gap-3 text-2xs sm:text-xs"
+            >
+              <button
+                type="button"
+                data-reaction="like"
+                data-base="428"
+                aria-pressed="false"
+                class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50"
+              >
+                <svg
+                  class="ic-outline h-4 w-4 shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                  />
+                </svg>
+                <svg
+                  class="ic-solid hidden h-4 w-4 shrink-0 text-rose-500"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                  />
+                </svg>
+                <span class="js-react-count tabular-nums font-medium">428</span>
+              </button>
+              <a
+                href="post-detail.html?slug=automation-roadmap#comments"
+                class="relative z-10 inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50 hover:text-zinc-800"
+                aria-label="댓글 보기"
+              >
+                <svg
+                  class="h-4 w-4 shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                  />
+                </svg>
+                <span class="tabular-nums font-medium">36</span>
+              </a>
+              <button
+                type="button"
+                data-reaction="save"
+                data-base="1200"
+                aria-pressed="false"
+                class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50"
+              >
+                <svg
+                  class="ic-outline h-4 w-4 shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                  />
+                </svg>
+                <svg
+                  class="ic-solid hidden h-4 w-4 shrink-0 text-amber-600"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M5 3a2 2 0 012-2h10a2 2 0 012 2v18l-7-4-7 4V3z"
+                  />
+                </svg>
+                <span class="js-react-count tabular-nums font-medium">1.2k</span>
+              </button>
+              <button
+                type="button"
+                data-share-path="post-detail.html?slug=automation-roadmap"
+                data-share-title="생성형 AI로 끝내는 업무 자동화 · 8주 로드맵"
+                class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50"
+                aria-label="공유"
+              >
+                <svg
+                  class="h-4 w-4 shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M8.59 13.51L15.42 17.5M15.41 6.5L8.59 10.49M18 21a3 3 0 100-6 3 3 0 000 6zM6 14a3 3 0 100-6 3 3 0 000 6zM18 9a3 3 0 100-6 3 3 0 000 6z"
+                  />
+                </svg>
+              </button>
+            </div>
+            <a
+              href="post-detail.html?slug=automation-roadmap"
+              class="rounded-full p-1.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700"
+              aria-label="상세"
+            >
+              <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+                />
+              </svg>
+            </a>
+          </div>
+        </article>
 
-    <!-- 인기 프롬프트 -->
-    <p class="feed-label mb-3 mt-8 px-1 text-2xs font-semibold uppercase tracking-wider text-zinc-400">인기 프롬프트</p>
-    <div class="space-y-3">
-      <article class="post-card rounded-2xl bg-white p-3.5 shadow-sm ring-1 ring-zinc-900/[0.04] sm:p-4">
-        <div class="flex gap-3">
-          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-fuchsia-100 text-sm font-bold text-fuchsia-900">이</span>
-          <div class="min-w-0 flex-1">
-            <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
-              <span class="text-sm font-semibold text-zinc-900">이하은</span>
-              <span class="rounded-md bg-fuchsia-50 px-1.5 py-0.5 text-2xs font-semibold text-fuchsia-900">프롬프트</span>
-              <span class="text-2xs text-zinc-400">· 1일 전</span>
-            </div>
-            <p class="mt-2 rounded-xl bg-zinc-50 px-3 py-2.5 font-mono text-2xs leading-relaxed text-zinc-800 sm:text-xs">너는 교육 설계자다. [학년/과목]을 받아 50분 수업안을 써라. 학습목표 3개, 활동 순서, AI 역할, 형성평가를 불릿으로.</p>
-            <div class="mt-2.5 flex flex-wrap gap-1.5">
-              <span class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600">#수업설계</span>
-              <span class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600">#복사해둠</span>
-            </div>
-            <div class="mt-3 flex items-center justify-between border-t border-zinc-50 pt-3">
-              <div class="flex items-center gap-4 text-2xs text-zinc-500 sm:text-xs">
-                <button type="button" class="flex items-center gap-1.5 rounded-lg px-1 py-0.5 hover:bg-zinc-50"><svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span class="font-medium tabular-nums">1.1k</span></button>
-                <button type="button" class="flex items-center gap-1.5 rounded-lg px-1 py-0.5 hover:bg-zinc-50"><svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span class="font-medium tabular-nums">41</span></button>
-                <button type="button" class="flex items-center gap-1.5 rounded-lg px-1 py-0.5 hover:bg-zinc-50"><svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg><span class="font-medium tabular-nums">2.8k</span></button>
+        <!-- 게시물 카드: 영상 -->
+        <article
+          class="post-card overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-zinc-900/[0.04]"
+        >
+          <div class="flex gap-3 p-3.5 sm:p-4">
+            <span
+              class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-violet-100 text-sm font-bold text-violet-900"
+              >김</span
+            >
+            <div class="min-w-0 flex-1">
+              <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <span class="text-sm font-semibold text-zinc-900">김나연</span>
+                <span
+                  class="rounded-md bg-violet-50 px-1.5 py-0.5 text-2xs font-semibold text-violet-800"
+                  >영상</span
+                >
+                <span class="text-2xs text-zinc-400">· 어제</span>
               </div>
-              <button type="button" class="rounded-full bg-zinc-900 px-3 py-1.5 text-2xs font-semibold text-white">복사</button>
-            </div>
-          </div>
-        </div>
-      </article>
-      <article class="post-card rounded-2xl bg-white p-3.5 shadow-sm ring-1 ring-zinc-900/[0.04] sm:p-4">
-        <div class="flex gap-3">
-          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-sky-100 text-sm font-bold text-sky-900">오</span>
-          <div class="min-w-0 flex-1">
-            <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
-              <span class="text-sm font-semibold text-zinc-900">오세훈</span>
-              <span class="rounded-md bg-sky-50 px-1.5 py-0.5 text-2xs font-semibold text-sky-900">프롬프트</span>
-              <span class="text-2xs text-zinc-400">· 4일 전</span>
-            </div>
-            <p class="mt-2 rounded-xl bg-zinc-50 px-3 py-2.5 font-mono text-2xs leading-relaxed text-zinc-800 sm:text-xs">아래 텍스트를 요약하고, 반박 가능한 논점 3개를 한국어로 제시해 줘. 출처가 불명확한 문장은 [검증 필요]로 표시해.</p>
-            <div class="mt-2.5 flex flex-wrap gap-1.5">
-              <span class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600">#비판적읽기</span>
-            </div>
-            <div class="mt-3 flex items-center justify-between border-t border-zinc-50 pt-3">
-              <div class="flex items-center gap-4 text-2xs text-zinc-500 sm:text-xs">
-                <button type="button" class="flex items-center gap-1.5"><svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span class="font-medium tabular-nums">506</span></button>
-                <button type="button" class="flex items-center gap-1.5"><svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span class="font-medium tabular-nums">22</span></button>
-                <button type="button" class="flex items-center gap-1.5"><svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg><span class="font-medium tabular-nums">980</span></button>
+              <h2
+                class="mt-2 text-[15px] font-semibold leading-snug text-zinc-900 sm:text-base"
+              >
+                <a
+                  href="post-detail.html?slug=rag-video"
+                  class="hover:underline"
+                  >RAG 아키텍처 한 번에 이해하기</a
+                >
+              </h2>
+              <div class="mt-2.5 flex flex-wrap gap-1.5">
+                <span
+                  class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600"
+                  >#RAG</span
+                >
+                <span
+                  class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600"
+                  >#튜토리얼</span
+                >
               </div>
-              <button type="button" class="rounded-full bg-zinc-900 px-3 py-1.5 text-2xs font-semibold text-white">복사</button>
             </div>
           </div>
-        </div>
-      </article>
-    </div>
+          <a
+            href="post-detail.html?slug=rag-video"
+            class="relative block aspect-video overflow-hidden bg-zinc-900"
+          >
+            <img
+              src="https://img.youtube.com/vi/sVcwVQRHIc8/hqdefault.jpg"
+              alt=""
+              class="h-full w-full object-cover"
+              loading="lazy"
+            />
+            <div
+              class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20"
+            ></div>
+            <span
+              class="absolute bottom-2 left-2 rounded bg-red-600 px-1.5 py-0.5 text-[0.625rem] font-semibold text-white"
+              >YouTube</span
+            >
+            <span
+              class="absolute bottom-2 right-2 rounded-md bg-black/65 px-1.5 py-0.5 text-2xs font-medium text-white"
+              >18:42</span
+            >
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span
+                class="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-zinc-900 shadow-lg"
+              >
+                <svg
+                  class="ml-1 h-7 w-7"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </span>
+            </div>
+          </a>
+          <div
+            class="flex items-center justify-between border-t border-zinc-100 px-3 py-2.5 sm:px-4"
+          >
+            <div class="flex items-center gap-3 text-2xs sm:text-xs">
+              <button
+                type="button"
+                data-reaction="like"
+                data-base="892"
+                aria-pressed="false"
+                class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50"
+              >
+                <svg class="ic-outline h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                <svg class="ic-solid hidden h-4 w-4 shrink-0 text-rose-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                <span class="js-react-count tabular-nums font-medium">892</span>
+              </button>
+              <a href="post-detail.html?slug=rag-video#comments" class="relative z-10 inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50 hover:text-zinc-800" aria-label="댓글 보기">
+                <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                <span class="tabular-nums font-medium">52</span>
+              </a>
+              <button type="button" data-reaction="save" data-base="3400" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50">
+                <svg class="ic-outline h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+                <svg class="ic-solid hidden h-4 w-4 shrink-0 text-amber-600" fill="currentColor" viewBox="0 0 24 24"><path d="M5 3a2 2 0 012-2h10a2 2 0 012 2v18l-7-4-7 4V3z"/></svg>
+                <span class="js-react-count tabular-nums font-medium">3.4k</span>
+              </button>
+              <button type="button" data-share-path="post-detail.html?slug=rag-video" data-share-title="RAG 아키텍처 한 번에 이해하기" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50" aria-label="공유">
+                <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.59 13.51L15.42 17.5M15.41 6.5L8.59 10.49M18 21a3 3 0 100-6 3 3 0 000 6zM6 14a3 3 0 100-6 3 3 0 000 6zM18 9a3 3 0 100-6 3 3 0 000 6z"/></svg>
+              </button>
+            </div>
+            <a href="post-detail.html?slug=rag-video" class="rounded-full p-1.5 text-zinc-400 hover:bg-zinc-100" aria-label="상세">
+              <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+            </a>
+          </div>
+        </article>
 
-    <!-- 최신 결과물 -->
-    <p class="feed-label mb-3 mt-8 px-1 text-2xs font-semibold uppercase tracking-wider text-zinc-400">최신 결과물</p>
-    <div class="grid grid-cols-2 gap-3 sm:gap-4">
-      <article class="post-card overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-zinc-900/[0.04]">
-        <div class="aspect-[4/5] bg-gradient-to-br from-orange-100 to-rose-100"></div>
-        <div class="p-3">
-          <div class="flex items-center gap-2">
-            <span class="h-7 w-7 shrink-0 rounded-xl bg-orange-100 text-center text-2xs font-bold leading-7 text-orange-900">민</span>
-            <span class="truncate text-2xs font-semibold text-zinc-900">민지</span>
+        <!-- 게시물 카드: 인사이트 (텍스트 위주) -->
+        <article
+          class="post-card rounded-2xl bg-white p-3.5 shadow-sm ring-1 ring-zinc-900/[0.04] sm:p-4"
+        >
+          <div class="flex gap-3">
+            <span
+              class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-amber-100 text-sm font-bold text-amber-950"
+              >박</span
+            >
+            <div class="min-w-0 flex-1">
+              <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <span class="text-sm font-semibold text-zinc-900">박서준</span>
+                <span
+                  class="rounded-md bg-amber-50 px-1.5 py-0.5 text-2xs font-semibold text-amber-900"
+                  >인사이트</span
+                >
+                <span class="text-2xs text-zinc-400">· 5분 전</span>
+              </div>
+              <h2
+                class="mt-2 text-[15px] font-semibold leading-snug text-zinc-900 sm:text-base"
+              >
+                <a
+                  href="post-detail.html?slug=chatbot-eval"
+                  class="hover:underline"
+                  >챗봇 과제를 학습 과정 평가로 바꾼 3가지 방법</a
+                >
+              </h2>
+              <p
+                class="mt-1.5 line-clamp-3 text-sm leading-relaxed text-zinc-500"
+              >
+                제출물만 보지 않고 질문·수정 로그를 포트폴리오로 묶는 실제
+                사례를 적어봤어요.
+              </p>
+              <div class="mt-2.5 flex flex-wrap gap-1.5">
+                <span
+                  class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600"
+                  >#평가</span
+                >
+                <span
+                  class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600"
+                  >#챗봇</span
+                >
+              </div>
+              <div
+                class="mt-3 flex items-center justify-between border-t border-zinc-50 pt-3"
+              >
+                <div class="flex items-center gap-3 text-2xs sm:text-xs">
+                  <button type="button" data-reaction="like" data-base="214" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50">
+                    <svg class="ic-outline h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                    <svg class="ic-solid hidden h-4 w-4 shrink-0 text-rose-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    <span class="js-react-count tabular-nums font-medium">214</span>
+                  </button>
+                  <a href="post-detail.html?slug=chatbot-eval#comments" class="relative z-10 inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50 hover:text-zinc-800" aria-label="댓글 보기">
+                    <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                    <span class="tabular-nums font-medium">18</span>
+                  </a>
+                  <button type="button" data-reaction="save" data-base="640" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50">
+                    <svg class="ic-outline h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+                    <svg class="ic-solid hidden h-4 w-4 shrink-0 text-amber-600" fill="currentColor" viewBox="0 0 24 24"><path d="M5 3a2 2 0 012-2h10a2 2 0 012 2v18l-7-4-7 4V3z"/></svg>
+                    <span class="js-react-count tabular-nums font-medium">640</span>
+                  </button>
+                  <button type="button" data-share-path="post-detail.html?slug=chatbot-eval" data-share-title="챗봇 과제를 학습 과정 평가로 바꾼 3가지 방법" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50" aria-label="공유">
+                    <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.59 13.51L15.42 17.5M15.41 6.5L8.59 10.49M18 21a3 3 0 100-6 3 3 0 000 6zM6 14a3 3 0 100-6 3 3 0 000 6zM18 9a3 3 0 100-6 3 3 0 000 6z"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-          <h3 class="mt-2 line-clamp-2 text-xs font-semibold leading-snug text-zinc-900 sm:text-sm">과학 수행평가 AI 피드백 루브릭</h3>
-          <div class="mt-2 flex items-center justify-between text-2xs text-zinc-500">
-            <span class="flex items-center gap-1"><svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>312</span>
-            <span class="flex items-center gap-1"><svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>9</span>
-          </div>
-        </div>
-      </article>
-      <article class="post-card overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-zinc-900/[0.04]">
-        <div class="aspect-[4/5] bg-gradient-to-br from-cyan-100 to-blue-100"></div>
-        <div class="p-3">
-          <div class="flex items-center gap-2">
-            <span class="h-7 w-7 shrink-0 rounded-xl bg-cyan-100 text-center text-2xs font-bold leading-7 text-cyan-900">도</span>
-            <span class="truncate text-2xs font-semibold text-zinc-900">도윤</span>
-          </div>
-          <h3 class="mt-2 line-clamp-2 text-xs font-semibold leading-snug text-zinc-900 sm:text-sm">학급 맞춤 퀴즈 JSON 세트</h3>
-          <div class="mt-2 flex items-center justify-between text-2xs text-zinc-500">
-            <span class="flex items-center gap-1"><svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>198</span>
-            <span class="flex items-center gap-1"><svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>412</span>
-          </div>
-        </div>
-      </article>
-    </div>
-
-    <!-- 많이 본 영상 (가로 스크롤) -->
-    <p class="feed-label mb-3 mt-8 px-1 text-2xs font-semibold uppercase tracking-wider text-zinc-400">많이 본 영상</p>
-    <div class="no-scrollbar -mx-3 flex snap-x-mandatory gap-3 overflow-x-auto px-3 pb-1 sm:-mx-4 sm:px-4">
-      <article class="post-card w-[72%] shrink-0 snap-start overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-zinc-900/[0.04] sm:w-[280px]">
-        <div class="relative aspect-video bg-gradient-to-br from-indigo-600 to-violet-900">
-          <span class="absolute bottom-2 right-2 rounded bg-black/55 px-1.5 py-0.5 text-2xs text-white">24:05</span>
-          <div class="absolute inset-0 flex items-center justify-center opacity-90">
-            <span class="flex h-11 w-11 items-center justify-center rounded-full bg-white/95 text-zinc-900"><svg class="ml-0.5 h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
-          </div>
-        </div>
-        <div class="p-3">
-          <p class="line-clamp-2 text-xs font-semibold text-zinc-900">프롬프트 체인으로 리포트 자동 작성</p>
-          <p class="mt-1 text-2xs text-zinc-400">조회 2.8만 · 오세훈</p>
-        </div>
-      </article>
-      <article class="post-card w-[72%] shrink-0 snap-start overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-zinc-900/[0.04] sm:w-[280px]">
-        <div class="relative aspect-video bg-gradient-to-br from-teal-600 to-cyan-900">
-          <span class="absolute bottom-2 right-2 rounded bg-black/55 px-1.5 py-0.5 text-2xs text-white">12:30</span>
-          <div class="absolute inset-0 flex items-center justify-center">
-            <span class="flex h-11 w-11 items-center justify-center rounded-full bg-white/95 text-zinc-900"><svg class="ml-0.5 h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
-          </div>
-        </div>
-        <div class="p-3">
-          <p class="line-clamp-2 text-xs font-semibold text-zinc-900">이미지 생성 파라미터 가이드</p>
-          <p class="mt-1 text-2xs text-zinc-400">조회 1.9만 · 문채원</p>
-        </div>
-      </article>
-      <article class="post-card w-[72%] shrink-0 snap-start overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-zinc-900/[0.04] sm:w-[280px]">
-        <div class="relative aspect-video bg-gradient-to-br from-rose-600 to-orange-900">
-          <span class="absolute bottom-2 right-2 rounded bg-black/55 px-1.5 py-0.5 text-2xs text-white">09:12</span>
-          <div class="absolute inset-0 flex items-center justify-center">
-            <span class="flex h-11 w-11 items-center justify-center rounded-full bg-white/95 text-zinc-900"><svg class="ml-0.5 h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
-          </div>
-        </div>
-        <div class="p-3">
-          <p class="line-clamp-2 text-xs font-semibold text-zinc-900">교실용 프롬프트 안전 체크</p>
-          <p class="mt-1 text-2xs text-zinc-400">조회 1.4만 · 최유진</p>
-        </div>
-      </article>
-    </div>
-
-    <!-- 최근 인사이트 -->
-    <p class="feed-label mb-3 mt-8 px-1 text-2xs font-semibold uppercase tracking-wider text-zinc-400">최근 인사이트</p>
-    <div class="space-y-2">
-      <a href="#" class="post-card flex gap-3 rounded-2xl bg-white p-3 shadow-sm ring-1 ring-zinc-900/[0.04] transition hover:bg-zinc-50/80 sm:p-3.5">
-        <div class="h-16 w-20 shrink-0 rounded-xl bg-gradient-to-br from-zinc-200 to-zinc-300"></div>
-        <div class="min-w-0 flex-1 py-0.5">
-          <p class="text-2xs text-zinc-400">어제</p>
-          <p class="mt-0.5 line-clamp-2 text-sm font-semibold text-zinc-900">교실에서 생성형 AI 동의서 체크리스트</p>
-          <p class="mt-1 line-clamp-1 text-2xs text-zinc-500">서연 외 12명이 공감함</p>
-        </div>
-      </a>
-      <a href="#" class="post-card flex gap-3 rounded-2xl bg-white p-3 shadow-sm ring-1 ring-zinc-900/[0.04] transition hover:bg-zinc-50/80 sm:p-3.5">
-        <div class="h-16 w-20 shrink-0 rounded-xl bg-gradient-to-br from-zinc-200 to-zinc-300"></div>
-        <div class="min-w-0 flex-1 py-0.5">
-          <p class="text-2xs text-zinc-400">3일 전</p>
-          <p class="mt-0.5 line-clamp-2 text-sm font-semibold text-zinc-900">프롬프트 공유 시 버전 관리 팁</p>
-          <p class="mt-1 line-clamp-1 text-2xs text-zinc-500">댓글 27</p>
-        </div>
-      </a>
-    </div>
-
-    <!-- 하단 고정 FAB (앱식 작성) -->
-    <div class="pointer-events-none fixed bottom-0 left-0 right-0 z-40 flex justify-center pb-6 pt-10 sm:pb-8">
-      <div class="pointer-events-auto mx-auto flex w-full max-w-3xl justify-end px-4">
-        <button type="button" class="flex h-14 w-14 items-center justify-center rounded-full bg-zinc-900 text-white shadow-lg shadow-zinc-900/25 ring-4 ring-zinc-100/80" aria-label="새 글 작성">
-          <svg class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 4v16m8-8H4"/></svg>
-        </button>
+        </article>
       </div>
-    </div>
-  </main>
 
-  <footer class="mx-auto max-w-3xl px-4 py-8 text-center text-2xs text-zinc-400">
-    에듀AI · 커뮤니티 홈 목업
-  </footer>
-</body>
+      <!-- 인기 프롬프트 -->
+      <p
+        class="feed-label mb-3 mt-8 px-1 text-2xs font-semibold uppercase tracking-wider text-zinc-400"
+      >
+        인기 프롬프트
+      </p>
+      <div class="space-y-3">
+        <article
+          class="post-card rounded-2xl bg-white p-3.5 shadow-sm ring-1 ring-zinc-900/[0.04] sm:p-4"
+        >
+          <div class="flex gap-3">
+            <span
+              class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-fuchsia-100 text-sm font-bold text-fuchsia-900"
+              >이</span
+            >
+            <div class="min-w-0 flex-1">
+              <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <span class="text-sm font-semibold text-zinc-900">이하은</span>
+                <span
+                  class="rounded-md bg-fuchsia-50 px-1.5 py-0.5 text-2xs font-semibold text-fuchsia-900"
+                  >프롬프트</span
+                >
+                <span class="text-2xs text-zinc-400">· 1일 전</span>
+              </div>
+              <div class="relative mt-2 rounded-xl border border-zinc-100 bg-zinc-50">
+                <p class="px-3 py-2.5 pr-14 font-mono text-2xs leading-relaxed text-zinc-800 sm:text-xs">
+                  너는 교육 설계자다. [학년/과목]을 받아 50분 수업안을 써라.
+                  학습목표 3개, 활동 순서, AI 역할, 형성평가를 불릿으로.
+                </p>
+                <button
+                  type="button"
+                  data-copy="너는 교육 설계자다. [학년/과목]을 받아 50분 수업안을 써라. 학습목표 3개, 활동 순서, AI 역할, 형성평가를 불릿으로."
+                  class="prompt-copy-btn absolute right-2 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg bg-white text-zinc-600 shadow-sm ring-1 ring-zinc-200 hover:bg-zinc-50"
+                  aria-label="프롬프트 복사"
+                >
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                </button>
+                <a href="post-detail.html?slug=prompt-lesson" class="block border-t border-zinc-100 px-3 py-2 text-2xs font-semibold text-violet-700 hover:bg-zinc-100/80">상세에서 전체 보기</a>
+              </div>
+              <div class="mt-2.5 flex flex-wrap gap-1.5">
+                <span
+                  class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600"
+                  >#수업설계</span
+                >
+                <span
+                  class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600"
+                  >#복사해둠</span
+                >
+              </div>
+              <div
+                class="mt-3 flex items-center justify-between border-t border-zinc-50 pt-3"
+              >
+                <div class="flex items-center gap-3 text-2xs text-zinc-500 sm:text-xs">
+                  <button type="button" data-reaction="like" data-base="1100" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium hover:bg-zinc-50">
+                    <svg class="ic-outline h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                    <svg class="ic-solid hidden h-4 w-4 text-rose-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    <span class="js-react-count font-medium tabular-nums">1.1k</span>
+                  </button>
+                  <a href="post-detail.html?slug=prompt-lesson#comments" class="relative z-10 inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50 hover:text-zinc-800" aria-label="댓글 보기">
+                    <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                    <span class="font-medium tabular-nums">41</span>
+                  </a>
+                  <button type="button" data-reaction="save" data-base="2800" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium hover:bg-zinc-50">
+                    <svg class="ic-outline h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+                    <svg class="ic-solid hidden h-4 w-4 text-amber-600" fill="currentColor" viewBox="0 0 24 24"><path d="M5 3a2 2 0 012-2h10a2 2 0 012 2v18l-7-4-7 4V3z"/></svg>
+                    <span class="js-react-count font-medium tabular-nums">2.8k</span>
+                  </button>
+                  <button type="button" data-share-path="post-detail.html?slug=prompt-lesson" data-share-title="50분 수업안 프롬프트" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium hover:bg-zinc-50" aria-label="공유">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.59 13.51L15.42 17.5M15.41 6.5L8.59 10.49M18 21a3 3 0 100-6 3 3 0 000 6zM6 14a3 3 0 100-6 3 3 0 000 6zM18 9a3 3 0 100-6 3 3 0 000 6z"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article
+          class="post-card rounded-2xl bg-white p-3.5 shadow-sm ring-1 ring-zinc-900/[0.04] sm:p-4"
+        >
+          <div class="flex gap-3">
+            <span
+              class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-sky-100 text-sm font-bold text-sky-900"
+              >오</span
+            >
+            <div class="min-w-0 flex-1">
+              <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <span class="text-sm font-semibold text-zinc-900">오세훈</span>
+                <span
+                  class="rounded-md bg-sky-50 px-1.5 py-0.5 text-2xs font-semibold text-sky-900"
+                  >프롬프트</span
+                >
+                <span class="text-2xs text-zinc-400">· 4일 전</span>
+              </div>
+              <div class="relative mt-2 rounded-xl border border-zinc-100 bg-zinc-50">
+                <p class="px-3 py-2.5 pr-14 font-mono text-2xs leading-relaxed text-zinc-800 sm:text-xs">
+                  아래 텍스트를 요약하고, 반박 가능한 논점 3개를 한국어로 제시해
+                  줘. 출처가 불명확한 문장은 [검증 필요]로 표시해.
+                </p>
+                <button
+                  type="button"
+                  data-copy="아래 텍스트를 요약하고, 반박 가능한 논점 3개를 한국어로 제시해 줘. 출처가 불명확한 문장은 [검증 필요]로 표시해."
+                  class="prompt-copy-btn absolute right-2 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg bg-white text-zinc-600 shadow-sm ring-1 ring-zinc-200 hover:bg-zinc-50"
+                  aria-label="프롬프트 복사"
+                >
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                </button>
+                <a href="post-detail.html?slug=prompt-reading" class="block border-t border-zinc-100 px-3 py-2 text-2xs font-semibold text-violet-700 hover:bg-zinc-100/80">상세에서 전체 보기</a>
+              </div>
+              <div class="mt-2.5 flex flex-wrap gap-1.5">
+                <span
+                  class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600"
+                  >#비판적읽기</span
+                >
+              </div>
+              <div class="mt-3 flex items-center justify-between border-t border-zinc-50 pt-3">
+                <div class="flex items-center gap-3 text-2xs text-zinc-500 sm:text-xs">
+                  <button type="button" data-reaction="like" data-base="506" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium hover:bg-zinc-50">
+                    <svg class="ic-outline h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                    <svg class="ic-solid hidden h-4 w-4 text-rose-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    <span class="js-react-count font-medium tabular-nums">506</span>
+                  </button>
+                  <a href="post-detail.html?slug=prompt-reading#comments" class="relative z-10 inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50 hover:text-zinc-800" aria-label="댓글 보기">
+                    <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                    <span class="font-medium tabular-nums">22</span>
+                  </a>
+                  <button type="button" data-reaction="save" data-base="980" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium hover:bg-zinc-50">
+                    <svg class="ic-outline h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+                    <svg class="ic-solid hidden h-4 w-4 text-amber-600" fill="currentColor" viewBox="0 0 24 24"><path d="M5 3a2 2 0 012-2h10a2 2 0 012 2v18l-7-4-7 4V3z"/></svg>
+                    <span class="js-react-count font-medium tabular-nums">980</span>
+                  </button>
+                  <button type="button" data-share-path="post-detail.html?slug=prompt-reading" data-share-title="비판적 읽기 요약 프롬프트" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium hover:bg-zinc-50" aria-label="공유">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.59 13.51L15.42 17.5M15.41 6.5L8.59 10.49M18 21a3 3 0 100-6 3 3 0 000 6zM6 14a3 3 0 100-6 3 3 0 000 6zM18 9a3 3 0 100-6 3 3 0 000 6z"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- 최신 결과물 -->
+      <p
+        class="feed-label mb-3 mt-8 px-1 text-2xs font-semibold uppercase tracking-wider text-zinc-400"
+      >
+        최신 결과물
+      </p>
+      <div class="grid grid-cols-2 gap-3 sm:gap-4">
+        <a
+          href="post-detail.html?slug=result-rubric"
+          class="post-card block overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-zinc-900/[0.04] transition hover:ring-zinc-300"
+        >
+          <div
+            class="aspect-[4/5] bg-gradient-to-br from-orange-100 to-rose-100"
+          ></div>
+          <div class="p-3">
+            <div class="flex items-center gap-2">
+              <span
+                class="h-7 w-7 shrink-0 rounded-xl bg-orange-100 text-center text-2xs font-bold leading-7 text-orange-900"
+                >민</span
+              >
+              <span class="truncate text-2xs font-semibold text-zinc-900"
+                >민지</span
+              >
+            </div>
+            <h3
+              class="mt-2 line-clamp-2 text-xs font-semibold leading-snug text-zinc-900 sm:text-sm"
+            >
+              과학 수행평가 AI 피드백 루브릭
+            </h3>
+            <div
+              class="mt-2 flex items-center justify-between text-2xs text-zinc-500"
+            >
+              <span class="flex items-center gap-1"
+                ><svg
+                  class="h-3.5 w-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                  /></svg
+                >312</span
+              >
+              <span class="flex items-center gap-1"
+                ><svg
+                  class="h-3.5 w-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                  /></svg
+                >9</span
+              >
+            </div>
+          </div>
+        </a>
+        <a
+          href="post-detail.html?slug=result-quiz"
+          class="post-card block overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-zinc-900/[0.04] transition hover:ring-zinc-300"
+        >
+          <div
+            class="aspect-[4/5] bg-gradient-to-br from-cyan-100 to-blue-100"
+          ></div>
+          <div class="p-3">
+            <div class="flex items-center gap-2">
+              <span
+                class="h-7 w-7 shrink-0 rounded-xl bg-cyan-100 text-center text-2xs font-bold leading-7 text-cyan-900"
+                >도</span
+              >
+              <span class="truncate text-2xs font-semibold text-zinc-900"
+                >도윤</span
+              >
+            </div>
+            <h3
+              class="mt-2 line-clamp-2 text-xs font-semibold leading-snug text-zinc-900 sm:text-sm"
+            >
+              학급 맞춤 퀴즈 JSON 세트
+            </h3>
+            <div
+              class="mt-2 flex items-center justify-between text-2xs text-zinc-500"
+            >
+              <span class="flex items-center gap-1"
+                ><svg
+                  class="h-3.5 w-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                  /></svg
+                >198</span
+              >
+              <span class="flex items-center gap-1"
+                ><svg
+                  class="h-3.5 w-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                  /></svg
+                >412</span
+              >
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <!-- 일간 인기 영상 (가로 스크롤) -->
+      <p
+        class="feed-label mb-3 mt-8 px-1 text-2xs font-semibold uppercase tracking-wider text-zinc-400"
+      >
+        일간 인기 영상
+      </p>
+      <div
+        class="no-scrollbar -mx-4 flex snap-x-mandatory gap-3 overflow-x-auto px-4 pb-1"
+      >
+        <a
+          href="post-detail.html?slug=rag-video"
+          class="post-card w-[72%] shrink-0 snap-start overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-zinc-900/[0.04] sm:w-[280px]"
+        >
+          <div
+            class="relative aspect-video bg-gradient-to-br from-indigo-600 to-violet-900"
+          >
+            <span
+              class="absolute bottom-2 right-2 rounded bg-black/55 px-1.5 py-0.5 text-2xs text-white"
+              >24:05</span
+            >
+            <div
+              class="absolute inset-0 flex items-center justify-center opacity-90"
+            >
+              <span
+                class="flex h-11 w-11 items-center justify-center rounded-full bg-white/95 text-zinc-900"
+                ><svg
+                  class="ml-0.5 h-5 w-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M8 5v14l11-7z" /></svg
+              ></span>
+            </div>
+          </div>
+          <div class="p-3">
+            <p class="line-clamp-2 text-xs font-semibold text-zinc-900">
+              프롬프트 체인으로 리포트 자동 작성
+            </p>
+            <p class="mt-1 text-2xs text-zinc-400">조회 2.8만 · 오세훈</p>
+          </div>
+        </a>
+        <article
+          class="post-card w-[72%] shrink-0 snap-start overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-zinc-900/[0.04] sm:w-[280px]"
+        >
+          <div
+            class="relative aspect-video bg-gradient-to-br from-teal-600 to-cyan-900"
+          >
+            <span
+              class="absolute bottom-2 right-2 rounded bg-black/55 px-1.5 py-0.5 text-2xs text-white"
+              >12:30</span
+            >
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span
+                class="flex h-11 w-11 items-center justify-center rounded-full bg-white/95 text-zinc-900"
+                ><svg
+                  class="ml-0.5 h-5 w-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M8 5v14l11-7z" /></svg
+              ></span>
+            </div>
+          </div>
+          <div class="p-3">
+            <p class="line-clamp-2 text-xs font-semibold text-zinc-900">
+              이미지 생성 파라미터 가이드
+            </p>
+            <p class="mt-1 text-2xs text-zinc-400">조회 1.9만 · 문채원</p>
+          </div>
+        </article>
+        <article
+          class="post-card w-[72%] shrink-0 snap-start overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-zinc-900/[0.04] sm:w-[280px]"
+        >
+          <div
+            class="relative aspect-video bg-gradient-to-br from-rose-600 to-orange-900"
+          >
+            <span
+              class="absolute bottom-2 right-2 rounded bg-black/55 px-1.5 py-0.5 text-2xs text-white"
+              >09:12</span
+            >
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span
+                class="flex h-11 w-11 items-center justify-center rounded-full bg-white/95 text-zinc-900"
+                ><svg
+                  class="ml-0.5 h-5 w-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M8 5v14l11-7z" /></svg
+              ></span>
+            </div>
+          </div>
+          <div class="p-3">
+            <p class="line-clamp-2 text-xs font-semibold text-zinc-900">
+              교실용 프롬프트 안전 체크
+            </p>
+            <p class="mt-1 text-2xs text-zinc-400">조회 1.4만 · 최유진</p>
+          </div>
+        </article>
+      </div>
+
+      <!-- 일간 인사이트 -->
+      <p
+        class="feed-label mb-3 mt-8 px-1 text-2xs font-semibold uppercase tracking-wider text-zinc-400"
+      >
+        일간 인사이트
+      </p>
+      <div class="space-y-2">
+        <a
+          href="post-detail.html?slug=insight-consent"
+          class="post-card flex gap-3 rounded-2xl bg-white p-3 shadow-sm ring-1 ring-zinc-900/[0.04] transition hover:bg-zinc-50/80 sm:p-3.5"
+        >
+          <div
+            class="h-16 w-20 shrink-0 rounded-xl bg-gradient-to-br from-zinc-200 to-zinc-300"
+          ></div>
+          <div class="min-w-0 flex-1 py-0.5">
+            <p class="text-2xs text-zinc-400">어제</p>
+            <p class="mt-0.5 line-clamp-2 text-sm font-semibold text-zinc-900">
+              교실에서 생성형 AI 동의서 체크리스트
+            </p>
+            <p class="mt-1 line-clamp-1 text-2xs text-zinc-500">
+              서연 외 12명이 공감함
+            </p>
+          </div>
+        </a>
+        <a
+          href="post-detail.html?slug=insight-version"
+          class="post-card flex gap-3 rounded-2xl bg-white p-3 shadow-sm ring-1 ring-zinc-900/[0.04] transition hover:bg-zinc-50/80 sm:p-3.5"
+        >
+          <div
+            class="h-16 w-20 shrink-0 rounded-xl bg-gradient-to-br from-zinc-200 to-zinc-300"
+          ></div>
+          <div class="min-w-0 flex-1 py-0.5">
+            <p class="text-2xs text-zinc-400">3일 전</p>
+            <p class="mt-0.5 line-clamp-2 text-sm font-semibold text-zinc-900">
+              프롬프트 공유 시 버전 관리 팁
+            </p>
+            <p class="mt-1 line-clamp-1 text-2xs text-zinc-500">댓글 27</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- 하단 고정 FAB (앱식 작성) -->
+      <div
+        class="pointer-events-none fixed bottom-0 left-0 right-0 z-40 flex justify-center pb-6 pt-10 sm:pb-8"
+      >
+        <div
+          class="pointer-events-auto mx-auto flex w-full max-w-[960px] justify-end px-4"
+        >
+          <a
+            href="compose.html"
+            class="flex h-14 w-14 items-center justify-center rounded-full bg-zinc-900 text-white shadow-lg shadow-zinc-900/25 ring-4 ring-zinc-100/80 hover:bg-zinc-800"
+            aria-label="새 글 작성"
+          >
+            <svg
+              class="h-7 w-7"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" d="M12 4v16m8-8H4" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <footer
+      class="mx-auto max-w-[960px] px-4 py-8 text-center text-2xs text-zinc-400"
+    >
+      에듀AI · 커뮤니티 홈 목업
+    </footer>
+
+    <template id="icon-check-tpl">
+      <svg class="h-4 w-4 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+    </template>
+
+    <script>
+      (function () {
+        function loadCommentMap() {
+          try {
+            var raw = localStorage.getItem('eduai_comments_v1');
+            var map = JSON.parse(raw || '{}');
+            return map && typeof map === 'object' ? map : {};
+          } catch (e) {
+            return {};
+          }
+        }
+        function extraCountForSlug(slug, map) {
+          var arr = map[slug];
+          return Array.isArray(arr) ? arr.length : 0;
+        }
+        function applyCommentCountFromStorage() {
+          var map = loadCommentMap();
+          document.querySelectorAll('a[href*="#comments"]').forEach(function (a) {
+            var href = a.getAttribute('href') || '';
+            var m = href.match(/slug=([^&#]+)/);
+            if (!m) return;
+            var slug = decodeURIComponent(m[1]);
+            var add = extraCountForSlug(slug, map);
+            if (!add) return;
+            var span = a.querySelector('span');
+            if (!span) return;
+            var base = parseInt(String(span.textContent || '0').replace(/,/g, ''), 10);
+            if (isNaN(base)) base = 0;
+            span.textContent = String(base + add);
+          });
+        }
+        function loadUserPosts() {
+          try {
+            var raw = localStorage.getItem('eduai_posts_v1');
+            var arr = JSON.parse(raw || '[]');
+            return Array.isArray(arr) ? arr : [];
+          } catch (e) {
+            return [];
+          }
+        }
+        function catLabel(cat) {
+          var m = {
+            planning: '기획',
+            design: '디자인',
+            development: '개발',
+            curriculum: '커리큘럼',
+            video: '영상',
+            prompt: '프롬프트',
+            output: '결과물',
+            insight: '인사이트',
+            community: '커뮤니티',
+          };
+          return m[cat] || '커뮤니티';
+        }
+        function catTone(cat) {
+          var m = {
+            planning: 'bg-indigo-100 text-indigo-900',
+            design: 'bg-pink-100 text-pink-900',
+            development: 'bg-teal-100 text-teal-900',
+            curriculum: 'bg-emerald-100 text-emerald-900',
+            video: 'bg-violet-100 text-violet-900',
+            prompt: 'bg-fuchsia-100 text-fuchsia-900',
+            output: 'bg-orange-100 text-orange-900',
+            insight: 'bg-amber-100 text-amber-900',
+            community: 'bg-rose-100 text-rose-900',
+          };
+          return m[cat] || m.community;
+        }
+        function esc(s) {
+          return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+        }
+        function injectUserPostsIntoFeed() {
+          var posts = loadUserPosts();
+          if (!posts.length) return;
+          var feed = document.querySelector('.feed');
+          if (!feed) return;
+          var map = loadCommentMap();
+          var html = posts.slice(0, 3).map(function (p) {
+            var tone = catTone(p.cat);
+            var label = catLabel(p.cat);
+            var c = extraCountForSlug(p.slug, map);
+            return (
+              '<article class="post-card rounded-2xl bg-white p-3.5 shadow-sm ring-1 ring-zinc-900/[0.04] sm:p-4">' +
+              '<div class="flex gap-3">' +
+              '<span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl text-sm font-bold ' + tone + '">김</span>' +
+              '<div class="min-w-0 flex-1">' +
+              '<div class="flex flex-wrap items-center gap-x-2 gap-y-1">' +
+              '<span class="text-sm font-semibold text-zinc-900">김에듀</span>' +
+              '<span class="rounded-md bg-zinc-100 px-1.5 py-0.5 text-2xs font-semibold text-zinc-700">' + label + '</span>' +
+              '<span class="text-2xs text-zinc-400">· 방금</span>' +
+              '</div>' +
+              '<h2 class="mt-2 text-[15px] font-semibold leading-snug text-zinc-900 sm:text-base"><a href="post-detail.html?slug=' + encodeURIComponent(p.slug) + '" class="hover:underline">' + esc(p.title) + '</a></h2>' +
+              (p.excerpt ? '<p class="mt-1.5 line-clamp-2 text-sm leading-relaxed text-zinc-500">' + esc(p.excerpt) + '</p>' : '') +
+              '<div class="mt-3 flex items-center justify-between border-t border-zinc-50 pt-3">' +
+              '<div class="flex items-center gap-3 text-2xs sm:text-xs">' +
+              '<button type="button" data-reaction="like" data-base="0" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50"><svg class="ic-outline h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><svg class="ic-solid hidden h-4 w-4 shrink-0 text-rose-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><span class="js-react-count tabular-nums font-medium">0</span></button>' +
+              '<a href="post-detail.html?slug=' + encodeURIComponent(p.slug) + '#comments" class="relative z-10 inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50 hover:text-zinc-800" aria-label="댓글 보기"><svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span class="tabular-nums font-medium">' + String(c) + '</span></a>' +
+              '</div></div></div></div></article>'
+            );
+          }).join('');
+          feed.insertAdjacentHTML('afterbegin', html);
+        }
+
+        function formatCompact(n) {
+          if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+          return String(n);
+        }
+        function parseCompact(s) {
+          s = String(s).trim();
+          if (s.endsWith('k')) return Math.round(parseFloat(s) * 1000);
+          var n = parseInt(s.replace(/,/g, ''), 10);
+          return isNaN(n) ? 0 : n;
+        }
+        var shareSvg =
+          '<svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.59 13.51L15.42 17.5M15.41 6.5L8.59 10.49M18 21a3 3 0 100-6 3 3 0 000 6zM6 14a3 3 0 100-6 3 3 0 000 6zM18 9a3 3 0 100-6 3 3 0 000 6z"/></svg>';
+        var copySvg =
+          '<svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>';
+
+        injectUserPostsIntoFeed();
+        document.querySelectorAll('[data-reaction]').forEach(function (btn) {
+          var raw = btn.getAttribute('data-base');
+          var base = parseInt(raw, 10);
+          if (isNaN(base)) base = parseCompact(raw);
+          var countEl = btn.querySelector('.js-react-count');
+          var outline = btn.querySelector('.ic-outline');
+          var solid = btn.querySelector('.ic-solid');
+          var active = false;
+          btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            active = !active;
+            btn.setAttribute('aria-pressed', active);
+            if (outline) outline.classList.toggle('hidden', active);
+            if (solid) solid.classList.toggle('hidden', !active);
+            var kind = btn.getAttribute('data-reaction');
+            if (kind === 'like') {
+              btn.classList.toggle('text-rose-500', active);
+              btn.classList.toggle('text-zinc-500', !active);
+            }
+            if (kind === 'save') {
+              btn.classList.toggle('text-amber-600', active);
+              btn.classList.toggle('text-zinc-500', !active);
+            }
+            if (countEl) countEl.textContent = formatCompact(base + (active ? 1 : 0));
+          });
+        });
+
+        document.querySelectorAll('[data-share-path]').forEach(function (btn) {
+          btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var url = new URL(btn.getAttribute('data-share-path') || 'project.html', window.location.href).href;
+            var title = btn.getAttribute('data-share-title') || document.title;
+            var checkHtml = document.getElementById('icon-check-tpl').innerHTML;
+            function flash() {
+              btn.innerHTML = checkHtml;
+              btn.disabled = true;
+              setTimeout(function () {
+                btn.innerHTML = shareSvg;
+                btn.disabled = false;
+              }, 1400);
+            }
+            if (navigator.share) {
+              navigator.share({ title: title, url: url }).catch(function () {});
+              return;
+            }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(url).then(flash).catch(function () {
+                window.prompt('공유 링크:', url);
+              });
+            } else {
+              window.prompt('공유 링크:', url);
+            }
+          });
+        });
+
+        document.querySelectorAll('[data-copy]').forEach(function (btn) {
+          btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var text = btn.getAttribute('data-copy') || '';
+            if (!text) return;
+            var checkHtml = document.getElementById('icon-check-tpl').innerHTML;
+            function flash() {
+              btn.innerHTML = checkHtml;
+              btn.disabled = true;
+              setTimeout(function () {
+                btn.innerHTML = copySvg;
+                btn.disabled = false;
+              }, 1400);
+            }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(text).then(flash).catch(function () {
+                window.prompt('복사:', text);
+              });
+            } else {
+              window.prompt('복사:', text);
+            }
+          });
+        });
+        applyCommentCountFromStorage();
+      })();
+    </script>
+  </body>
 </html>

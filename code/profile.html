@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>에듀AI — 프로필</title>
+  <title>클래스루프 — 프로필</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -22,18 +22,231 @@
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="min-h-screen bg-zinc-100 font-sans text-zinc-900 antialiased">
-  <header class="sticky top-0 z-50 border-b border-zinc-200/80 bg-zinc-50/95 backdrop-blur-xl">
-    <div class="mx-auto flex h-12 max-w-lg items-center gap-2 px-4 sm:max-w-2xl">
-      <button type="button" id="btn-back" class="inline-flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 transition hover:bg-zinc-200/70 hover:text-zinc-900" aria-label="뒤로">
-        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
-      </button>
-      <span class="flex-1 text-center text-sm font-semibold tracking-tight text-zinc-900 sm:text-left">프로필</span>
-      <a href="project.html" class="rounded-full px-3 py-1.5 text-2xs font-semibold text-zinc-500 transition hover:bg-zinc-200/60 hover:text-zinc-900">피드</a>
-    </div>
-  </header>
+<body class="min-h-screen bg-[#0c0c0e] font-sans text-zinc-100 antialiased">
+    <!-- 좌측 사이드바 (데스크톱) -->
+    <aside
+      class="fixed inset-y-0 left-0 z-40 hidden w-[232px] flex-col border-r border-zinc-800/90 bg-zinc-950 xl:flex xl:flex-col"
+      aria-label="주 메뉴"
+    >
+      <div class="flex h-14 items-center gap-2 border-b border-zinc-800/80 px-4">
+        <a
+          href="project.html"
+          class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sky-600 text-xs font-bold text-white"
+          >AI</a
+        >
+        <div class="min-w-0">
+          <a
+            href="project.html"
+            class="block truncate text-sm font-semibold tracking-tight text-zinc-100"
+            >클래스루프</a
+          >
+          <p class="truncate text-2xs text-zinc-500">교육 콘텐츠 피드</p>
+        </div>
+      </div>
+      <nav class="flex flex-1 flex-col gap-1 px-2 py-3 text-sm">
+        <a
+          href="compose.html"
+          class="flex items-center gap-3 rounded-lg px-3 py-2 text-zinc-400 transition hover:bg-zinc-800/80 hover:text-zinc-100"
+        >
+          <svg class="h-5 w-5 shrink-0 opacity-80" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          새로 올리기
+        </a>
+        <a
+          href="project.html"
+          class="flex items-center gap-3 rounded-lg bg-zinc-800/90 px-3 py-2 font-medium text-zinc-100"
+        >
+          <svg class="h-5 w-5 shrink-0 text-sky-400" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+          피드 홈
+        </a>
+        <a
+          href="browse.html"
+          class="flex items-center gap-3 rounded-lg px-3 py-2 text-zinc-400 transition hover:bg-zinc-800/80 hover:text-zinc-100"
+        >
+          <svg class="h-5 w-5 shrink-0 opacity-80" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+          탐색 · 폴더
+        </a>
+        <div class="mt-4 border-t border-zinc-800/80 pt-3">
+          <p class="mb-2 px-3 text-2xs font-semibold uppercase tracking-wider text-zinc-500">
+            최근 본 링크
+          </p>
+          <ul class="space-y-0.5 text-2xs text-zinc-500">
+            <li>
+              <a href="browse.html?c=video" class="block truncate px-3 py-1 transition hover:bg-zinc-800/40 hover:text-zinc-200">eduai.app/browse?c=video</a>
+            </li>
+            <li>
+              <a href="post-detail.html?slug=rag-video" class="block truncate px-3 py-1 transition hover:bg-zinc-800/40 hover:text-zinc-200">post-detail.html?slug=rag-video</a>
+            </li>
+            <li>
+              <a href="post-detail.html?slug=automation-roadmap" class="block truncate px-3 py-1 transition hover:bg-zinc-800/40 hover:text-zinc-200">post-detail.html?slug=automation-roadmap</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <div class="border-t border-zinc-800/80 p-3">
+        <a
+          href="profile.html"
+          class="flex items-center gap-2 rounded-lg bg-zinc-900/80 p-2.5 transition hover:bg-zinc-800/80"
+        >
+          <span
+            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-amber-400/90 to-orange-500 text-xs font-bold text-zinc-900"
+            >김</span
+          >
+          <div class="min-w-0 flex-1">
+            <p class="truncate text-2xs font-medium text-zinc-200">김에듀</p>
+            <p class="text-2xs text-zinc-500">프로필 보기</p>
+          </div>
+        </a>
+      </div>
+    </aside>
 
-  <main class="mx-auto max-w-lg px-4 pb-28 pt-3 sm:max-w-2xl sm:pt-4">
+    <div class="min-h-screen xl:pl-[232px]">
+      <!-- 상단 바 -->
+      <header
+        class="sticky top-0 z-50 border-b border-zinc-800/90 bg-[#0c0c0e]/95 backdrop-blur-xl"
+      >
+        <div
+          class="mx-auto flex max-w-[1400px] min-w-0 items-center justify-between gap-2 px-4 py-2.5 sm:gap-3 sm:py-3"
+        >
+          <div class="flex shrink-0 items-center gap-2 xl:hidden">
+            <a
+              href="project.html"
+              class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-sky-600 text-xs font-bold text-white"
+              >AI</a
+            >
+            <a
+              href="project.html"
+              class="max-w-[5.5rem] truncate text-sm font-semibold tracking-tight text-zinc-100 sm:max-w-none"
+              >클래스루프</a
+            >
+          </div>
+          <form
+            id="top-search-form"
+            class="flex w-full max-w-[400px] shrink-0 items-center"
+            action="search.html"
+            method="get"
+            role="search"
+          >
+            <div class="relative w-full">
+              <svg
+                class="pointer-events-none absolute left-3 top-1/2 h-[1.125rem] w-[1.125rem] -translate-y-1/2 text-zinc-500"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.75"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+              <input
+                type="search"
+                id="top-search-q"
+                name="q"
+                enterkeyhint="search"
+                placeholder="검색어를 입력해 보세요…"
+                class="w-full rounded-xl border border-zinc-700/90 bg-zinc-900/90 py-2.5 pl-10 pr-3 text-sm text-zinc-100 placeholder:text-zinc-500 shadow-inner shadow-black/20 outline-none transition focus:border-sky-500/70 focus:ring-2 focus:ring-sky-500/25 sm:py-3 sm:pl-11 sm:text-[0.9375rem]"
+              />
+            </div>
+          </form>
+          <div class="ml-auto flex shrink-0 items-center gap-0.5 sm:gap-1">
+            <a
+              href="notifications.html"
+              class="relative flex h-9 w-9 items-center justify-center rounded-full text-zinc-400 hover:bg-zinc-800/80 hover:text-zinc-100"
+              aria-label="알림"
+            >
+              <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                />
+              </svg>
+              <span
+                class="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-[#0c0c0e]"
+              ></span>
+            </a>
+            <a
+              href="profile.html"
+              class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-amber-400/90 to-orange-500 text-xs font-bold text-zinc-900"
+              aria-label="내 프로필"
+            >
+              김
+            </a>
+          </div>
+        </div>
+        <div class="border-t border-zinc-800/80">
+          <div
+            class="no-scrollbar mx-auto flex max-w-[1400px] gap-1.5 overflow-x-auto px-4 py-2.5"
+          >
+            <a
+              href="project.html"
+              class="shrink-0 rounded-full bg-sky-600 px-3.5 py-1.5 text-2xs font-semibold text-white"
+              >전체</a
+            >
+            <a
+              href="browse.html?c=planning"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >기획</a
+            >
+            <a
+              href="browse.html?c=design"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >디자인</a
+            >
+            <a
+              href="browse.html?c=development"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >개발</a
+            >
+            <a
+              href="browse.html?c=curriculum"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >커리큘럼</a
+            >
+            <a
+              href="browse.html?c=video"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >영상</a
+            >
+            <a
+              href="browse.html?c=prompt"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >프롬프트</a
+            >
+            <a
+              href="browse.html?c=output"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >결과물</a
+            >
+            <a
+              href="browse.html?c=insight"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >인사이트</a
+            >
+            <a
+              href="browse.html?c=community"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >커뮤니티</a
+            >
+          </div>
+        </div>
+      </header>
+
+  <main class="mx-auto max-w-lg px-4 pb-28 pt-4 sm:max-w-2xl sm:pt-5">
+      <div class="mb-4 flex items-center justify-between gap-2">
+        <button type="button" id="btn-back" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-zinc-400 transition hover:bg-zinc-800/80 hover:text-zinc-100 xl:hidden" aria-label="뒤로">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <span class="min-w-0 flex-1 text-center text-sm font-semibold tracking-tight text-zinc-100 xl:text-left">프로필</span>
+        <a href="project.html" class="shrink-0 rounded-full px-3 py-1.5 text-2xs font-semibold text-zinc-400 transition hover:bg-zinc-800/80 hover:text-zinc-100">피드</a>
+      </div>
     <!-- 히어로: 다크 배너 + 겹치는 카드 -->
     <div class="relative">
       <div class="overflow-hidden rounded-2xl bg-gradient-to-br from-zinc-800 via-zinc-900 to-zinc-950 px-6 pb-14 pt-8 text-center shadow-lg shadow-zinc-900/25 ring-1 ring-white/10 sm:px-8 sm:pb-16 sm:pt-10">
@@ -62,28 +275,28 @@
       </div>
 
       <div class="relative z-10 -mt-8 px-0 sm:-mt-10">
-        <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-zinc-900/[0.06] sm:p-6">
+        <div class="rounded-2xl border border-zinc-800/90 bg-zinc-900/50 p-5 shadow-lg shadow-black/20 ring-1 ring-white/[0.04] sm:p-6">
           <div class="flex items-end justify-between gap-3 text-2xs text-zinc-500">
             <span>다음 레벨까지</span>
-            <span class="tabular-nums font-semibold text-zinc-800">3,420 / 4,000 XP</span>
+            <span class="tabular-nums font-semibold text-zinc-300">3,420 / 4,000 XP</span>
           </div>
-          <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-zinc-100">
-            <div class="h-full w-[85%] rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500"></div>
+          <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-zinc-800">
+            <div class="h-full w-[85%] rounded-full bg-gradient-to-r from-sky-500 to-fuchsia-500"></div>
           </div>
           <p class="mt-3 text-2xs leading-relaxed text-zinc-500">도장과 활동으로 XP가 쌓이면, 단계가 올라가며 꾸미기가 열려요.</p>
 
-          <div class="mt-5 grid grid-cols-3 gap-3 border-t border-zinc-100 pt-5">
+          <div class="mt-5 grid grid-cols-3 gap-3 border-t border-zinc-800/80 pt-5">
             <div class="text-center">
               <p class="text-2xs text-zinc-400">게시</p>
-              <p class="mt-0.5 text-lg font-bold tabular-nums text-zinc-900">42</p>
+              <p class="mt-0.5 text-lg font-bold tabular-nums text-zinc-100">42</p>
             </div>
             <div class="text-center">
               <p class="text-2xs text-zinc-400">도장</p>
-              <p id="stat-stamps" class="mt-0.5 text-lg font-bold tabular-nums text-violet-600">17</p>
+              <p id="stat-stamps" class="mt-0.5 text-lg font-bold tabular-nums text-sky-400">17</p>
             </div>
             <div class="text-center">
               <p class="text-2xs text-zinc-400">연속</p>
-              <p class="mt-0.5 text-lg font-bold tabular-nums text-zinc-900">11일</p>
+              <p class="mt-0.5 text-lg font-bold tabular-nums text-zinc-100">11일</p>
             </div>
           </div>
         </div>
@@ -91,15 +304,15 @@
     </div>
 
     <!-- 이번 주 도장 (가로 스크롤) -->
-    <section class="mt-6 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-zinc-900/[0.06] sm:p-6">
+    <section class="mt-6 rounded-2xl border border-zinc-800/90 bg-zinc-900/50 p-5 shadow-lg shadow-black/20 ring-1 ring-white/[0.04] sm:p-6">
       <div class="flex items-start justify-between gap-3">
         <div class="min-w-0">
-          <h2 class="text-sm font-bold text-zinc-900">이번 주 도장</h2>
+          <h2 class="text-sm font-bold text-zinc-100">이번 주 도장</h2>
           <p class="mt-0.5 text-2xs text-zinc-500">채울수록 기록 · 월요일 초기화</p>
         </div>
-        <span id="stamp-frac" class="shrink-0 tabular-nums text-sm font-semibold text-zinc-900">5 / 8</span>
+        <span id="stamp-frac" class="shrink-0 tabular-nums text-sm font-semibold text-zinc-100">5 / 8</span>
       </div>
-      <div class="mt-3 h-1 overflow-hidden rounded-full bg-zinc-100">
+      <div class="mt-3 h-1 overflow-hidden rounded-full bg-zinc-800">
         <div id="stamp-bar" class="h-full rounded-full bg-zinc-900 transition-[width] duration-300 ease-out" style="width: 62.5%"></div>
       </div>
       <div class="relative mt-4 -mx-1">
@@ -108,19 +321,19 @@
     </section>
 
     <!-- 내가 쓴 글 -->
-    <section class="mt-4 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-zinc-900/[0.06] sm:p-6">
+    <section class="mt-4 rounded-2xl border border-zinc-800/90 bg-zinc-900/50 p-5 shadow-lg shadow-black/20 ring-1 ring-white/[0.04] sm:p-6">
       <div class="flex items-center justify-between gap-2">
-        <h2 class="text-sm font-bold text-zinc-900">내가 쓴 글</h2>
-        <a href="compose.html" class="text-2xs font-medium text-violet-600 hover:text-violet-800">새 글</a>
+        <h2 class="text-sm font-bold text-zinc-100">내가 쓴 글</h2>
+        <a href="compose.html" class="text-2xs font-medium text-sky-400 hover:text-sky-300">새 글</a>
       </div>
-      <ul class="mt-4 space-y-0 divide-y divide-zinc-100">
+      <ul class="mt-4 space-y-0 divide-y divide-zinc-800/80">
         <li>
-          <a href="post-detail.html?slug=prd-ai-classroom" class="flex gap-3 py-3 first:pt-0 transition hover:bg-zinc-50/80 -mx-2 px-2 rounded-xl">
-            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-zinc-100 text-zinc-600">
+          <a href="post-detail.html?slug=prd-ai-classroom" class="flex gap-3 py-3 first:pt-0 transition hover:bg-zinc-800/40 -mx-2 px-2 rounded-xl">
+            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-zinc-800 text-zinc-300">
               <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
             </span>
             <div class="min-w-0 flex-1">
-              <p class="line-clamp-2 text-sm font-medium text-zinc-900">교실 AI 도입 PRD 초안 — 목표·비기능·리스크</p>
+              <p class="line-clamp-2 text-sm font-medium text-zinc-100">교실 AI 도입 PRD 초안 — 목표·비기능·리스크</p>
               <div class="mt-1 flex flex-wrap items-center gap-1.5">
                 <span class="rounded-md bg-indigo-50 px-1.5 py-0.5 text-2xs font-medium text-indigo-800">기획</span>
                 <span class="text-2xs text-zinc-400">게시 · 6시간 전</span>
@@ -129,12 +342,12 @@
           </a>
         </li>
         <li>
-          <a href="post-detail.html?slug=design-tokens-edu" class="flex gap-3 py-3 transition hover:bg-zinc-50/80 -mx-2 px-2 rounded-xl">
-            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-zinc-100 text-zinc-600">
+          <a href="post-detail.html?slug=design-tokens-edu" class="flex gap-3 py-3 transition hover:bg-zinc-800/40 -mx-2 px-2 rounded-xl">
+            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-zinc-800 text-zinc-300">
               <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
             </span>
             <div class="min-w-0 flex-1">
-              <p class="line-clamp-2 text-sm font-medium text-zinc-900">교육 앱 디자인 토큰 · 컬러·타이포 스케일</p>
+              <p class="line-clamp-2 text-sm font-medium text-zinc-100">교육 앱 디자인 토큰 · 컬러·타이포 스케일</p>
               <div class="mt-1 flex flex-wrap items-center gap-1.5">
                 <span class="rounded-md bg-pink-50 px-1.5 py-0.5 text-2xs font-medium text-pink-900">디자인</span>
                 <span class="text-2xs text-zinc-400">게시 · 1일 전</span>
@@ -143,8 +356,8 @@
           </a>
         </li>
         <li>
-          <a href="compose.html" class="flex gap-3 py-3 last:pb-0 transition hover:bg-zinc-50/80 -mx-2 px-2 rounded-xl">
-            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-dashed border-zinc-200 bg-zinc-50 text-zinc-400">
+          <a href="compose.html" class="flex gap-3 py-3 last:pb-0 transition hover:bg-zinc-800/40 -mx-2 px-2 rounded-xl">
+            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-dashed border-zinc-600 bg-zinc-950/80 text-zinc-500">
               <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 4v16m8-8H4"/></svg>
             </span>
             <div class="min-w-0 flex-1">
@@ -157,31 +370,31 @@
     </section>
 
     <!-- 커리큘럼 · 학습 -->
-    <section class="mt-4 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-zinc-900/[0.06] sm:p-6">
+    <section class="mt-4 rounded-2xl border border-zinc-800/90 bg-zinc-900/50 p-5 shadow-lg shadow-black/20 ring-1 ring-white/[0.04] sm:p-6">
       <div class="flex items-center justify-between gap-2">
-        <h2 class="text-sm font-bold text-zinc-900">커리큘럼 · 학습</h2>
-        <a href="browse.html?c=curriculum" class="text-2xs font-medium text-zinc-500 hover:text-zinc-900">탐색</a>
+        <h2 class="text-sm font-bold text-zinc-100">커리큘럼 · 학습</h2>
+        <a href="browse.html?c=curriculum" class="text-2xs font-medium text-zinc-500 hover:text-sky-400">탐색</a>
       </div>
       <p class="mt-1 text-2xs text-zinc-500">수행한 주차와 마지막으로 본 시점이에요.</p>
       <div class="mt-4 space-y-3">
-        <a href="post-detail.html?slug=automation-roadmap" class="block rounded-xl border border-zinc-100 bg-zinc-50/50 p-4 transition hover:border-zinc-200 hover:bg-white">
+        <a href="post-detail.html?slug=automation-roadmap" class="block rounded-xl border border-zinc-800 bg-zinc-950/60 p-4 transition hover:border-zinc-700 hover:bg-zinc-800/30">
           <div class="flex items-start justify-between gap-2">
             <div class="min-w-0">
-              <p class="text-sm font-semibold text-zinc-900">생성형 AI로 끝내는 업무 자동화 · 8주 로드맵</p>
+              <p class="text-sm font-semibold text-zinc-100">생성형 AI로 끝내는 업무 자동화 · 8주 로드맵</p>
               <p class="mt-1 text-2xs text-zinc-500">3주차까지 완료 · 마지막 학습 4일 전</p>
             </div>
             <span class="shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-2xs font-semibold text-emerald-800">3/8주</span>
           </div>
-          <div class="mt-3 h-1.5 overflow-hidden rounded-full bg-zinc-200">
+          <div class="mt-3 h-1.5 overflow-hidden rounded-full bg-zinc-800">
             <div class="h-full w-[37.5%] rounded-full bg-emerald-500"></div>
           </div>
         </a>
-        <a href="post-detail.html?slug=chatbot-eval" class="flex items-center gap-3 rounded-xl border border-zinc-100 p-3 transition hover:border-zinc-200 hover:bg-zinc-50/80">
+        <a href="post-detail.html?slug=chatbot-eval" class="flex items-center gap-3 rounded-xl border border-zinc-800 p-3 transition hover:border-zinc-700 hover:bg-zinc-800/30">
           <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-100 text-amber-800">
             <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           </span>
           <div class="min-w-0 flex-1">
-            <p class="text-sm font-medium text-zinc-900">챗봇 과제 → 과정 평가 전환</p>
+            <p class="text-sm font-medium text-zinc-100">챗봇 과제 → 과정 평가 전환</p>
             <p class="mt-0.5 text-2xs text-zinc-500">인사이트 글 학습 완료 · 5분 전</p>
           </div>
         </a>
@@ -189,24 +402,24 @@
     </section>
 
     <!-- 시청한 영상 -->
-    <section class="mt-4 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-zinc-900/[0.06] sm:p-6">
+    <section class="mt-4 rounded-2xl border border-zinc-800/90 bg-zinc-900/50 p-5 shadow-lg shadow-black/20 ring-1 ring-white/[0.04] sm:p-6">
       <div class="flex items-center justify-between gap-2">
-        <h2 class="text-sm font-bold text-zinc-900">시청한 영상</h2>
-        <a href="browse.html?c=video" class="text-2xs font-medium text-zinc-500 hover:text-zinc-900">더 보기</a>
+        <h2 class="text-sm font-bold text-zinc-100">시청한 영상</h2>
+        <a href="browse.html?c=video" class="text-2xs font-medium text-zinc-500 hover:text-sky-400">더 보기</a>
       </div>
       <div class="no-scrollbar mt-4 flex gap-3 overflow-x-auto pb-1">
-        <a href="post-detail.html?slug=rag-video" class="group w-[11.5rem] shrink-0 overflow-hidden rounded-xl bg-zinc-900 ring-1 ring-zinc-200/80">
+        <a href="post-detail.html?slug=rag-video" class="group w-[11.5rem] shrink-0 overflow-hidden rounded-xl bg-zinc-900 ring-1 ring-zinc-700/80">
           <div class="relative aspect-video bg-zinc-800">
             <img src="https://img.youtube.com/vi/sVcwVQRHIc8/mqdefault.jpg" alt="" class="h-full w-full object-cover opacity-90 transition group-hover:opacity-100" loading="lazy" />
             <span class="absolute bottom-1.5 right-1.5 rounded bg-black/70 px-1 py-0.5 text-[0.6rem] font-medium text-white">18:42</span>
             <span class="absolute left-1.5 top-1.5 rounded bg-red-600 px-1 py-0.5 text-[0.55rem] font-semibold text-white">시청 완료</span>
           </div>
-          <div class="bg-white px-2.5 py-2">
-            <p class="line-clamp-2 text-2xs font-medium leading-snug text-zinc-900">RAG 아키텍처 한 번에 이해하기</p>
+          <div class="bg-zinc-950 px-2.5 py-2">
+            <p class="line-clamp-2 text-2xs font-medium leading-snug text-zinc-100">RAG 아키텍처 한 번에 이해하기</p>
             <p class="mt-1 text-[0.65rem] text-zinc-400">3일 전 · 100%</p>
           </div>
         </a>
-        <a href="project.html" class="group w-[11.5rem] shrink-0 overflow-hidden rounded-xl bg-white ring-1 ring-zinc-200/80">
+        <a href="project.html" class="group w-[11.5rem] shrink-0 overflow-hidden rounded-xl border border-zinc-800/90 bg-zinc-900/80 ring-1 ring-white/[0.04]">
           <div class="relative aspect-video bg-gradient-to-br from-violet-800 to-indigo-950">
             <div class="absolute inset-0 flex items-center justify-center">
               <span class="flex h-11 w-11 items-center justify-center rounded-full bg-white/95 text-zinc-900 shadow-lg">
@@ -217,7 +430,7 @@
             <span class="absolute left-1.5 top-1.5 rounded bg-white/20 px-1 py-0.5 text-[0.55rem] font-medium text-white">시청 중 68%</span>
           </div>
           <div class="px-2.5 py-2">
-            <p class="line-clamp-2 text-2xs font-medium leading-snug text-zinc-900">교실용 프롬프트 안전 체크</p>
+            <p class="line-clamp-2 text-2xs font-medium leading-snug text-zinc-100">교실용 프롬프트 안전 체크</p>
             <p class="mt-1 text-[0.65rem] text-zinc-400">1주 전 · 이어보기</p>
           </div>
         </a>
@@ -225,10 +438,10 @@
     </section>
 
     <!-- 꾸미기 -->
-    <section class="mt-4 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-zinc-900/[0.06] sm:p-6">
+    <section class="mt-4 rounded-2xl border border-zinc-800/90 bg-zinc-900/50 p-5 shadow-lg shadow-black/20 ring-1 ring-white/[0.04] sm:p-6">
       <div class="flex items-start justify-between gap-3">
         <div>
-          <h2 class="text-sm font-bold text-zinc-900">캐릭터</h2>
+          <h2 class="text-sm font-bold text-zinc-100">캐릭터</h2>
           <p class="mt-1 text-2xs text-zinc-500">레벨에 따라 해금 · 활동 보상과 연결됩니다.</p>
         </div>
         <button type="button" id="btn-reset-look" class="text-2xs font-medium text-zinc-400 hover:text-zinc-700">초기화</button>
@@ -243,37 +456,39 @@
           <div id="opts-acc" class="mt-2 flex flex-wrap gap-2"></div>
         </div>
       </div>
-      <p id="toast-hint" class="mt-4 hidden text-2xs font-medium text-violet-600"></p>
+      <p id="toast-hint" class="mt-4 hidden text-2xs font-medium text-sky-400"></p>
     </section>
 
     <!-- 최근 활동 -->
-    <section class="mt-4 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-zinc-900/[0.06] sm:p-6">
+    <section class="mt-4 rounded-2xl border border-zinc-800/90 bg-zinc-900/50 p-5 shadow-lg shadow-black/20 ring-1 ring-white/[0.04] sm:p-6">
       <div class="flex items-center justify-between">
-        <h2 class="text-sm font-bold text-zinc-900">최근 활동</h2>
-        <a href="project.html" class="text-2xs font-medium text-zinc-500 hover:text-zinc-900">더 보기</a>
+        <h2 class="text-sm font-bold text-zinc-100">최근 활동</h2>
+        <a href="project.html" class="text-2xs font-medium text-zinc-500 hover:text-sky-400">더 보기</a>
       </div>
       <div class="mt-4 space-y-1">
-        <a href="post-detail.html?slug=automation-roadmap" class="flex items-center gap-3 rounded-xl px-2 py-2.5 transition hover:bg-zinc-50">
-          <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-zinc-100 text-zinc-500">
+        <a href="post-detail.html?slug=automation-roadmap" class="flex items-center gap-3 rounded-xl px-2 py-2.5 transition hover:bg-zinc-800/30">
+          <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-zinc-800 text-zinc-400">
             <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
           </span>
           <div class="min-w-0 flex-1">
-            <p class="truncate text-sm font-medium text-zinc-900">글 읽기 완료</p>
-            <p class="text-2xs text-zinc-400"><span class="text-violet-600">+40 XP</span> · 어제</p>
+            <p class="truncate text-sm font-medium text-zinc-100">글 읽기 완료</p>
+            <p class="text-2xs text-zinc-400"><span class="text-sky-400">+40 XP</span> · 어제</p>
           </div>
         </a>
-        <a href="post-detail.html?slug=rag-video" class="flex items-center gap-3 rounded-xl px-2 py-2.5 transition hover:bg-zinc-50">
-          <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-zinc-100 text-zinc-500">
+        <a href="post-detail.html?slug=rag-video" class="flex items-center gap-3 rounded-xl px-2 py-2.5 transition hover:bg-zinc-800/30">
+          <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-zinc-800 text-zinc-400">
             <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           </span>
           <div class="min-w-0 flex-1">
-            <p class="truncate text-sm font-medium text-zinc-900">영상 시청</p>
-            <p class="text-2xs text-zinc-400"><span class="text-violet-600">+35 XP</span> · 2일 전</p>
+            <p class="truncate text-sm font-medium text-zinc-100">영상 시청</p>
+            <p class="text-2xs text-zinc-400"><span class="text-sky-400">+35 XP</span> · 2일 전</p>
           </div>
         </a>
       </div>
     </section>
   </main>
+  </main>
+
 
   <script>
     document.getElementById('btn-back').addEventListener('click', function () {
@@ -313,7 +528,7 @@
         if (s.done) {
           return (
             '<div class="snap-start shrink-0">' +
-            '<div class="flex w-[4.75rem] flex-col items-center rounded-xl bg-zinc-50 py-2 ring-1 ring-zinc-200/80">' +
+            '<div class="flex w-[4.75rem] flex-col items-center rounded-xl bg-zinc-800/60 py-2 ring-1 ring-zinc-700/80">' +
             '<span class="flex h-9 w-9 items-center justify-center rounded-full bg-zinc-900 text-white">' +
             checkIconSm +
             '</span>' +
@@ -325,8 +540,8 @@
         }
         return (
           '<div class="snap-start shrink-0">' +
-          '<div class="flex w-[4.75rem] flex-col items-center rounded-xl border border-dashed border-zinc-200 bg-white py-2">' +
-          '<span class="flex h-9 w-9 items-center justify-center rounded-full border border-zinc-200 bg-zinc-50/80"></span>' +
+          '<div class="flex w-[4.75rem] flex-col items-center rounded-xl border border-dashed border-zinc-600 bg-zinc-950/80 py-2">' +
+          '<span class="flex h-9 w-9 items-center justify-center rounded-full border border-zinc-600 bg-zinc-800/80"></span>' +
           '<span class="mt-1.5 max-w-[4.5rem] text-center text-[0.65rem] font-medium leading-tight text-zinc-400">' +
           esc(s.label) +
           '</span>' +
@@ -363,9 +578,9 @@
     }
     function optCls(on, locked) {
       var b = 'rounded-lg px-3 py-2 text-2xs font-medium ring-1 transition ';
-      if (locked) return b + 'cursor-not-allowed bg-zinc-50 text-zinc-400 ring-zinc-100';
+      if (locked) return b + 'cursor-not-allowed bg-zinc-900 text-zinc-500 ring-zinc-800';
       if (on) return b + 'bg-zinc-900 text-white ring-zinc-900';
-      return b + 'bg-zinc-50 text-zinc-600 ring-zinc-200/80 hover:bg-zinc-100';
+      return b + 'bg-zinc-800/80 text-zinc-300 ring-zinc-700/80 hover:bg-zinc-700';
     }
     var state = loadState();
     renderAvatar(state);
@@ -406,6 +621,35 @@
       build(document.getElementById('opts-acc'), ACCS, 'acc', function (it) { flash('레벨 ' + it.minLv + ' 이상 해금 (목업)'); });
       flash('기본 꾸미기로 초기화했습니다.');
     });
+  </script>
+    </div>
+  <div id="floating-actions" class="fixed bottom-5 right-5 z-[70] flex flex-col items-end gap-2 xl:right-6">
+    <button id="btn-scroll-top" type="button" class="pointer-events-none inline-flex h-10 w-10 items-center justify-center rounded-full border border-zinc-700/90 bg-zinc-900/95 text-zinc-200 opacity-0 shadow-xl shadow-black/40 transition hover:border-zinc-500 hover:bg-zinc-800" aria-label="맨 위로">
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
+    </button>
+    <button id="btn-report-bug" type="button" class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-rose-700/70 bg-rose-950/80 text-rose-200 shadow-xl shadow-black/40 transition hover:border-rose-500 hover:bg-rose-900/80" aria-label="버그 신고">
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M8.93 4.93l-5 5m17.14-5l-5 5M6.34 14h11.32a2 2 0 011.73 3l-5.66 9.8a2 2 0 01-3.46 0L4.61 17a2 2 0 011.73-3z"/></svg>
+    </button>
+  </div>
+  <script>
+    (function () {
+      var topBtn = document.getElementById('btn-scroll-top');
+      var bugBtn = document.getElementById('btn-report-bug');
+      function updateTopBtn() {
+        var show = window.scrollY > 240;
+        topBtn.classList.toggle('opacity-0', !show);
+        topBtn.classList.toggle('pointer-events-none', !show);
+      }
+      updateTopBtn();
+      window.addEventListener('scroll', updateTopBtn, { passive: true });
+      topBtn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      bugBtn.addEventListener('click', function () {
+        var u = 'compose.html?bug=1&url=' + encodeURIComponent(location.href);
+        window.location.href = u;
+      });
+    })();
   </script>
 </body>
 </html>

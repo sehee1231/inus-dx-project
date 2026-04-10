@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>에듀AI — 글</title>
+  <title>클래스루프 — 글</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -16,51 +16,271 @@
     };
   </script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-  <style>body { font-feature-settings: "ss01" on; }</style>
+  <style>
+    body { font-feature-settings: "ss01" on; -webkit-tap-highlight-color: transparent; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
 </head>
-<body class="min-h-screen bg-zinc-100 font-sans text-zinc-900 antialiased">
-  <header class="sticky top-0 z-50 border-b border-zinc-200/80 bg-white/95 backdrop-blur-xl">
-    <div class="mx-auto flex h-12 max-w-[960px] items-center justify-between gap-3 px-4">
-      <div class="flex min-w-0 items-center gap-1">
-        <button type="button" id="btn-back" class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-zinc-600 hover:bg-zinc-100" aria-label="뒤로가기">
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
-        </button>
-        <span class="truncate text-sm font-semibold text-zinc-800">게시글</span>
+<body class="min-h-screen bg-[#0c0c0e] font-sans text-zinc-100 antialiased">
+    <!-- 좌측 사이드바 (데스크톱) -->
+    <aside
+      class="fixed inset-y-0 left-0 z-40 hidden w-[232px] flex-col border-r border-zinc-800/90 bg-zinc-950 xl:flex xl:flex-col"
+      aria-label="주 메뉴"
+    >
+      <div class="flex h-14 items-center gap-2 border-b border-zinc-800/80 px-4">
+        <a
+          href="project.html"
+          class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sky-600 text-xs font-bold text-white"
+          >AI</a
+        >
+        <div class="min-w-0">
+          <a
+            href="project.html"
+            class="block truncate text-sm font-semibold tracking-tight text-zinc-100"
+            >클래스루프</a
+          >
+          <p class="truncate text-2xs text-zinc-500">교육 콘텐츠 피드</p>
+        </div>
       </div>
-      <div class="flex items-center gap-1.5">
-        <button id="btn-edit" type="button" class="hidden rounded-full bg-zinc-100 px-3 py-1.5 text-2xs font-semibold text-zinc-700 hover:bg-zinc-200/70">편집</button>
-        <button id="btn-delete" type="button" class="hidden rounded-full bg-rose-50 px-3 py-1.5 text-2xs font-semibold text-rose-700 hover:bg-rose-100">삭제</button>
-        <a href="project.html" class="rounded-full px-3 py-1.5 text-2xs font-semibold text-zinc-500 hover:bg-zinc-100 hover:text-zinc-800">목록</a>
+      <nav class="flex flex-1 flex-col gap-1 px-2 py-3 text-sm">
+        <a
+          href="compose.html"
+          class="flex items-center gap-3 rounded-lg px-3 py-2 text-zinc-400 transition hover:bg-zinc-800/80 hover:text-zinc-100"
+        >
+          <svg class="h-5 w-5 shrink-0 opacity-80" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          새로 올리기
+        </a>
+        <a
+          href="project.html"
+          class="flex items-center gap-3 rounded-lg bg-zinc-800/90 px-3 py-2 font-medium text-zinc-100"
+        >
+          <svg class="h-5 w-5 shrink-0 text-sky-400" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+          피드 홈
+        </a>
+        <a
+          href="browse.html"
+          class="flex items-center gap-3 rounded-lg px-3 py-2 text-zinc-400 transition hover:bg-zinc-800/80 hover:text-zinc-100"
+        >
+          <svg class="h-5 w-5 shrink-0 opacity-80" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+          탐색 · 폴더
+        </a>
+        <div class="mt-4 border-t border-zinc-800/80 pt-3">
+          <p class="mb-2 px-3 text-2xs font-semibold uppercase tracking-wider text-zinc-500">
+            최근 본 링크
+          </p>
+          <ul class="space-y-0.5 text-2xs text-zinc-500">
+            <li>
+              <a href="browse.html?c=video" class="block truncate px-3 py-1 transition hover:bg-zinc-800/40 hover:text-zinc-200">eduai.app/browse?c=video</a>
+            </li>
+            <li>
+              <a href="post-detail.html?slug=rag-video" class="block truncate px-3 py-1 transition hover:bg-zinc-800/40 hover:text-zinc-200">post-detail.html?slug=rag-video</a>
+            </li>
+            <li>
+              <a href="post-detail.html?slug=automation-roadmap" class="block truncate px-3 py-1 transition hover:bg-zinc-800/40 hover:text-zinc-200">post-detail.html?slug=automation-roadmap</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <div class="border-t border-zinc-800/80 p-3">
+        <a
+          href="profile.html"
+          class="flex items-center gap-2 rounded-lg bg-zinc-900/80 p-2.5 transition hover:bg-zinc-800/80"
+        >
+          <span
+            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-amber-400/90 to-orange-500 text-xs font-bold text-zinc-900"
+            >김</span
+          >
+          <div class="min-w-0 flex-1">
+            <p class="truncate text-2xs font-medium text-zinc-200">김에듀</p>
+            <p class="text-2xs text-zinc-500">프로필 보기</p>
+          </div>
+        </a>
       </div>
-    </div>
-  </header>
+    </aside>
 
-  <main class="mx-auto max-w-[960px] px-4 pb-20 pt-4 sm:pt-6">
-    <div id="not-found" class="hidden rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-      <p class="text-lg font-bold text-zinc-900">글을 찾을 수 없습니다</p>
+    <div class="min-h-screen xl:pl-[232px]">
+      <!-- 상단 바 -->
+      <header
+        class="sticky top-0 z-50 border-b border-zinc-800/90 bg-[#0c0c0e]/95 backdrop-blur-xl"
+      >
+        <div
+          class="mx-auto flex max-w-[1400px] min-w-0 items-center justify-between gap-2 px-4 py-2.5 sm:gap-3 sm:py-3"
+        >
+          <div class="flex shrink-0 items-center gap-2 xl:hidden">
+            <a
+              href="project.html"
+              class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-sky-600 text-xs font-bold text-white"
+              >AI</a
+            >
+            <a
+              href="project.html"
+              class="max-w-[5.5rem] truncate text-sm font-semibold tracking-tight text-zinc-100 sm:max-w-none"
+              >클래스루프</a
+            >
+          </div>
+          <form
+            id="top-search-form"
+            class="flex w-full max-w-[400px] shrink-0 items-center"
+            action="search.html"
+            method="get"
+            role="search"
+          >
+            <div class="relative w-full">
+              <svg
+                class="pointer-events-none absolute left-3 top-1/2 h-[1.125rem] w-[1.125rem] -translate-y-1/2 text-zinc-500"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.75"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+              <input
+                type="search"
+                id="top-search-q"
+                name="q"
+                enterkeyhint="search"
+                placeholder="검색어를 입력해 보세요…"
+                class="w-full rounded-xl border border-zinc-700/90 bg-zinc-900/90 py-2.5 pl-10 pr-3 text-sm text-zinc-100 placeholder:text-zinc-500 shadow-inner shadow-black/20 outline-none transition focus:border-sky-500/70 focus:ring-2 focus:ring-sky-500/25 sm:py-3 sm:pl-11 sm:text-[0.9375rem]"
+              />
+            </div>
+          </form>
+          <div class="ml-auto flex shrink-0 items-center gap-0.5 sm:gap-1">
+            <a
+              href="notifications.html"
+              class="relative flex h-9 w-9 items-center justify-center rounded-full text-zinc-400 hover:bg-zinc-800/80 hover:text-zinc-100"
+              aria-label="알림"
+            >
+              <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                />
+              </svg>
+              <span
+                class="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-[#0c0c0e]"
+              ></span>
+            </a>
+            <a
+              href="profile.html"
+              class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-amber-400/90 to-orange-500 text-xs font-bold text-zinc-900"
+              aria-label="내 프로필"
+            >
+              김
+            </a>
+          </div>
+        </div>
+        <div class="border-t border-zinc-800/80">
+          <div
+            class="no-scrollbar mx-auto flex max-w-[1400px] gap-1.5 overflow-x-auto px-4 py-2.5"
+          >
+            <a
+              href="project.html"
+              class="shrink-0 rounded-full bg-sky-600 px-3.5 py-1.5 text-2xs font-semibold text-white"
+              >전체</a
+            >
+            <a
+              href="browse.html?c=planning"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >기획</a
+            >
+            <a
+              href="browse.html?c=design"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >디자인</a
+            >
+            <a
+              href="browse.html?c=development"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >개발</a
+            >
+            <a
+              href="browse.html?c=curriculum"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >커리큘럼</a
+            >
+            <a
+              href="browse.html?c=video"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >영상</a
+            >
+            <a
+              href="browse.html?c=prompt"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >프롬프트</a
+            >
+            <a
+              href="browse.html?c=output"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >결과물</a
+            >
+            <a
+              href="browse.html?c=insight"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >인사이트</a
+            >
+            <a
+              href="browse.html?c=community"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >커뮤니티</a
+            >
+          </div>
+        </div>
+      </header>
+
+  <main class="mx-auto max-w-[960px] px-4 pb-24 pt-4 sm:pt-5">
+      <div class="mb-4 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex min-w-0 items-center gap-2">
+          <button type="button" id="btn-back" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-zinc-400 hover:bg-zinc-800/80 hover:text-zinc-100" aria-label="뒤로가기">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+          </button>
+          <span class="truncate text-sm font-semibold text-zinc-100">게시글</span>
+        </div>
+        <div class="flex flex-wrap items-center justify-end gap-1.5">
+          <button id="btn-edit" type="button" class="hidden rounded-full bg-zinc-800 px-3 py-1.5 text-2xs font-semibold text-zinc-200 hover:bg-zinc-700">편집</button>
+          <button id="btn-delete" type="button" class="hidden rounded-full bg-rose-950/80 px-3 py-1.5 text-2xs font-semibold text-rose-300 ring-1 ring-rose-800/80 hover:bg-rose-900/80">삭제</button>
+          <a href="project.html" class="rounded-full px-3 py-1.5 text-2xs font-semibold text-zinc-400 hover:bg-zinc-800/80 hover:text-zinc-100">피드</a>
+        </div>
+      </div>
+
+    <div id="not-found" class="hidden rounded-2xl border border-zinc-800/90 bg-zinc-900/50 p-6 shadow-lg shadow-black/20 ring-1 ring-white/[0.04]">
+      <p class="text-lg font-bold text-zinc-100">글을 찾을 수 없습니다</p>
       <p class="mt-2 text-sm text-zinc-500">주소를 확인해 주세요.</p>
-      <a href="project.html" class="mt-4 inline-block text-sm font-semibold text-violet-700 underline">피드로</a>
+      <a href="project.html" class="mt-4 inline-block text-sm font-semibold text-sky-400 underline underline-offset-2 hover:text-sky-300">피드로</a>
     </div>
 
     <div id="post-root" class="hidden">
-      <article id="article-main" class="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm"></article>
-      <section id="comments" class="scroll-mt-[4.5rem] mt-3 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
-        <div class="border-b border-zinc-100 px-4 py-3">
-          <h2 class="text-sm font-bold text-zinc-900">댓글 <span id="comment-count" class="font-normal text-zinc-400"></span></h2>
+      <article id="article-main" class="relative isolate rounded-2xl border border-zinc-800/90 bg-zinc-900/50 shadow-lg shadow-black/25 ring-1 ring-white/[0.04]"></article>
+      <section id="comments" class="relative isolate scroll-mt-[4.5rem] mt-3 overflow-hidden rounded-2xl border border-zinc-800/90 bg-zinc-900/50 shadow-lg shadow-black/25 ring-1 ring-white/[0.04]">
+        <div class="border-b border-zinc-800/80 px-4 py-3">
+          <h2 class="text-sm font-bold text-zinc-100">댓글 <span id="comment-count" class="font-normal text-zinc-500"></span></h2>
         </div>
-        <div id="comment-thread" class="divide-y divide-zinc-50 px-4 py-2"></div>
-        <div class="border-t border-zinc-100 bg-zinc-50/70 px-4 py-3">
+        <div id="comment-thread" class="divide-y divide-zinc-800/80 px-4 py-2"></div>
+        <div class="border-t border-zinc-800/80 bg-zinc-950/80 px-4 py-3">
           <div class="flex gap-2">
-            <input id="comment-input" type="text" placeholder="댓글을 입력하세요" class="min-w-0 flex-1 rounded-xl border border-zinc-200 bg-white px-3.5 py-2 text-sm outline-none placeholder:text-zinc-400 focus:border-zinc-300" />
-            <button id="comment-submit" type="button" class="shrink-0 rounded-xl bg-zinc-900 px-4 py-2 text-sm font-semibold text-white hover:bg-zinc-800">등록</button>
+            <input id="comment-input" type="text" list="mention-list" autocomplete="off" placeholder="댓글 (@이름 으로 멘션)" class="min-w-0 flex-1 rounded-xl border border-zinc-700 bg-zinc-900/80 px-3.5 py-2 text-sm text-zinc-100 outline-none placeholder:text-zinc-500 focus:border-sky-600/50" />
+            <button id="comment-cancel" type="button" class="hidden shrink-0 rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-2 text-sm font-semibold text-zinc-200 hover:bg-zinc-700">취소</button>
+            <button id="comment-submit" type="button" class="shrink-0 rounded-xl bg-sky-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-sky-900/30 hover:bg-sky-500">등록</button>
           </div>
-          <p class="mt-2 text-2xs text-zinc-400">이 브라우저에 저장됩니다.</p>
+          <p class="mt-2 text-2xs text-zinc-500">이 브라우저에 저장됩니다.</p>
         </div>
       </section>
     </div>
   </main>
 
-  <footer class="mx-auto max-w-[960px] px-4 py-8 text-center text-2xs text-zinc-400">에듀AI · 목업</footer>
+  <footer class="mx-auto max-w-[960px] px-4 py-8 text-center text-2xs text-zinc-500">클래스루프 · 목업</footer>
+    </div>
 
   <template id="icon-copy">
     <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
@@ -68,6 +288,18 @@
   <template id="icon-check">
     <svg class="h-4 w-4 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
   </template>
+
+  <datalist id="mention-list">
+    <option value="한소희"></option>
+    <option value="김나연"></option>
+    <option value="이하은"></option>
+    <option value="오세훈"></option>
+    <option value="민지"></option>
+    <option value="도윤"></option>
+    <option value="박서준"></option>
+    <option value="서준"></option>
+    <option value="나연"></option>
+  </datalist>
 
   <script>
     (function () {
@@ -92,9 +324,54 @@
     function escapeHtml(s) {
       return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
+    function escAttr(s) {
+      return String(s || '')
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
 
     function safeJsonParse(s, fallback) {
       try { return JSON.parse(s); } catch (e) { return fallback; }
+    }
+
+    var LS_MENTION_INBOX = 'eduai_mention_inbox_v1';
+    function parseMentionNames(text) {
+      var re = /@([\uac00-\ud7a3a-zA-Z0-9_·]{1,24})/g;
+      var m;
+      var out = [];
+      var seen = {};
+      while ((m = re.exec(String(text || ''))) !== null) {
+        var name = String(m[1] || '').trim();
+        if (!name || seen[name]) continue;
+        seen[name] = 1;
+        out.push(name);
+      }
+      return out;
+    }
+    function pushMentionNotifications(fromUser, names, ctx) {
+      if (!names || !names.length) return;
+      var arr = safeJsonParse(localStorage.getItem(LS_MENTION_INBOX), []);
+      if (!Array.isArray(arr)) arr = [];
+      var slug = ctx.postSlug || '';
+      var title = ctx.postTitle || '';
+      var snippet = String(ctx.snippet || '').slice(0, 160);
+      var source = ctx.source || 'comment';
+      names.forEach(function (to) {
+        if (!to || to === fromUser) return;
+        arr.unshift({
+          id: 'n-' + Date.now() + '-' + Math.floor(Math.random() * 1e9),
+          at: new Date().toISOString(),
+          read: false,
+          toUser: to,
+          fromUser: fromUser,
+          postSlug: slug,
+          postTitle: title,
+          snippet: snippet,
+          source: source,
+        });
+      });
+      localStorage.setItem(LS_MENTION_INBOX, JSON.stringify(arr.slice(0, 200)));
     }
 
     function timeAgoShort(iso) {
@@ -149,7 +426,10 @@
     }
 
     function wireCopyButtons(root) {
-      root.querySelectorAll('[data-copy]').forEach(function (btn) {
+      var hooked = new WeakSet();
+      root.querySelectorAll('.js-prompt-copy, button[data-copy], .prompt-copy-btn').forEach(function (btn) {
+        if (hooked.has(btn)) return;
+        hooked.add(btn);
         btn.addEventListener('click', function (e) {
           e.preventDefault();
           e.stopPropagation();
@@ -209,7 +489,7 @@
 
     var DATA = {
       'automation-roadmap': {
-        badge: '커리큘럼', badgeClass: 'bg-emerald-50 text-emerald-800', avatarClass: 'bg-emerald-100 text-emerald-900', initial: '한', authorName: '한소희', timeRelative: '3시간 전',
+        badge: '커리큘럼', badgeClass: 'bg-emerald-900/85 text-emerald-100', avatarClass: 'bg-emerald-800/90 text-emerald-50', initial: '한', authorName: '한소희', timeRelative: '3시간 전',
         title: '생성형 AI로 끝내는 업무 자동화 · 8주 로드맵', excerpt: '프롬프트 설계부터 RAG까지 주차별로 정리했어요.',
         likes: '428', comments: '36', saves: '1200',
         body: '<p>주차별 산출물 템플릿은 팀 노션에 올릴 예정입니다. 먼저 1–3주차 요약본부터 공유합니다.</p>',
@@ -219,17 +499,17 @@
         thread: [{ who: '이하은', when: '2시간 전', text: '8주 중 3주차만 먼저 써도 될까요?' }, { who: '한소희', when: '1시간 전', text: '네, 모듈형으로 나눌게요.', reply: true }],
       },
       'rag-video': {
-        badge: '영상', badgeClass: 'bg-violet-50 text-violet-800', avatarClass: 'bg-violet-100 text-violet-900', initial: '김', authorName: '김나연', timeRelative: '어제',
+        badge: '영상', badgeClass: 'bg-violet-900/85 text-violet-100', avatarClass: 'bg-violet-800/90 text-violet-50', initial: '김', authorName: '김나연', timeRelative: '어제',
         title: 'RAG 아키텍처 한 번에 이해하기', excerpt: '튜토리얼 영상과 함께 정리한 노트입니다.',
         likes: '892', comments: '52', saves: '3400',
         body: '<p>아래 썸네일을 누르면 유튜브 원본으로 이동합니다.</p>',
         extra: '#RAG #튜토리얼',
-        previewHtml: '<a href="https://www.youtube.com/watch?v=sVcwVQRHIc8" target="_blank" rel="noopener noreferrer" class="group mt-4 block overflow-hidden rounded-xl ring-1 ring-zinc-200/80"><div class="relative aspect-video"><img src="https://img.youtube.com/vi/sVcwVQRHIc8/hqdefault.jpg" alt="" class="h-full w-full object-cover" loading="lazy" /><span class="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent"></span><span class="absolute bottom-2 left-2 rounded bg-red-600 px-1.5 py-0.5 text-[0.625rem] font-semibold text-white">YouTube</span><span class="absolute inset-0 flex items-center justify-center"><span class="flex h-12 w-12 items-center justify-center rounded-full bg-white/95 text-red-600 shadow-lg ring-1 ring-black/10"><svg class="ml-1 h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></span></div></a>',
+        previewHtml: '<a href="https://www.youtube.com/watch?v=sVcwVQRHIc8" target="_blank" rel="noopener noreferrer" class="group relative z-0 mt-4 block overflow-hidden rounded-xl ring-1 ring-zinc-700/90"><div class="relative aspect-video"><img src="https://img.youtube.com/vi/sVcwVQRHIc8/hqdefault.jpg" alt="" class="h-full w-full object-cover" loading="lazy" /><span class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 to-transparent"></span><span class="pointer-events-none absolute bottom-2 left-2 rounded bg-red-600 px-1.5 py-0.5 text-[0.625rem] font-semibold text-white">YouTube</span><span class="pointer-events-none absolute inset-0 flex items-center justify-center"><span class="flex h-12 w-12 items-center justify-center rounded-full bg-white/95 text-red-600 shadow-lg ring-1 ring-black/10"><svg class="ml-1 h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></span></div></a>',
         promptText: null,
         thread: [{ who: '박서준', when: '어제', text: '벡터 DB는 어떤 걸 쓰셨나요?' }],
       },
       'chatbot-eval': {
-        badge: '인사이트', badgeClass: 'bg-amber-50 text-amber-900', avatarClass: 'bg-amber-100 text-amber-950', initial: '박', authorName: '박서준', timeRelative: '5분 전',
+        badge: '인사이트', badgeClass: 'bg-amber-900/85 text-amber-100', avatarClass: 'bg-amber-800/90 text-amber-50', initial: '박', authorName: '박서준', timeRelative: '5분 전',
         title: '챗봇 과제를 학습 과정 평가로 바꾼 3가지 방법', excerpt: '질문·수정 로그를 포트폴리오로 묶는 사례입니다.',
         likes: '214', comments: '18', saves: '640',
         body: '<ul class="list-disc space-y-2 pl-5"><li>과정 기록 루브릭</li><li>피어 리뷰 질문 세트</li><li>교사 피드백 템플릿</li></ul>',
@@ -237,62 +517,62 @@
         thread: [{ who: '민지', when: '방금', text: '학부모 설명용 한 장 요약 부탁드려요.' }],
       },
       'prompt-lesson': {
-        badge: '프롬프트', badgeClass: 'bg-fuchsia-50 text-fuchsia-900', avatarClass: 'bg-fuchsia-100 text-fuchsia-900', initial: '이', authorName: '이하은', timeRelative: '1일 전',
+        badge: '프롬프트', badgeClass: 'bg-fuchsia-800/95 text-fuchsia-50', avatarClass: 'bg-fuchsia-900/90 text-fuchsia-50', initial: '이', authorName: '이하은', timeRelative: '1일 전',
         title: '50분 수업안 프롬프트', excerpt: '학년·과목만 바꿔 넣으면 수업안 초안이 나옵니다.',
         likes: '1100', comments: '41', saves: '2800', body: '', extra: '',
         previewHtml: '', promptText: '너는 교육 설계자다. [학년/과목]을 받아 50분 수업안을 써라. 학습목표 3개, 활동 순서, AI 역할, 형성평가를 불릿으로.',
         thread: [{ who: '오세훈', when: '20시간 전', text: '형성평가 문항 예시도 부탁드려요.' }],
       },
       'prompt-reading': {
-        badge: '프롬프트', badgeClass: 'bg-sky-50 text-sky-900', avatarClass: 'bg-sky-100 text-sky-900', initial: '오', authorName: '오세훈', timeRelative: '4일 전',
+        badge: '프롬프트', badgeClass: 'bg-sky-800/95 text-sky-50', avatarClass: 'bg-sky-900/90 text-sky-50', initial: '오', authorName: '오세훈', timeRelative: '4일 전',
         title: '비판적 읽기 요약 프롬프트', excerpt: '출처 불명 문장은 검증 표시를 붙입니다.',
         likes: '506', comments: '22', saves: '980', body: '', extra: '',
         previewHtml: '', promptText: '아래 텍스트를 요약하고, 반박 가능한 논점 3개를 한국어로 제시해 줘. 출처가 불명확한 문장은 [검증 필요]로 표시해.',
         thread: [{ who: '김에듀', when: '3일 전', text: '학생용 짧은 버전도 올려 주세요.' }],
       },
       'result-rubric': {
-        badge: '결과물', badgeClass: 'bg-orange-50 text-orange-900', avatarClass: 'bg-orange-100 text-orange-900', initial: '민', authorName: '민지', timeRelative: '3일 전',
+        badge: '결과물', badgeClass: 'bg-orange-900/85 text-orange-100', avatarClass: 'bg-orange-800/90 text-orange-50', initial: '민', authorName: '민지', timeRelative: '3일 전',
         title: '과학 수행평가 AI 피드백 루브릭', excerpt: '루브릭 초안과 피드백 문장 예시입니다.',
         likes: '312', comments: '9', saves: '54',
         body: '<p>결과물 미리보기입니다.</p>',
         extra: '#과학 #루브릭',
-        previewHtml: '<div class="mt-4 overflow-hidden rounded-xl border border-orange-200 bg-gradient-to-br from-orange-50 to-rose-50 p-4"><div class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-orange-100"><p class="text-sm font-bold text-zinc-900">루브릭 카드 v1.3</p><p class="mt-2 text-xs text-zinc-600">탐구 질문 · 근거 · AI 피드백 반영</p></div></div>',
+        previewHtml: '<div class="mt-4 overflow-hidden rounded-xl border border-orange-800/50 bg-gradient-to-br from-orange-950/80 to-zinc-950 p-4"><div class="rounded-lg bg-zinc-900/90 p-4 shadow-md ring-1 ring-orange-900/40"><p class="text-sm font-bold text-zinc-100">루브릭 카드 v1.3</p><p class="mt-2 text-xs text-zinc-400">탐구 질문 · 근거 · AI 피드백 반영</p></div></div>',
         promptText: null, thread: [],
       },
       'result-quiz': {
-        badge: '결과물', badgeClass: 'bg-cyan-50 text-cyan-900', avatarClass: 'bg-cyan-100 text-cyan-900', initial: '도', authorName: '도윤', timeRelative: '1주 전',
+        badge: '결과물', badgeClass: 'bg-cyan-900/85 text-cyan-100', avatarClass: 'bg-cyan-800/90 text-cyan-50', initial: '도', authorName: '도윤', timeRelative: '1주 전',
         title: '학급 맞춤 퀴즈 JSON 세트', excerpt: '단원 코드만 넣으면 문항 스키마가 생성됩니다.',
         likes: '198', comments: '6', saves: '412',
         body: '<p>JSON 형태 결과물 미리보기입니다.</p>', extra: '#JSON #퀴즈',
-        previewHtml: '<div class="mt-4 overflow-hidden rounded-xl border border-cyan-200 bg-gradient-to-br from-cyan-50 to-blue-50"><div class="border-b border-cyan-100 px-4 py-2 text-2xs font-semibold text-cyan-800">preview.json</div><pre class="overflow-x-auto px-4 py-3 text-[0.72rem] text-zinc-700">{ &quot;grade&quot;: &quot;6학년&quot;, &quot;topic&quot;: &quot;지구와 달&quot; }</pre></div>',
+        previewHtml: '<div class="mt-4 overflow-hidden rounded-xl border border-cyan-800/50 bg-gradient-to-br from-cyan-950/90 to-zinc-950"><div class="border-b border-cyan-900/50 px-4 py-2 text-2xs font-semibold text-cyan-200">preview.json</div><pre class="overflow-x-auto px-4 py-3 text-[0.72rem] text-zinc-300">{ &quot;grade&quot;: &quot;6학년&quot;, &quot;topic&quot;: &quot;지구와 달&quot; }</pre></div>',
         promptText: null, thread: [{ who: '한소희', when: '1일 전', text: '난이도 슬라이더만 추가해 주세요.' }],
       },
       'insight-consent': {
-        badge: '인사이트', badgeClass: 'bg-zinc-100 text-zinc-800', avatarClass: 'bg-zinc-200 text-zinc-800', initial: '동', authorName: '동아리 운영', timeRelative: '어제',
+        badge: '인사이트', badgeClass: 'bg-zinc-800 text-zinc-100', avatarClass: 'bg-zinc-700 text-zinc-100', initial: '동', authorName: '동아리 운영', timeRelative: '어제',
         title: '교실에서 생성형 AI 동의서 체크리스트', excerpt: '학부모 안내·보관 기간 점검용입니다.',
         likes: '240', comments: '15', saves: '88', body: '<p>항목별 설명은 교육청 가이드를 참고했습니다.</p>', extra: '', previewHtml: '', promptText: null,
         thread: [{ who: '서연', when: '어제', text: '학교장 승인 문구 샘플 부탁드려요.' }],
       },
       'insight-version': {
-        badge: '인사이트', badgeClass: 'bg-zinc-100 text-zinc-800', avatarClass: 'bg-zinc-200 text-zinc-800', initial: '정', authorName: '정비서', timeRelative: '3일 전',
+        badge: '인사이트', badgeClass: 'bg-zinc-800 text-zinc-100', avatarClass: 'bg-zinc-700 text-zinc-100', initial: '정', authorName: '정비서', timeRelative: '3일 전',
         title: '프롬프트 공유 시 버전 관리 팁', excerpt: '파일명 규칙과 노션 템플릿을 소개합니다.',
-        likes: '412', comments: '27', saves: '120', body: '<p>태그 예시: <code class="rounded bg-zinc-100 px-1">v2.1-수정요청</code></p>', extra: '', previewHtml: '', promptText: null,
+        likes: '412', comments: '27', saves: '120', body: '<p>태그 예시: <code class="rounded bg-zinc-800 px-1 text-zinc-200">v2.1-수정요청</code></p>', extra: '', previewHtml: '', promptText: null,
         thread: [{ who: '문채원', when: '2일 전', text: '버전 번호만으로는 부족할 때가 있어요.' }],
       },
       'prd-ai-classroom': {
-        badge: '기획', badgeClass: 'bg-indigo-50 text-indigo-900', avatarClass: 'bg-indigo-100 text-indigo-900', initial: '서', authorName: '서준', timeRelative: '6시간 전',
+        badge: '기획', badgeClass: 'bg-indigo-900/85 text-indigo-100', avatarClass: 'bg-indigo-800/90 text-indigo-50', initial: '서', authorName: '서준', timeRelative: '6시간 전',
         title: '교실 AI 도입 PRD 초안 — 목표·비기능·리스크', excerpt: '교사·학생 페르소나와 성공 지표를 먼저 고정했습니다.',
         likes: '156', comments: '12', saves: '48', body: '<p>비기능 요구: 응답 지연 3초 이내, 개인정보 최소 수집, 감사 로그 보관.</p><p>리스크: 과제 의존·표절 논의는 별도 가이드와 연동합니다.</p>', extra: '#PRD #기획', previewHtml: '', promptText: null,
         thread: [{ who: '김에듀', when: '4시간 전', text: '지표는 학기 단위로 잡을까요?' }],
       },
       'design-tokens-edu': {
-        badge: '디자인', badgeClass: 'bg-pink-50 text-pink-900', avatarClass: 'bg-pink-100 text-pink-900', initial: '나', authorName: '나연', timeRelative: '1일 전',
+        badge: '디자인', badgeClass: 'bg-pink-900/85 text-pink-100', avatarClass: 'bg-pink-800/90 text-pink-50', initial: '나', authorName: '나연', timeRelative: '1일 전',
         title: '교육 앱 디자인 토큰 · 컬러·타이포 스케일', excerpt: '접근성 대비와 학년별 밀도 옵션을 같이 정리했습니다.',
-        likes: '289', comments: '19', saves: '210', body: '<p>시맨틱 토큰: <code class="rounded bg-zinc-100 px-1">color.text.primary</code> 등으로 교체해 두었습니다.</p>', extra: '#디자인시스템 #토큰', previewHtml: '<div class="mt-4 flex flex-wrap gap-2"><span class="h-10 w-16 rounded-lg bg-pink-500 ring-1 ring-black/10"></span><span class="h-10 w-16 rounded-lg bg-violet-500 ring-1 ring-black/10"></span><span class="h-10 w-16 rounded-lg bg-teal-500 ring-1 ring-black/10"></span></div>', promptText: null,
+        likes: '289', comments: '19', saves: '210', body: '<p>시맨틱 토큰: <code class="rounded bg-zinc-800 px-1 text-zinc-200">color.text.primary</code> 등으로 교체해 두었습니다.</p>', extra: '#디자인시스템 #토큰', previewHtml: '<div class="mt-4 flex flex-wrap gap-2"><span class="h-10 w-16 rounded-lg bg-pink-500 ring-1 ring-black/10"></span><span class="h-10 w-16 rounded-lg bg-violet-500 ring-1 ring-black/10"></span><span class="h-10 w-16 rounded-lg bg-teal-500 ring-1 ring-black/10"></span></div>', promptText: null,
         thread: [],
       },
       'dev-api-integration': {
-        badge: '개발', badgeClass: 'bg-teal-50 text-teal-900', avatarClass: 'bg-teal-100 text-teal-900', initial: '도', authorName: '도윤', timeRelative: '어제',
+        badge: '개발', badgeClass: 'bg-teal-900/85 text-teal-100', avatarClass: 'bg-teal-800/90 text-teal-50', initial: '도', authorName: '도윤', timeRelative: '어제',
         title: '학급 API 연동 체크리스트 · 인증·오류 처리', excerpt: 'OAuth 스코프·토큰 갱신·429 백오프를 순서대로 점검합니다.',
         likes: '341', comments: '24', saves: '502', body: '<pre class="overflow-x-auto rounded-lg bg-zinc-900 p-3 text-[0.72rem] text-emerald-300">GET /classes/{id}/roster\nAuthorization: Bearer …</pre><p class="mt-3 text-sm">429 시 지수 백오프 후 재시도, 클라이언트에 재시도 상한을 둡니다.</p>', extra: '#API #연동', previewHtml: '', promptText: null,
         thread: [{ who: '한소희', when: '어제', text: '스테이징 엔드포인트도 표에 넣어 주세요.' }],
@@ -316,21 +596,24 @@
 
     function badgeForCat(cat) {
       var m = {
-        curriculum: { badge: '커리큘럼', badgeClass: 'bg-emerald-50 text-emerald-800', avatarClass: 'bg-emerald-100 text-emerald-900' },
-        video: { badge: '영상', badgeClass: 'bg-violet-50 text-violet-800', avatarClass: 'bg-violet-100 text-violet-900' },
-        prompt: { badge: '프롬프트', badgeClass: 'bg-fuchsia-50 text-fuchsia-900', avatarClass: 'bg-fuchsia-100 text-fuchsia-900' },
-        output: { badge: '결과물', badgeClass: 'bg-orange-50 text-orange-900', avatarClass: 'bg-orange-100 text-orange-900' },
-        insight: { badge: '인사이트', badgeClass: 'bg-amber-50 text-amber-900', avatarClass: 'bg-amber-100 text-amber-950' },
-        community: { badge: '커뮤니티', badgeClass: 'bg-rose-50 text-rose-900', avatarClass: 'bg-rose-100 text-rose-900' },
-        planning: { badge: '기획', badgeClass: 'bg-indigo-50 text-indigo-900', avatarClass: 'bg-indigo-100 text-indigo-900' },
-        design: { badge: '디자인', badgeClass: 'bg-pink-50 text-pink-900', avatarClass: 'bg-pink-100 text-pink-900' },
-        development: { badge: '개발', badgeClass: 'bg-teal-50 text-teal-900', avatarClass: 'bg-teal-100 text-teal-900' },
+        curriculum: { badge: '커리큘럼', badgeClass: 'bg-emerald-900/85 text-emerald-100', avatarClass: 'bg-emerald-800/90 text-emerald-50' },
+        video: { badge: '영상', badgeClass: 'bg-violet-900/85 text-violet-100', avatarClass: 'bg-violet-800/90 text-violet-50' },
+        prompt: { badge: '프롬프트', badgeClass: 'bg-fuchsia-800/95 text-fuchsia-50', avatarClass: 'bg-fuchsia-900/90 text-fuchsia-50' },
+        output: { badge: '결과물', badgeClass: 'bg-orange-900/85 text-orange-100', avatarClass: 'bg-orange-800/90 text-orange-50' },
+        insight: { badge: '인사이트', badgeClass: 'bg-amber-900/85 text-amber-100', avatarClass: 'bg-amber-800/90 text-amber-50' },
+        community: { badge: '커뮤니티', badgeClass: 'bg-rose-900/85 text-rose-100', avatarClass: 'bg-rose-800/90 text-rose-50' },
+        planning: { badge: '기획', badgeClass: 'bg-indigo-900/85 text-indigo-100', avatarClass: 'bg-indigo-800/90 text-indigo-50' },
+        design: { badge: '디자인', badgeClass: 'bg-pink-900/85 text-pink-100', avatarClass: 'bg-pink-800/90 text-pink-50' },
+        development: { badge: '개발', badgeClass: 'bg-teal-900/85 text-teal-100', avatarClass: 'bg-teal-800/90 text-teal-50' },
       };
       return m[cat] || m.community;
     }
 
     function userPostToDetail(u) {
       var b = badgeForCat(u.cat);
+      var isPrompt = u.cat === 'prompt';
+      var rawBody = u.body || '';
+      var body = isPrompt ? '' : '<p>' + escapeHtml(rawBody).replace(/\n/g, '<br/>') + '</p>';
       return {
         badge: b.badge,
         badgeClass: b.badgeClass,
@@ -343,10 +626,11 @@
         likes: '0',
         comments: '0',
         saves: '0',
-        body: '<p>' + escapeHtml(u.body || '').replace(/\\n/g, '<br/>') + '</p>',
+        body: body,
         extra: '',
         previewHtml: '',
-        promptText: null,
+        promptText: isPrompt ? rawBody || null : null,
+        link: u.link || '',
         thread: [],
       };
     }
@@ -376,25 +660,53 @@
       localStorage.setItem(LS_COMMENTS, JSON.stringify(all));
     }
 
+    function updateUserComment(slug, id, text) {
+      var all = safeJsonParse(localStorage.getItem(LS_COMMENTS), {});
+      if (!all || typeof all !== 'object') all = {};
+      var arr = all[slug];
+      if (!Array.isArray(arr)) return false;
+      var changed = false;
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i] && arr[i].id === id) {
+          arr[i].text = text;
+          changed = true;
+          break;
+        }
+      }
+      if (!changed) return false;
+      all[slug] = arr;
+      localStorage.setItem(LS_COMMENTS, JSON.stringify(all));
+      return true;
+    }
+
+    function formatCommentDisplay(raw) {
+      var s = escapeHtml(raw || '');
+      return s.replace(/@([\uac00-\ud7a3a-zA-Z0-9_·]+)/g, '<span class="font-medium text-sky-400">@$1</span>');
+    }
+
     function renderComments(thread) {
-      if (!thread || !thread.length) return '<p class="py-6 text-center text-sm text-zinc-400">댓글이 없습니다.</p>';
+      if (!thread || !thread.length) return '<p class="py-6 text-center text-sm text-zinc-500">댓글이 없습니다.</p>';
       return thread.map(function (c) {
-        var pad = c.reply ? ' pl-10 border-l border-zinc-100 ml-2' : '';
+        var pad = c.reply ? ' pl-10 border-l border-zinc-700 ml-2' : '';
         var when = c.when && String(c.when).includes('T') ? timeAgoShort(c.when) : c.when;
-        var canDel = c.isUser && c.id;
+        var canManage = c.isUser && c.id;
         return (
           '<div class="py-3' + pad + '">' +
           '<div class="flex gap-3">' +
-          '<div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-2xs font-bold text-zinc-600">' + escapeHtml((c.who || '?').charAt(0)) + '</div>' +
+          '<div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-zinc-800 text-2xs font-bold text-zinc-300">' + escapeHtml((c.who || '?').charAt(0)) + '</div>' +
           '<div class="min-w-0 flex-1">' +
           '<div class="flex items-center justify-between gap-2">' +
           '<div class="min-w-0">' +
-          '<span class="text-sm font-semibold text-zinc-900">' + escapeHtml(c.who) + '</span>' +
-          '<span class="ml-2 text-2xs text-zinc-400">' + escapeHtml(when) + '</span>' +
+          '<span class="text-sm font-semibold text-zinc-100">' + escapeHtml(c.who) + '</span>' +
+          '<span class="ml-2 text-2xs text-zinc-500">' + escapeHtml(when) + '</span>' +
           '</div>' +
-          (canDel ? '<button type="button" class="js-del-comment shrink-0 rounded-full px-2 py-1 text-2xs font-semibold text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700" data-comment-id="' + escapeHtml(c.id) + '">삭제</button>' : '') +
+          (canManage
+            ? '<div class="flex items-center gap-1"><button type="button" class="js-edit-comment shrink-0 rounded-full px-2 py-1 text-2xs font-semibold text-zinc-500 hover:bg-zinc-800 hover:text-zinc-200" data-comment-id="' + escapeHtml(c.id) + '" data-comment-text="' + escapeHtml(c.text) + '">수정</button><button type="button" class="js-del-comment shrink-0 rounded-full px-2 py-1 text-2xs font-semibold text-zinc-500 hover:bg-zinc-800 hover:text-zinc-200" data-comment-id="' + escapeHtml(c.id) + '">삭제</button></div>'
+            : '') +
           '</div>' +
-          '<p class="mt-1 text-sm leading-relaxed text-zinc-700">' + escapeHtml(c.text) + '</p>' +
+          '<p class="mt-1 text-sm leading-relaxed text-zinc-300">' +
+          formatCommentDisplay(c.text) +
+          '</p>' +
           '</div></div></div>'
         );
       }).join('');
@@ -407,10 +719,10 @@
       var bodyHtml = (p.previewHtml || '') + (p.body || '');
       if (p.promptText) {
         var pt = escapeHtml(p.promptText);
-        bodyHtml += '<div class="relative mt-4 rounded-lg border border-zinc-200 bg-zinc-50 p-3 pr-12 font-mono text-2xs leading-relaxed text-zinc-800 sm:text-xs"><button type="button" class="js-prompt-copy absolute right-2 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg bg-white text-zinc-600 shadow-sm ring-1 ring-zinc-200/80 hover:bg-zinc-50" aria-label="프롬프트 복사">' + document.getElementById('icon-copy').innerHTML + '</button><span class="whitespace-pre-wrap">' + pt + '</span></div>';
+        bodyHtml += '<div class="relative mt-4 rounded-lg border border-zinc-700 bg-zinc-950 p-3 pr-12 font-mono text-2xs leading-relaxed text-zinc-300 sm:text-xs"><button type="button" class="js-prompt-copy absolute right-2 top-1/2 z-10 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg bg-zinc-800 text-zinc-200 shadow-md ring-1 ring-zinc-600/80 hover:bg-zinc-700" aria-label="프롬프트 복사">' + document.getElementById('icon-copy').innerHTML + '</button><span class="whitespace-pre-wrap">' + pt + '</span></div>';
       }
       if (!String(bodyHtml).trim()) bodyHtml = '<p class="text-sm text-zinc-500">본문이 없습니다.</p>';
-      return '<div class="flex gap-3 p-4 sm:p-5"><span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-base font-bold ' + p.avatarClass + '">' + escapeHtml(p.initial) + '</span><div class="min-w-0 flex-1"><div class="flex flex-wrap items-center gap-x-2 gap-y-1"><span class="font-semibold text-zinc-900">' + escapeHtml(p.authorName) + '</span><span class="rounded px-1.5 py-0.5 text-2xs font-semibold ' + p.badgeClass + '">' + escapeHtml(p.badge) + '</span><span class="text-2xs text-zinc-400">' + escapeHtml(p.timeRelative) + '</span></div><h1 class="mt-2 text-lg font-bold leading-snug text-zinc-900 sm:text-xl">' + escapeHtml(p.title) + '</h1><p class="mt-2 text-sm text-zinc-600">' + escapeHtml(p.excerpt) + '</p></div></div><div class="border-t border-zinc-100 px-4 py-4 sm:px-5"><div class="prose prose-zinc max-w-none text-sm leading-relaxed text-zinc-800">' + bodyHtml + '</div>' + (p.extra ? '<p class="mt-4 text-2xs text-zinc-400">' + escapeHtml(p.extra) + '</p>' : '') + '</div><div class="flex flex-wrap items-center gap-1 border-t border-zinc-100 bg-zinc-50/50 px-2 py-2 sm:px-3"><button type="button" data-reaction="like" data-base="' + likeBase + '" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-2xs font-medium text-zinc-500 hover:bg-white">' + HEART_OUT + HEART_IN + '<span class="js-react-count tabular-nums">' + formatCompact(likeBase) + '</span></button><a href="#comments" class="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-2xs font-medium text-zinc-500 hover:bg-white"><svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span class="tabular-nums">' + cmt + '</span></a><button type="button" data-reaction="save" data-base="' + saveBase + '" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-2xs font-medium text-zinc-500 hover:bg-white">' + MARK_OUT + MARK_IN + '<span class="js-react-count tabular-nums">' + formatCompact(saveBase) + '</span></button><button type="button" data-share-path="post-detail.html?slug=' + encodeURIComponent(slug) + '" data-share-title="' + escapeHtml(p.title) + '" class="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-2xs font-medium text-zinc-500 hover:bg-white" aria-label="공유">' + SHARE_ICON + '</button></div>';
+      return '<div class="flex gap-3 p-4 sm:p-5"><span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-base font-bold ' + p.avatarClass + '">' + escapeHtml(p.initial) + '</span><div class="min-w-0 flex-1"><div class="flex flex-wrap items-center gap-x-2 gap-y-1"><span class="font-semibold text-zinc-100">' + escapeHtml(p.authorName) + '</span><span class="rounded px-1.5 py-0.5 text-2xs font-semibold ' + p.badgeClass + '">' + escapeHtml(p.badge) + '</span><span class="text-2xs text-zinc-500">' + escapeHtml(p.timeRelative) + '</span></div><h1 class="mt-2 text-lg font-bold leading-snug text-zinc-100 sm:text-xl">' + escapeHtml(p.title) + '</h1><p class="mt-2 text-sm text-zinc-400">' + escapeHtml(p.excerpt) + '</p>' + (p.link ? '<p class="mt-2"><a href="' + escAttr(p.link) + '" class="break-all text-sm text-sky-400 underline underline-offset-2 hover:text-sky-300" target="_blank" rel="noopener noreferrer">' + escapeHtml(p.link) + '</a></p>' : '') + '</div></div><div class="border-t border-zinc-800/80 px-4 py-4 sm:px-5"><div class="prose prose-invert prose-zinc relative z-0 max-w-none text-sm leading-relaxed text-zinc-300">' + bodyHtml + '</div>' + (p.extra ? '<p class="mt-4 text-2xs text-zinc-500">' + escapeHtml(p.extra) + '</p>' : '') + '</div><div class="relative z-10 flex flex-wrap items-center gap-1 border-t border-zinc-800/80 bg-zinc-950/60 px-2 py-2 sm:px-3"><button type="button" data-reaction="like" data-base="' + likeBase + '" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-2xs font-medium text-zinc-400 hover:bg-zinc-800/90 hover:text-zinc-100">' + HEART_OUT + HEART_IN + '<span class="js-react-count tabular-nums">' + formatCompact(likeBase) + '</span></button><a href="#comments" class="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-2xs font-medium text-zinc-400 hover:bg-zinc-800/90 hover:text-zinc-100"><svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span class="tabular-nums">' + cmt + '</span></a><button type="button" data-reaction="save" data-base="' + saveBase + '" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-2xs font-medium text-zinc-400 hover:bg-zinc-800/90 hover:text-zinc-100">' + MARK_OUT + MARK_IN + '<span class="js-react-count tabular-nums">' + formatCompact(saveBase) + '</span></button><button type="button" data-share-path="post-detail.html?slug=' + encodeURIComponent(slug) + '" data-share-title="' + escapeHtml(p.title) + '" class="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-2xs font-medium text-zinc-400 hover:bg-zinc-800/90 hover:text-zinc-100" aria-label="공유">' + SHARE_ICON + '</button></div>';
     }
 
     var params = new URLSearchParams(window.location.search);
@@ -432,7 +744,7 @@
     } else {
       document.getElementById('post-root').classList.remove('hidden');
       document.getElementById('article-main').innerHTML = renderArticle(post, slug);
-      document.title = '에듀AI — ' + post.title;
+      document.title = '클래스루프 — ' + post.title;
       var copyBtn = document.querySelector('.js-prompt-copy');
       if (copyBtn && post.promptText) copyBtn.setAttribute('data-copy', post.promptText);
       function renderAllComments() {
@@ -452,25 +764,72 @@
 
       var inEl = document.getElementById('comment-input');
       var btnEl = document.getElementById('comment-submit');
+      var cancelEl = document.getElementById('comment-cancel');
+      var editingCommentId = null;
+      function setEditMode(id, text) {
+        editingCommentId = id;
+        inEl.value = text || '';
+        btnEl.textContent = '수정 저장';
+        cancelEl.classList.remove('hidden');
+        inEl.focus();
+      }
+      function clearEditMode() {
+        editingCommentId = null;
+        btnEl.textContent = '등록';
+        cancelEl.classList.add('hidden');
+      }
       function submitComment() {
         var text = (inEl.value || '').trim();
         if (!text) return;
-        addUserComment(slug, '김에듀', text);
+        if (editingCommentId) {
+          var ok = updateUserComment(slug, editingCommentId, text);
+          if (!ok) {
+            alert('수정할 댓글을 찾지 못했습니다.');
+          }
+        } else {
+          addUserComment(slug, '김에듀', text);
+          var mn = parseMentionNames(text);
+          if (mn.length) {
+            pushMentionNotifications('김에듀', mn, {
+              postSlug: slug,
+              postTitle: post.title || '',
+              snippet: text,
+              source: 'comment',
+            });
+          }
+        }
         inEl.value = '';
+        clearEditMode();
         renderAllComments();
       }
       btnEl.addEventListener('click', submitComment);
+      cancelEl.addEventListener('click', function () {
+        inEl.value = '';
+        clearEditMode();
+      });
       inEl.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') submitComment();
       });
 
       document.getElementById('comment-thread').addEventListener('click', function (e) {
         var t = e.target;
-        if (!t || !t.classList || !t.classList.contains('js-del-comment')) return;
+        if (!t || !t.classList) return;
+        if (t.classList.contains('js-edit-comment')) {
+          var eid = t.getAttribute('data-comment-id') || '';
+          var etext = t.getAttribute('data-comment-text') || '';
+          if (!eid) return;
+          setEditMode(eid, etext);
+          return;
+        }
+        if (!t.classList.contains('js-del-comment')) return;
         var id = t.getAttribute('data-comment-id') || '';
         if (!id) return;
         if (!confirm('이 댓글을 삭제할까요?')) return;
         deleteUserComment(slug, id);
+        if (editingCommentId === id) {
+          inEl.value = '';
+          clearEditMode();
+        }
         renderAllComments();
       });
 
@@ -512,6 +871,34 @@
       scrollToCommentsIfHash();
       window.addEventListener('hashchange', scrollToCommentsIfHash);
     }
+  </script>
+  <div id="floating-actions" class="fixed bottom-5 right-5 z-[70] flex flex-col items-end gap-2 xl:right-6">
+    <button id="btn-scroll-top" type="button" class="pointer-events-none inline-flex h-10 w-10 items-center justify-center rounded-full border border-zinc-700/90 bg-zinc-900/95 text-zinc-200 opacity-0 shadow-xl shadow-black/40 transition hover:border-zinc-500 hover:bg-zinc-800" aria-label="맨 위로">
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
+    </button>
+    <button id="btn-report-bug" type="button" class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-rose-700/70 bg-rose-950/80 text-rose-200 shadow-xl shadow-black/40 transition hover:border-rose-500 hover:bg-rose-900/80" aria-label="버그 신고">
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M8.93 4.93l-5 5m17.14-5l-5 5M6.34 14h11.32a2 2 0 011.73 3l-5.66 9.8a2 2 0 01-3.46 0L4.61 17a2 2 0 011.73-3z"/></svg>
+    </button>
+  </div>
+  <script>
+    (function () {
+      var topBtn = document.getElementById('btn-scroll-top');
+      var bugBtn = document.getElementById('btn-report-bug');
+      function updateTopBtn() {
+        var show = window.scrollY > 240;
+        topBtn.classList.toggle('opacity-0', !show);
+        topBtn.classList.toggle('pointer-events-none', !show);
+      }
+      updateTopBtn();
+      window.addEventListener('scroll', updateTopBtn, { passive: true });
+      topBtn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      bugBtn.addEventListener('click', function () {
+        var u = 'compose.html?bug=1&url=' + encodeURIComponent(location.href);
+        window.location.href = u;
+      });
+    })();
   </script>
 </body>
 </html>

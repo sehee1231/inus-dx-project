@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>에듀AI — 카테고리</title>
+  <title>클래스루프 — 카테고리</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -20,45 +20,245 @@
     body { font-feature-settings: "ss01" on; -webkit-tap-highlight-color: transparent; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .feed-card-media { height: 11.25rem; }
+    @media (min-width: 640px) {
+      .feed-card-media { height: 12.5rem; }
+    }
   </style>
 </head>
-<body class="min-h-screen bg-zinc-100 font-sans text-zinc-900 antialiased">
-  <header class="sticky top-0 z-50 border-b border-zinc-200/80 bg-zinc-50/95 backdrop-blur-xl">
-    <div class="mx-auto flex h-12 max-w-[960px] items-center justify-between gap-3 px-4">
-      <a href="project.html" class="flex items-center gap-2">
-        <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-zinc-900 text-xs font-bold text-white">AI</span>
-        <span class="text-sm font-semibold">에듀AI</span>
-      </a>
-      <div class="flex gap-1">
-        <a href="search.html" class="flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 hover:bg-zinc-200/70" aria-label="검색">
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-        </a>
-        <a href="notifications.html" class="relative flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 hover:bg-zinc-200/70" aria-label="알림">
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
-          <span class="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-zinc-50"></span>
-        </a>
-        <a href="profile.html" class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-amber-200 to-orange-200 text-xs font-bold text-amber-950">김</a>
+<body class="min-h-screen bg-[#0c0c0e] font-sans text-zinc-100 antialiased">
+    <!-- 좌측 사이드바 (데스크톱) -->
+    <aside
+      class="fixed inset-y-0 left-0 z-40 hidden w-[232px] flex-col border-r border-zinc-800/90 bg-zinc-950 xl:flex xl:flex-col"
+      aria-label="주 메뉴"
+    >
+      <div class="flex h-14 items-center gap-2 border-b border-zinc-800/80 px-4">
+        <a
+          href="project.html"
+          class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sky-600 text-xs font-bold text-white"
+          >AI</a
+        >
+        <div class="min-w-0">
+          <a
+            href="project.html"
+            class="block truncate text-sm font-semibold tracking-tight text-zinc-100"
+            >클래스루프</a
+          >
+          <p class="truncate text-2xs text-zinc-500">교육 콘텐츠 피드</p>
+        </div>
       </div>
-    </div>
-    <div class="border-t border-zinc-100/80">
-      <div class="no-scrollbar mx-auto flex max-w-[960px] gap-1.5 overflow-x-auto px-4 py-2.5" id="chips"></div>
-    </div>
-  </header>
+      <nav class="flex flex-1 flex-col gap-1 px-2 py-3 text-sm">
+        <a
+          href="compose.html"
+          class="flex items-center gap-3 rounded-lg px-3 py-2 text-zinc-400 transition hover:bg-zinc-800/80 hover:text-zinc-100"
+        >
+          <svg class="h-5 w-5 shrink-0 opacity-80" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          새로 올리기
+        </a>
+        <a
+          href="project.html"
+          class="flex items-center gap-3 rounded-lg px-3 py-2 text-zinc-400 transition hover:bg-zinc-800/80 hover:text-zinc-100"
+        >
+          <svg class="h-5 w-5 shrink-0 opacity-80" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+          피드 홈
+        </a>
+        <a
+          href="browse.html"
+          class="flex items-center gap-3 rounded-lg bg-zinc-800/90 px-3 py-2 font-medium text-zinc-100"
+        >
+          <svg class="h-5 w-5 shrink-0 opacity-80" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+          탐색 · 폴더
+        </a>
+        <div class="mt-4 border-t border-zinc-800/80 pt-3">
+          <p class="mb-2 px-3 text-2xs font-semibold uppercase tracking-wider text-zinc-500">
+            최근 본 링크
+          </p>
+          <ul class="space-y-0.5 text-2xs text-zinc-500">
+            <li>
+              <a href="browse.html?c=video" class="block truncate px-3 py-1 transition hover:bg-zinc-800/40 hover:text-zinc-200">eduai.app/browse?c=video</a>
+            </li>
+            <li>
+              <a href="post-detail.html?slug=rag-video" class="block truncate px-3 py-1 transition hover:bg-zinc-800/40 hover:text-zinc-200">post-detail.html?slug=rag-video</a>
+            </li>
+            <li>
+              <a href="post-detail.html?slug=automation-roadmap" class="block truncate px-3 py-1 transition hover:bg-zinc-800/40 hover:text-zinc-200">post-detail.html?slug=automation-roadmap</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <div class="border-t border-zinc-800/80 p-3">
+        <a
+          href="profile.html"
+          class="flex items-center gap-2 rounded-lg bg-zinc-900/80 p-2.5 transition hover:bg-zinc-800/80"
+        >
+          <span
+            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-amber-400/90 to-orange-500 text-xs font-bold text-zinc-900"
+            >김</span
+          >
+          <div class="min-w-0 flex-1">
+            <p class="truncate text-2xs font-medium text-zinc-200">김에듀</p>
+            <p class="text-2xs text-zinc-500">프로필 보기</p>
+          </div>
+        </a>
+      </div>
+    </aside>
 
-  <main class="mx-auto max-w-[960px] px-4 pb-20 pt-4">
+    <div class="min-h-screen xl:pl-[232px]">
+      <!-- 상단 바 -->
+      <header
+        class="sticky top-0 z-50 border-b border-zinc-800/90 bg-[#0c0c0e]/95 backdrop-blur-xl"
+      >
+        <div
+          class="mx-auto flex max-w-[1400px] min-w-0 items-center justify-between gap-2 px-4 py-2.5 sm:gap-3 sm:py-3"
+        >
+          <div class="flex shrink-0 items-center gap-2 xl:hidden">
+            <a
+              href="project.html"
+              class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-sky-600 text-xs font-bold text-white"
+              >AI</a
+            >
+            <a
+              href="project.html"
+              class="max-w-[5.5rem] truncate text-sm font-semibold tracking-tight text-zinc-100 sm:max-w-none"
+              >클래스루프</a
+            >
+          </div>
+          <form
+            id="top-search-form"
+            class="flex w-full max-w-[400px] shrink-0 items-center"
+            action="search.html"
+            method="get"
+            role="search"
+          >
+            <div class="relative w-full">
+              <svg
+                class="pointer-events-none absolute left-3 top-1/2 h-[1.125rem] w-[1.125rem] -translate-y-1/2 text-zinc-500"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.75"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+              <input
+                type="search"
+                id="top-search-q"
+                name="q"
+                enterkeyhint="search"
+                placeholder="검색어를 입력해 보세요…"
+                class="w-full rounded-xl border border-zinc-700/90 bg-zinc-900/90 py-2.5 pl-10 pr-3 text-sm text-zinc-100 placeholder:text-zinc-500 shadow-inner shadow-black/20 outline-none transition focus:border-sky-500/70 focus:ring-2 focus:ring-sky-500/25 sm:py-3 sm:pl-11 sm:text-[0.9375rem]"
+              />
+            </div>
+          </form>
+          <div class="ml-auto flex shrink-0 items-center gap-0.5 sm:gap-1">
+            <a
+              href="notifications.html"
+              class="relative flex h-9 w-9 items-center justify-center rounded-full text-zinc-400 hover:bg-zinc-800/80 hover:text-zinc-100"
+              aria-label="알림"
+            >
+              <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                />
+              </svg>
+              <span
+                class="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-[#0c0c0e]"
+              ></span>
+            </a>
+            <a
+              href="profile.html"
+              class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-amber-400/90 to-orange-500 text-xs font-bold text-zinc-900"
+              aria-label="내 프로필"
+            >
+              김
+            </a>
+          </div>
+        </div>
+        <div class="border-t border-zinc-800/80">
+          <div
+            class="no-scrollbar mx-auto flex max-w-[1400px] gap-1.5 overflow-x-auto px-4 py-2.5"
+            id="chips"
+          >
+            <a
+              href="project.html"
+              class="shrink-0 rounded-full bg-sky-600 px-3.5 py-1.5 text-2xs font-semibold text-white"
+              >전체</a
+            >
+            <a
+              href="browse.html?c=planning"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >기획</a
+            >
+            <a
+              href="browse.html?c=design"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >디자인</a
+            >
+            <a
+              href="browse.html?c=development"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >개발</a
+            >
+            <a
+              href="browse.html?c=curriculum"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >커리큘럼</a
+            >
+            <a
+              href="browse.html?c=video"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >영상</a
+            >
+            <a
+              href="browse.html?c=prompt"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >프롬프트</a
+            >
+            <a
+              href="browse.html?c=output"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >결과물</a
+            >
+            <a
+              href="browse.html?c=insight"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >인사이트</a
+            >
+            <a
+              href="browse.html?c=community"
+              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+              >커뮤니티</a
+            >
+          </div>
+        </div>
+      </header>
+
+  <main class="mx-auto max-w-[1400px] px-4 pb-24 pt-4 sm:pt-5">
+
     <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
       <div class="min-w-0 flex-1">
-        <h1 id="h1" class="text-xl font-bold tracking-tight sm:text-2xl"></h1>
+        <h1 id="h1" class="text-xl font-bold tracking-tight text-zinc-100 sm:text-2xl"></h1>
         <p id="desc" class="mt-1.5 text-sm leading-relaxed text-zinc-500"></p>
       </div>
       <div id="view-wrap" class="hidden shrink-0">
         <div class="flex items-center gap-2" role="group" aria-label="보기 방식">
-          <button type="button" id="v-list" class="view-btn inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-500 shadow-sm transition hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-800" aria-label="리스트로 보기" title="리스트">
+          <button type="button" id="v-list" class="view-btn inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900/80 text-zinc-400 shadow-sm transition hover:border-zinc-600 hover:bg-zinc-800 hover:text-zinc-100" aria-label="리스트로 보기" title="리스트">
             <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10" />
             </svg>
           </button>
-          <button type="button" id="v-feed" class="view-btn inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-500 shadow-sm transition hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-800" aria-label="피드로 보기" title="피드">
+          <button type="button" id="v-feed" class="view-btn inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900/80 text-zinc-400 shadow-sm transition hover:border-zinc-600 hover:bg-zinc-800 hover:text-zinc-100" aria-label="피드로 보기" title="피드">
             <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zM14 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
             </svg>
@@ -67,12 +267,13 @@
       </div>
     </div>
     <div id="root" class="mt-4"></div>
-    <p class="mt-10 text-center text-2xs text-zinc-400">
-      <a href="project.html" class="font-medium text-zinc-500 underline underline-offset-2 hover:text-zinc-800">전체 피드</a>
+    <p class="mt-10 text-center text-2xs text-zinc-500">
+      <a href="project.html" class="font-medium text-sky-400/90 underline underline-offset-2 hover:text-sky-300">전체 피드</a>
       ·
-      <a href="compose.html" class="font-medium text-zinc-500 underline underline-offset-2 hover:text-zinc-800">새 글</a>
+      <a href="compose.html" class="font-medium text-sky-400/90 underline underline-offset-2 hover:text-sky-300">새 글</a>
     </p>
   </main>
+
 
   <template id="icon-check-tpl">
     <svg class="h-4 w-4 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
@@ -118,15 +319,15 @@
     };
 
     var CAT_THEME = {
-      curriculum: { av: 'bg-emerald-100 text-emerald-900', chip: 'bg-emerald-50 text-emerald-800', wide: 'from-emerald-600 to-teal-800' },
-      video: { av: 'bg-violet-100 text-violet-900', chip: 'bg-violet-50 text-violet-800', wide: 'from-violet-700 to-indigo-900' },
-      prompt: { av: 'bg-fuchsia-100 text-fuchsia-900', chip: 'bg-fuchsia-50 text-fuchsia-900', wide: 'from-fuchsia-600 to-purple-900' },
-      output: { av: 'bg-orange-100 text-orange-900', chip: 'bg-orange-50 text-orange-900', wide: 'from-orange-400 to-rose-600' },
-      insight: { av: 'bg-amber-100 text-amber-950', chip: 'bg-amber-50 text-amber-900', wide: 'from-amber-200 to-zinc-400' },
-      community: { av: 'bg-rose-100 text-rose-900', chip: 'bg-rose-50 text-rose-900', wide: 'from-rose-500 to-orange-700' },
-      planning: { av: 'bg-indigo-100 text-indigo-900', chip: 'bg-indigo-50 text-indigo-900', wide: 'from-indigo-600 to-slate-800' },
-      design: { av: 'bg-pink-100 text-pink-900', chip: 'bg-pink-50 text-pink-900', wide: 'from-pink-400 to-violet-600' },
-      development: { av: 'bg-teal-100 text-teal-900', chip: 'bg-teal-50 text-teal-900', wide: 'from-teal-600 to-emerald-800' },
+      curriculum: { av: 'bg-emerald-900/85 text-emerald-100', chip: 'bg-emerald-900/70 text-emerald-100', wide: 'from-emerald-600 to-teal-800' },
+      video: { av: 'bg-violet-900/85 text-violet-100', chip: 'bg-violet-900/70 text-violet-100', wide: 'from-violet-700 to-indigo-900' },
+      prompt: { av: 'bg-fuchsia-900/90 text-fuchsia-50', chip: 'bg-fuchsia-800/80 text-fuchsia-50', wide: 'from-fuchsia-600 to-purple-900' },
+      output: { av: 'bg-orange-900/85 text-orange-100', chip: 'bg-orange-900/70 text-orange-100', wide: 'from-orange-400 to-rose-600' },
+      insight: { av: 'bg-amber-900/85 text-amber-100', chip: 'bg-amber-900/70 text-amber-100', wide: 'from-amber-600 to-zinc-800' },
+      community: { av: 'bg-rose-900/85 text-rose-100', chip: 'bg-rose-900/70 text-rose-100', wide: 'from-rose-500 to-orange-700' },
+      planning: { av: 'bg-indigo-900/85 text-indigo-100', chip: 'bg-indigo-900/70 text-indigo-100', wide: 'from-indigo-600 to-slate-800' },
+      design: { av: 'bg-pink-900/85 text-pink-100', chip: 'bg-pink-900/70 text-pink-100', wide: 'from-pink-400 to-violet-600' },
+      development: { av: 'bg-teal-900/85 text-teal-100', chip: 'bg-teal-900/70 text-teal-100', wide: 'from-teal-600 to-emerald-800' },
     };
 
     var TIMES = ['방금', '3시간 전', '어제', '2일 전', '5분 전', '1일 전'];
@@ -174,6 +375,7 @@
             slug: p.slug,
             t: p.title || '제목 없음',
             sub: (p.authorName || '김에듀') + ' · ' + (LABEL[cat] ? LABEL[cat].name : '커뮤니티'),
+            link: (p.link || '').trim(),
           };
         });
     }
@@ -213,17 +415,14 @@
     var saveOutline = '<svg class="ic-outline h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>';
     var saveSolid = '<svg class="ic-solid hidden h-4 w-4 shrink-0 text-amber-600" fill="currentColor" viewBox="0 0 24 24"><path d="M5 3a2 2 0 012-2h10a2 2 0 012 2v18l-7-4-7 4V3z"/></svg>';
     var shareSvg = '<svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.59 13.51L15.42 17.5M15.41 6.5L8.59 10.49M18 21a3 3 0 100-6 3 3 0 000 6zM6 14a3 3 0 100-6 3 3 0 000 6zM18 9a3 3 0 100-6 3 3 0 000 6z"/></svg>';
-    var moreSvg = '<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>';
-
     function actionsBar(slug, title, stats) {
       var enc = encodeURIComponent(slug);
       var tEsc = esc(title).replace(/'/g, '&#39;');
       return (
-        '<div class="flex items-center justify-between border-t border-zinc-100 px-3 py-2.5 sm:px-4">' +
-        '<div class="flex items-center gap-3 text-2xs sm:text-xs">' +
+        '<div class="relative z-10 mt-auto flex flex-wrap items-center gap-2 border-t border-zinc-800/80 px-3 py-2.5 sm:gap-3 sm:px-4">' +
         '<button type="button" data-reaction="like" data-base="' +
         stats.like +
-        '" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50">' +
+        '" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 text-2xs font-medium text-zinc-400 hover:bg-zinc-800/90 hover:text-zinc-100 sm:text-xs">' +
         likeOutline +
         likeSolid +
         '<span class="js-react-count tabular-nums font-medium">' +
@@ -231,14 +430,14 @@
         '</span></button>' +
         '<a href="post-detail.html?slug=' +
         enc +
-        '#comments" class="relative z-10 inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50 hover:text-zinc-800" aria-label="댓글 보기">' +
+        '#comments" class="relative z-10 inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg px-1.5 py-1 text-2xs font-medium text-zinc-400 hover:bg-zinc-800/90 hover:text-zinc-100 sm:text-xs" aria-label="댓글 보기">' +
         cmtSvg +
         '<span class="tabular-nums font-medium">' +
         stats.cmt +
         '</span></a>' +
         '<button type="button" data-reaction="save" data-base="' +
         stats.save +
-        '" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50">' +
+        '" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 text-2xs font-medium text-zinc-400 hover:bg-zinc-800/90 hover:text-zinc-100 sm:text-xs">' +
         saveOutline +
         saveSolid +
         '<span class="js-react-count tabular-nums font-medium">' +
@@ -248,14 +447,9 @@
         enc +
         '" data-share-title="' +
         tEsc +
-        '" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50" aria-label="공유">' +
+        '" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 text-2xs font-medium text-zinc-400 hover:bg-zinc-800/90 hover:text-zinc-100 sm:text-xs" aria-label="공유">' +
         shareSvg +
-        '</button></div>' +
-        '<a href="post-detail.html?slug=' +
-        enc +
-        '" class="rounded-full p-1.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700" aria-label="상세">' +
-        moreSvg +
-        '</a></div>'
+        '</button></div>'
       );
     }
 
@@ -263,11 +457,10 @@
       var enc = encodeURIComponent(slug);
       var tEsc = esc(title).replace(/'/g, '&#39;');
       return (
-        '<div class="mt-3 flex items-center justify-between border-t border-zinc-50 pt-3">' +
-        '<div class="flex items-center gap-3 text-2xs sm:text-xs">' +
+        '<div class="relative z-10 mt-3 flex flex-wrap items-center gap-2 border-t border-zinc-800/80 pt-3 sm:gap-3">' +
         '<button type="button" data-reaction="like" data-base="' +
         stats.like +
-        '" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50">' +
+        '" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 text-2xs font-medium text-zinc-400 hover:bg-zinc-800/90 hover:text-zinc-100 sm:text-xs">' +
         likeOutline +
         likeSolid +
         '<span class="js-react-count tabular-nums font-medium">' +
@@ -275,14 +468,14 @@
         '</span></button>' +
         '<a href="post-detail.html?slug=' +
         enc +
-        '#comments" class="relative z-10 inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50 hover:text-zinc-800" aria-label="댓글 보기">' +
+        '#comments" class="relative z-10 inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg px-1.5 py-1 text-2xs font-medium text-zinc-400 hover:bg-zinc-800/90 hover:text-zinc-100 sm:text-xs" aria-label="댓글 보기">' +
         cmtSvg +
         '<span class="tabular-nums font-medium">' +
         stats.cmt +
         '</span></a>' +
         '<button type="button" data-reaction="save" data-base="' +
         stats.save +
-        '" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50">' +
+        '" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 text-2xs font-medium text-zinc-400 hover:bg-zinc-800/90 hover:text-zinc-100 sm:text-xs">' +
         saveOutline +
         saveSolid +
         '<span class="js-react-count tabular-nums font-medium">' +
@@ -292,161 +485,203 @@
         enc +
         '" data-share-title="' +
         tEsc +
-        '" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 font-medium text-zinc-500 hover:bg-zinc-50" aria-label="공유">' +
+        '" class="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 text-2xs font-medium text-zinc-400 hover:bg-zinc-800/90 hover:text-zinc-100 sm:text-xs" aria-label="공유">' +
         shareSvg +
-        '</button></div></div>'
+        '</button></div>'
+      );
+    }
+
+    var SLUG_FEED_LINK = {
+      'automation-roadmap': 'https://classloop.app/roadmap',
+      'rag-video': 'https://www.youtube.com/watch?v=sVcwVQRHIc8',
+      'chatbot-eval': 'https://classloop.app/eval',
+      'prompt-lesson': 'https://classloop.app/prompt-lesson',
+      'prompt-reading': 'https://classloop.app/prompt-reading',
+      'result-rubric': 'https://classloop.app/result-rubric',
+      'result-quiz': 'https://classloop.app/result-quiz',
+      'prd-ai-classroom': 'https://classloop.app/prd-ai',
+      'design-tokens-edu': 'https://classloop.app/tokens',
+      'dev-api-integration': 'https://classloop.app/api-checklist',
+    };
+
+    function escAttrUrl(s) {
+      return String(s || '')
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function clipLinkDisplay(u, maxLen) {
+      u = String(u || '').replace(/^https?:\/\//i, '');
+      var m = maxLen || 34;
+      if (u.length > m) u = u.slice(0, m - 1) + '…';
+      return u;
+    }
+
+    function metaExternalLinkHtml(url) {
+      if (!url) return '';
+      return (
+        ' · <a href="' +
+        escAttrUrl(url) +
+        '" target="_blank" rel="noopener noreferrer" class="pointer-events-auto relative z-[6] inline-block max-w-[min(14rem,55%)] truncate align-bottom text-sky-400/90 hover:underline" onclick="event.stopPropagation()">' +
+        esc(clipLinkDisplay(url, 36)) +
+        '</a>'
       );
     }
 
     function cardFeed(it, cat) {
+      var isVideo = cat === 'video';
       var th = CAT_THEME[cat] || CAT_THEME.insight;
       var L = LABEL[cat];
       var au = parseAuthor(it.sub);
-      var time = TIMES[hashNum(it.slug, 0, TIMES.length - 1)];
       var stats = fakeStats(it.slug);
       stats.cmt += userCommentCount(it.slug);
       var chip = esc(L.name);
       var title = esc(it.t);
-      var ex = esc(excerptFor(it, cat));
       var slugQ = encodeURIComponent(it.slug);
-      var head =
-        '<div class="flex gap-3 p-3.5 sm:p-4">' +
-        '<span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl text-sm font-bold ' +
-        th.av +
-        '">' +
-        esc(au.initial) +
-        '</span>' +
-        '<div class="min-w-0 flex-1">' +
-        '<div class="flex flex-wrap items-center gap-x-2 gap-y-1">' +
-        '<span class="text-sm font-semibold text-zinc-900">' +
+      var detailHref = 'post-detail.html?slug=' + slugQ;
+      var feedUrl = String(it.link || '').trim() || (SLUG_FEED_LINK[it.slug] || '');
+      var ex = esc(excerptFor(it, cat));
+
+      var headHtml =
+        '<div class="relative z-[2] border-b border-zinc-800/80 px-3 pb-2.5 pt-3">' +
+        '<h2 class="text-sm font-semibold leading-snug text-zinc-100">' +
+        (isVideo
+          ? '<a href="' + detailHref + '" class="transition hover:text-sky-400">' + title + '</a>'
+          : '<span>' + title + '</span>') +
+        '</h2>' +
+        '<p class="mt-1 truncate text-2xs text-zinc-500">' +
         esc(au.name) +
-        '</span>' +
-        '<span class="rounded-md px-1.5 py-0.5 text-2xs font-semibold ' +
-        th.chip +
-        '">' +
+        ' · ' +
         chip +
-        '</span>' +
-        '<span class="text-2xs text-zinc-400">· ' +
-        esc(time) +
-        '</span></div>' +
-        '<h2 class="mt-2 text-[15px] font-semibold leading-snug text-zinc-900 sm:text-base">' +
-        '<a href="post-detail.html?slug=' +
-        slugQ +
-        '" class="hover:underline">' +
-        title +
-        '</a></h2>';
+        metaExternalLinkHtml(feedUrl) +
+        '</p></div>';
+
+      var shellOpen =
+        '<article class="post-card ' +
+        (isVideo ? 'post-card--video ' : '') +
+        'group relative flex h-full min-h-0 flex-col overflow-hidden rounded-xl border border-zinc-800/90 bg-zinc-900/50 shadow-lg shadow-black/25 ring-1 ring-white/[0.04]">' +
+        '<div class="relative flex min-h-0 flex-1 flex-col">';
+      var overlay =
+        isVideo
+          ? ''
+          : '<a href="' + detailHref + '" class="absolute inset-0 z-[1] rounded-t-xl" aria-label="글 상세 보기"></a>';
 
       if (cat === 'prompt') {
-        var sn = PROMPT_SNIP[it.slug] || it.t.slice(0, 120);
-        head +=
-          '<div class="relative mt-2 rounded-xl border border-zinc-100 bg-zinc-50">' +
-          '<p class="px-3 py-2.5 pr-14 font-mono text-2xs leading-relaxed text-zinc-800 sm:text-xs">' +
+        var sn = PROMPT_SNIP[it.slug] || String(it.t).slice(0, 120);
+        var body =
+          shellOpen +
+          overlay +
+          headHtml +
+          '<div class="relative z-[2]">' +
+          '<div class="relative mt-0 border-t border-zinc-800/60 bg-zinc-950/90 feed-card-media">' +
+          '<span class="pointer-events-none absolute left-2 top-2 z-[5] rounded bg-fuchsia-700/95 px-1.5 py-0.5 text-[0.625rem] font-semibold text-white">프롬프트</span>' +
+          '<p class="pointer-events-none absolute inset-0 overflow-y-auto px-2.5 pb-10 pt-8 font-mono text-2xs leading-relaxed text-zinc-300 sm:text-xs">' +
           esc(sn) +
           '</p>' +
-          '<a href="post-detail.html?slug=' +
-          slugQ +
-          '" class="block border-t border-zinc-100 px-3 py-2 text-2xs font-semibold text-violet-700 hover:bg-zinc-100/80">상세에서 전체 보기</a></div>' +
-          '<div class="mt-2.5 flex flex-wrap gap-1.5">' +
-          '<span class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600">#' +
-          esc(L.name) +
+          '</div>' +
+          '<a href="' +
+          detailHref +
+          '" class="relative z-[6] block border-t border-zinc-800/80 px-3 py-2 text-2xs font-semibold text-sky-400 hover:bg-zinc-800/60" onclick="event.stopPropagation()">상세에서 전체 보기</a>' +
+          '<div class="relative z-[2] px-3 pb-2">' +
+          '<div class="flex flex-wrap gap-1.5 pt-2">' +
+          '<span class="rounded-md bg-zinc-800/80 px-2 py-0.5 text-2xs font-medium text-zinc-400">#' +
+          chip +
           '</span></div>' +
           actionsInline(it.slug, it.t, stats) +
-          '</div></div>';
-        return (
-          '<article class="post-card rounded-2xl bg-white p-3.5 shadow-sm ring-1 ring-zinc-900/[0.04] sm:p-4">' +
-          head +
-          '</article>'
-        );
+          '</div></div></div>' +
+          '</article>';
+        return body;
       }
 
       if (cat === 'insight' || cat === 'community' || cat === 'planning' || cat === 'design' || cat === 'development') {
-        head +=
-          '<p class="mt-1.5 line-clamp-3 text-sm leading-relaxed text-zinc-500">' +
+        return (
+          shellOpen +
+          overlay +
+          headHtml +
+          '<div class="relative z-[2] flex min-h-0 flex-1 flex-col">' +
+          '<p class="px-3 pb-2 pt-1 line-clamp-3 text-sm leading-relaxed text-zinc-500">' +
           ex +
           '</p>' +
-          '<div class="mt-2.5 flex flex-wrap gap-1.5">' +
-          '<span class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600">#' +
-          esc(L.name) +
-          '</span>' +
-          '<span class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600">#에듀AI</span></div>' +
-          actionsInline(it.slug, it.t, stats) +
-          '</div></div>';
-        return (
-          '<article class="post-card rounded-2xl bg-white p-3.5 shadow-sm ring-1 ring-zinc-900/[0.04] sm:p-4">' +
-          head +
-          '</article>'
+          '<div class="relative mt-auto shrink-0 overflow-hidden border-t border-zinc-800/60 bg-zinc-950 feed-card-media">' +
+          '<div class="absolute inset-0 bg-gradient-to-br ' +
+          th.wide +
+          ' opacity-90"></div>' +
+          '<div class="absolute inset-0 bg-[url(\'data:image/svg+xml,%3Csvg width=\\\'40\\\' height=\\\'40\\\' xmlns=\\\'http://www.w3.org/2000/svg\\\'%3E%3Cpath d=\\\'M0 40h40V0H0v40z\\\' fill=\\\'%23ffffff\\\' fill-opacity=\\\'.04\\\'/%3E%3C/svg%3E\')] opacity-40"></div>' +
+          '</div></div>' +
+          actionsBar(it.slug, it.t, stats) +
+          '</div></article>'
         );
       }
 
-      head +=
-        '<p class="mt-1.5 line-clamp-2 text-sm leading-relaxed text-zinc-500">' +
-        ex +
-        '</p>' +
-        '<div class="mt-2.5 flex flex-wrap gap-1.5">' +
-        '<span class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600">#' +
-        esc(L.name) +
-        '</span>' +
-        '<span class="rounded-md bg-zinc-100 px-2 py-0.5 text-2xs font-medium text-zinc-600">#피드</span></div></div></div>';
-
       var media = '';
-      if (cat === 'video') {
+      if (isVideo) {
         if (it.slug === 'rag-video') {
           media =
-            '<a href="post-detail.html?slug=' +
-            slugQ +
-            '" class="relative block aspect-video overflow-hidden bg-zinc-900">' +
+            '<div class="relative z-[2] shrink-0 overflow-hidden border-t border-zinc-800/60 bg-zinc-900 feed-card-media">' +
+            '<a href="' +
+            detailHref +
+            '" class="relative block h-full min-h-[8rem]">' +
             '<img src="https://img.youtube.com/vi/sVcwVQRHIc8/hqdefault.jpg" alt="" class="h-full w-full object-cover" loading="lazy" />' +
-            '<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20"></div>' +
-            '<span class="absolute bottom-2 left-2 rounded bg-red-600 px-1.5 py-0.5 text-[0.625rem] font-semibold text-white">YouTube</span>' +
-            '<span class="absolute bottom-2 right-2 rounded-md bg-black/65 px-1.5 py-0.5 text-2xs font-medium text-white">18:42</span>' +
-            '<div class="absolute inset-0 flex items-center justify-center">' +
+            '<div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20"></div>' +
+            '<span class="pointer-events-none absolute bottom-2 left-2 rounded bg-red-600 px-1.5 py-0.5 text-[0.625rem] font-semibold text-white">YouTube</span>' +
+            '<span class="pointer-events-none absolute bottom-2 right-2 rounded-md bg-black/65 px-1.5 py-0.5 text-2xs font-medium text-white">18:42</span>' +
+            '<div class="pointer-events-none absolute inset-0 flex items-center justify-center">' +
             '<span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-zinc-900 shadow-lg">' +
-            '<svg class="ml-1 h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div></a>';
+            '<svg class="ml-1 h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div></a></div>';
         } else {
           media =
-            '<a href="post-detail.html?slug=' +
-            slugQ +
-            '" class="relative block aspect-video overflow-hidden bg-gradient-to-br ' +
+            '<div class="relative z-[2] shrink-0 overflow-hidden border-t border-zinc-800/60 bg-zinc-900 feed-card-media">' +
+            '<a href="' +
+            detailHref +
+            '" class="relative flex h-full min-h-[8rem] items-center justify-center overflow-hidden bg-gradient-to-br ' +
             th.wide +
             '">' +
-            '<div class="absolute inset-0 flex items-center justify-center">' +
             '<span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-zinc-900 shadow-lg">' +
-            '<svg class="ml-1 h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div></a>';
+            '<svg class="ml-1 h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></a></div>';
         }
       } else if (cat === 'curriculum') {
         media =
-          '<a href="post-detail.html?slug=' +
-          slugQ +
-          '" class="relative block aspect-[21/9] bg-gradient-to-r ' +
+          '<div class="relative z-[2] shrink-0 overflow-hidden border-t border-zinc-800/60 bg-zinc-950 feed-card-media">' +
+          '<div class="h-full w-full bg-gradient-to-r ' +
           th.wide +
           '">' +
-          '<div class="absolute inset-0 bg-[url(\'data:image/svg+xml,%3Csvg width=\\\'40\\\' height=\\\'40\\\' xmlns=\\\'http://www.w3.org/2000/svg\\\'%3E%3Cpath d=\\\'M0 40h40V0H0v40z\\\' fill=\\\'%23ffffff\\\' fill-opacity=\\\'.04\\\'/%3E%3C/svg%3E\')] opacity-50"></div></a>';
+          '<div class="h-full w-full bg-[url(\'data:image/svg+xml,%3Csvg width=\\\'40\\\' height=\\\'40\\\' xmlns=\\\'http://www.w3.org/2000/svg\\\'%3E%3Cpath d=\\\'M0 40h40V0H0v40z\\\' fill=\\\'%23ffffff\\\' fill-opacity=\\\'.04\\\'/%3E%3C/svg%3E\')] opacity-50"></div></div></div>';
       } else if (cat === 'output') {
         media =
-          '<a href="post-detail.html?slug=' +
-          slugQ +
-          '" class="relative block aspect-[5/4] bg-gradient-to-br ' +
+          '<div class="relative z-[2] shrink-0 overflow-hidden border-t border-zinc-800/60 bg-zinc-950 feed-card-media">' +
+          '<div class="h-full w-full bg-gradient-to-br ' +
           th.wide +
-          '"></a>';
+          '"></div></div>';
+      } else {
+        media =
+          '<div class="relative z-[2] shrink-0 overflow-hidden border-t border-zinc-800/60 bg-zinc-950 feed-card-media">' +
+          '<div class="h-full w-full bg-gradient-to-br from-zinc-700 to-zinc-900"></div></div>';
       }
 
+      var excerptBlock =
+        cat !== 'curriculum' && cat !== 'output' && !isVideo
+          ? ''
+          : '<p class="relative z-[2] line-clamp-2 px-3 pt-1 text-sm leading-relaxed text-zinc-500">' + ex + '</p>';
+
       return (
-        '<article class="post-card overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-zinc-900/[0.04]">' +
-        head +
+        shellOpen +
+        overlay +
+        headHtml +
+        excerptBlock +
         media +
         actionsBar(it.slug, it.t, stats) +
-        '</article>'
+        '</div></article>'
       );
     }
 
     function rowList(it) {
       return (
-        '<li><a class="flex items-center justify-between rounded-2xl bg-white px-4 py-3 text-sm font-medium shadow-sm ring-1 ring-zinc-900/[0.04] hover:bg-zinc-50" href="post-detail.html?slug=' +
+        '<li><a class="flex items-center justify-between rounded-2xl border border-zinc-800/90 bg-zinc-900/50 px-4 py-3 text-sm font-medium text-zinc-100 shadow-md ring-1 ring-white/[0.04] hover:bg-zinc-800/40" href="post-detail.html?slug=' +
         encodeURIComponent(it.slug) +
         '">' +
         '<span class="min-w-0 pr-2">' +
         esc(it.t) +
-        '</span><span class="shrink-0 text-zinc-300">→</span></a></li>'
+        '</span><span class="shrink-0 text-zinc-500">→</span></a></li>'
       );
     }
 
@@ -461,13 +696,13 @@
     document.getElementById('chips').innerHTML = keys.map(function (k, i) {
       var href = k ? 'browse.html?c=' + encodeURIComponent(k) : 'project.html';
       var on = (k === '' && !c) || k === c;
-      return '<a href="' + href + '" class="shrink-0 rounded-full px-3.5 py-1.5 text-2xs ring-1 ring-zinc-200/80 ' + (on ? 'bg-zinc-900 font-semibold text-white ring-zinc-900' : 'bg-white font-medium text-zinc-600 hover:bg-zinc-50') + '">' + labels[i] + '</a>';
+      return '<a href="' + href + '" class="shrink-0 rounded-full px-3.5 py-1.5 text-2xs ring-1 ring-zinc-700/80 ' + (on ? 'bg-sky-600 font-semibold text-white ring-sky-500' : 'bg-zinc-900/80 font-medium text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100') + '">' + labels[i] + '</a>';
     }).join('');
 
     var viewBtnOff =
-      'view-btn inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-500 shadow-sm transition hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-800';
+      'view-btn inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900/80 text-zinc-400 shadow-sm transition hover:border-zinc-600 hover:bg-zinc-800 hover:text-zinc-100';
     var viewBtnOn =
-      'view-btn inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-900 bg-zinc-900 text-white shadow-md transition';
+      'view-btn inline-flex h-10 w-10 items-center justify-center rounded-xl border border-sky-600 bg-sky-600 text-white shadow-md shadow-sky-900/30 transition';
 
     function setView(v, save) {
       view = v;
@@ -511,16 +746,16 @@
               return (
                 '<a href="browse.html?c=' +
                 k +
-                '" class="flex items-center justify-between rounded-2xl bg-white px-4 py-4 shadow-sm ring-1 ring-zinc-900/[0.04] transition hover:ring-zinc-300"><span class="font-semibold">' +
+                '" class="flex items-center justify-between rounded-2xl border border-zinc-800/90 bg-zinc-900/50 px-4 py-4 shadow-md ring-1 ring-white/[0.04] transition hover:border-zinc-700 hover:bg-zinc-800/40"><span class="font-semibold text-zinc-100">' +
                 LABEL[k].name +
-                '</span><span class="text-2xs text-zinc-400">' +
+                '</span><span class="text-2xs text-zinc-500">' +
                 n +
                 '개</span></a>'
               );
             })
             .join('') +
           '</div>';
-        document.title = '에듀AI — 카테고리';
+        document.title = '클래스루프 — 카테고리';
         return;
       }
 
@@ -535,18 +770,21 @@
       var L = LABEL[c];
       h1.textContent = L.name;
       desc.textContent = L.desc;
-      document.title = '에듀AI — ' + L.name;
+      document.title = '클래스루프 — ' + L.name;
       wrap.classList.remove('hidden');
 
       var rows = userPostsByCat(c).concat(ITEMS[c] || []);
       if (!rows.length) {
         root.innerHTML =
-          '<div class="rounded-2xl border border-dashed border-zinc-300 bg-white px-6 py-14 text-center"><p class="text-sm font-semibold text-zinc-800">아직 글이 없어요</p><a href="compose.html" class="mt-4 inline-flex rounded-full bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-zinc-800">글 작성하기</a></div>';
+          '<div class="rounded-2xl border border-dashed border-zinc-700 bg-zinc-900/40 px-6 py-14 text-center"><p class="text-sm font-semibold text-zinc-200">아직 글이 없어요</p><a href="compose.html" class="mt-4 inline-flex rounded-full bg-sky-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-sky-900/30 hover:bg-sky-500">글 작성하기</a></div>';
         return;
       }
 
       if (view === 'feed') {
-        root.innerHTML = '<div class="feed space-y-3 sm:space-y-4">' + rows.map(function (it) { return cardFeed(it, c); }).join('') + '</div>';
+        root.innerHTML =
+          '<div class="feed grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">' +
+          rows.map(function (it) { return cardFeed(it, c); }).join('') +
+          '</div>';
       } else {
         root.innerHTML = '<ul class="space-y-2">' + rows.map(rowList).join('') + '</ul>';
       }
@@ -586,11 +824,11 @@
           var kind = btn.getAttribute('data-reaction');
           if (kind === 'like') {
             btn.classList.toggle('text-rose-500', active);
-            btn.classList.toggle('text-zinc-500', !active);
+            btn.classList.toggle('text-zinc-400', !active);
           }
           if (kind === 'save') {
-            btn.classList.toggle('text-amber-600', active);
-            btn.classList.toggle('text-zinc-500', !active);
+            btn.classList.toggle('text-amber-500', active);
+            btn.classList.toggle('text-zinc-400', !active);
           }
           if (countEl) countEl.textContent = formatCompact(base + (active ? 1 : 0));
         });
@@ -642,6 +880,35 @@
     }
 
     setView(view, false);
+  </script>
+    </div>
+  <div id="floating-actions" class="fixed bottom-5 right-5 z-[70] flex flex-col items-end gap-2 xl:right-6">
+    <button id="btn-scroll-top" type="button" class="pointer-events-none inline-flex h-10 w-10 items-center justify-center rounded-full border border-zinc-700/90 bg-zinc-900/95 text-zinc-200 opacity-0 shadow-xl shadow-black/40 transition hover:border-zinc-500 hover:bg-zinc-800" aria-label="맨 위로">
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
+    </button>
+    <button id="btn-report-bug" type="button" class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-rose-700/70 bg-rose-950/80 text-rose-200 shadow-xl shadow-black/40 transition hover:border-rose-500 hover:bg-rose-900/80" aria-label="버그 신고">
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M8.93 4.93l-5 5m17.14-5l-5 5M6.34 14h11.32a2 2 0 011.73 3l-5.66 9.8a2 2 0 01-3.46 0L4.61 17a2 2 0 011.73-3z"/></svg>
+    </button>
+  </div>
+  <script>
+    (function () {
+      var topBtn = document.getElementById('btn-scroll-top');
+      var bugBtn = document.getElementById('btn-report-bug');
+      function updateTopBtn() {
+        var show = window.scrollY > 240;
+        topBtn.classList.toggle('opacity-0', !show);
+        topBtn.classList.toggle('pointer-events-none', !show);
+      }
+      updateTopBtn();
+      window.addEventListener('scroll', updateTopBtn, { passive: true });
+      topBtn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      bugBtn.addEventListener('click', function () {
+        var u = 'compose.html?bug=1&url=' + encodeURIComponent(location.href);
+        window.location.href = u;
+      });
+    })();
   </script>
 </body>
 </html>

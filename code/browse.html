@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>클래스루프 — 카테고리</title>
+  <title>모아집 — 카테고리</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -42,19 +42,12 @@
           <a
             href="project.html"
             class="block truncate text-sm font-semibold tracking-tight text-zinc-100"
-            >클래스루프</a
+            >모아집</a
           >
           <p class="truncate text-2xs text-zinc-500">교육 콘텐츠 피드</p>
         </div>
       </div>
       <nav class="flex flex-1 flex-col gap-1 px-2 py-3 text-sm">
-        <a
-          href="compose.html"
-          class="flex items-center gap-3 rounded-lg px-3 py-2 text-zinc-400 transition hover:bg-zinc-800/80 hover:text-zinc-100"
-        >
-          <svg class="h-5 w-5 shrink-0 opacity-80" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-          새로 올리기
-        </a>
         <a
           href="project.html"
           class="flex items-center gap-3 rounded-lg px-3 py-2 text-zinc-400 transition hover:bg-zinc-800/80 hover:text-zinc-100"
@@ -66,8 +59,15 @@
           href="browse.html"
           class="flex items-center gap-3 rounded-lg bg-zinc-800/90 px-3 py-2 font-medium text-zinc-100"
         >
-          <svg class="h-5 w-5 shrink-0 opacity-80" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+          <svg class="h-5 w-5 shrink-0 text-sky-400" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
           탐색 · 폴더
+        </a>
+        <a
+          href="compose.html"
+          class="flex items-center gap-3 rounded-lg px-3 py-2 text-zinc-400 transition hover:bg-zinc-800/80 hover:text-zinc-100"
+        >
+          <svg class="h-5 w-5 shrink-0 opacity-80" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg>
+          새로 올리기
         </a>
         <div class="mt-4 border-t border-zinc-800/80 pt-3">
           <p class="mb-2 px-3 text-2xs font-semibold uppercase tracking-wider text-zinc-500">
@@ -75,13 +75,10 @@
           </p>
           <ul class="space-y-0.5 text-2xs text-zinc-500">
             <li>
-              <a href="browse.html?c=video" class="block truncate px-3 py-1 transition hover:bg-zinc-800/40 hover:text-zinc-200">eduai.app/browse?c=video</a>
+              <a href="browse.html" class="block truncate px-3 py-1 transition hover:bg-zinc-800/40 hover:text-zinc-200">browse.html · 카테고리</a>
             </li>
             <li>
-              <a href="post-detail.html?slug=rag-video" class="block truncate px-3 py-1 transition hover:bg-zinc-800/40 hover:text-zinc-200">post-detail.html?slug=rag-video</a>
-            </li>
-            <li>
-              <a href="post-detail.html?slug=automation-roadmap" class="block truncate px-3 py-1 transition hover:bg-zinc-800/40 hover:text-zinc-200">post-detail.html?slug=automation-roadmap</a>
+              <a href="compose.html" class="block truncate px-3 py-1 transition hover:bg-zinc-800/40 hover:text-zinc-200">compose.html · 새 글</a>
             </li>
           </ul>
         </div>
@@ -93,10 +90,10 @@
         >
           <span
             class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-amber-400/90 to-orange-500 text-xs font-bold text-zinc-900"
-            >김</span
+            >세</span
           >
           <div class="min-w-0 flex-1">
-            <p class="truncate text-2xs font-medium text-zinc-200">김에듀</p>
+            <p class="truncate text-2xs font-medium text-zinc-200">세희</p>
             <p class="text-2xs text-zinc-500">프로필 보기</p>
           </div>
         </a>
@@ -120,7 +117,7 @@
             <a
               href="project.html"
               class="max-w-[5.5rem] truncate text-sm font-semibold tracking-tight text-zinc-100 sm:max-w-none"
-              >클래스루프</a
+              >모아집</a
             >
           </div>
           <form
@@ -181,7 +178,7 @@
               class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-amber-400/90 to-orange-500 text-xs font-bold text-zinc-900"
               aria-label="내 프로필"
             >
-              김
+              세
             </a>
           </div>
         </div>
@@ -292,31 +289,18 @@
       development: { name: '개발', desc: '구현·코드·연동·배포 노트입니다.' },
     };
     var ITEMS = {
-      curriculum: [{ slug: 'automation-roadmap', t: '생성형 AI로 끝내는 업무 자동화 · 8주 로드맵', sub: '한소희 · 커리큘럼' }],
-      video: [{ slug: 'rag-video', t: 'RAG 아키텍처 한 번에 이해하기', sub: '김나연 · 영상' }],
-      prompt: [
-        { slug: 'prompt-lesson', t: '50분 수업안 프롬프트', sub: '이하은 · 프롬프트' },
-        { slug: 'prompt-reading', t: '비판적 읽기 요약 프롬프트', sub: '오세훈 · 프롬프트' },
-      ],
-      output: [
-        { slug: 'result-rubric', t: '과학 수행평가 AI 피드백 루브릭', sub: '민지 · 결과물' },
-        { slug: 'result-quiz', t: '학급 맞춤 퀴즈 JSON 세트', sub: '도윤 · 결과물' },
-      ],
-      insight: [
-        { slug: 'chatbot-eval', t: '챗봇 과제를 학습 과정 평가로 바꾼 3가지 방법', sub: '박서준 · 인사이트' },
-        { slug: 'insight-consent', t: '교실에서 생성형 AI 동의서 체크리스트', sub: '동아리 운영' },
-        { slug: 'insight-version', t: '프롬프트 공유 시 버전 관리 팁', sub: '정비서' },
-      ],
+      curriculum: [],
+      video: [],
+      prompt: [],
+      output: [],
+      insight: [],
       community: [],
-      planning: [{ slug: 'prd-ai-classroom', t: '교실 AI 도입 PRD 초안 — 목표·비기능·리스크', sub: '서준 · 기획' }],
-      design: [{ slug: 'design-tokens-edu', t: '교육 앱 디자인 토큰 · 컬러·타이포 스케일', sub: '나연 · 디자인' }],
-      development: [{ slug: 'dev-api-integration', t: '학급 API 연동 체크리스트 · 인증·오류 처리', sub: '도윤 · 개발' }],
+      planning: [],
+      design: [],
+      development: [],
     };
 
-    var PROMPT_SNIP = {
-      'prompt-lesson': '너는 교육 설계자다. [학년/과목]을 받아 50분 수업안을 써라. 학습목표 3개, 활동 순서, AI 역할, 형성평가를 불릿으로.',
-      'prompt-reading': '아래 텍스트를 요약하고, 반박 가능한 논점 3개를 한국어로 제시해 줘. 출처가 불명확한 문장은 [검증 필요]로 표시해.',
-    };
+    var PROMPT_SNIP = {};
 
     var CAT_THEME = {
       curriculum: { av: 'bg-emerald-900/85 text-emerald-100', chip: 'bg-emerald-900/70 text-emerald-100', wide: 'from-emerald-600 to-teal-800' },
@@ -330,19 +314,11 @@
       development: { av: 'bg-teal-900/85 text-teal-100', chip: 'bg-teal-900/70 text-teal-100', wide: 'from-teal-600 to-emerald-800' },
     };
 
-    var TIMES = ['방금', '3시간 전', '어제', '2일 전', '5분 전', '1일 전'];
-
     function esc(s) {
       return String(s)
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/"/g, '&quot;');
-    }
-
-    function hashNum(slug, min, max) {
-      var h = 0;
-      for (var i = 0; i < slug.length; i++) h = (h << 5) - h + slug.charCodeAt(i);
-      return min + (Math.abs(h) % (max - min + 1));
     }
 
     function parseAuthor(sub) {
@@ -351,12 +327,8 @@
       return { name: name, initial: name.charAt(0) };
     }
 
-    function fakeStats(slug) {
-      return {
-        like: hashNum(slug, 120, 2400),
-        cmt: hashNum(slug + 'c', 8, 120),
-        save: hashNum(slug + 's', 200, 4000),
-      };
+    function fakeStats() {
+      return { like: 0, cmt: 0, save: 0 };
     }
     function loadUserPosts() {
       try {
@@ -374,7 +346,7 @@
           return {
             slug: p.slug,
             t: p.title || '제목 없음',
-            sub: (p.authorName || '김에듀') + ' · ' + (LABEL[cat] ? LABEL[cat].name : '커뮤니티'),
+            sub: (p.authorName || '세희') + ' · ' + (LABEL[cat] ? LABEL[cat].name : '커뮤니티'),
             link: (p.link || '').trim(),
           };
         });
@@ -491,18 +463,14 @@
       );
     }
 
-    var SLUG_FEED_LINK = {
-      'automation-roadmap': 'https://classloop.app/roadmap',
-      'rag-video': 'https://www.youtube.com/watch?v=sVcwVQRHIc8',
-      'chatbot-eval': 'https://classloop.app/eval',
-      'prompt-lesson': 'https://classloop.app/prompt-lesson',
-      'prompt-reading': 'https://classloop.app/prompt-reading',
-      'result-rubric': 'https://classloop.app/result-rubric',
-      'result-quiz': 'https://classloop.app/result-quiz',
-      'prd-ai-classroom': 'https://classloop.app/prd-ai',
-      'design-tokens-edu': 'https://classloop.app/tokens',
-      'dev-api-integration': 'https://classloop.app/api-checklist',
-    };
+    var SLUG_FEED_LINK = {};
+
+    function youtubeVideoId(url) {
+      if (!url) return '';
+      var u = String(url);
+      var m = u.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+      return m ? m[1] : '';
+    }
 
     function escAttrUrl(s) {
       return String(s || '')
@@ -533,7 +501,7 @@
       var th = CAT_THEME[cat] || CAT_THEME.insight;
       var L = LABEL[cat];
       var au = parseAuthor(it.sub);
-      var stats = fakeStats(it.slug);
+      var stats = fakeStats();
       stats.cmt += userCommentCount(it.slug);
       var chip = esc(L.name);
       var title = esc(it.t);
@@ -615,16 +583,18 @@
 
       var media = '';
       if (isVideo) {
-        if (it.slug === 'rag-video') {
+        var yid = youtubeVideoId(feedUrl);
+        if (yid) {
           media =
             '<div class="relative z-[2] shrink-0 overflow-hidden border-t border-zinc-800/60 bg-zinc-900 feed-card-media">' +
             '<a href="' +
             detailHref +
             '" class="relative block h-full min-h-[8rem]">' +
-            '<img src="https://img.youtube.com/vi/sVcwVQRHIc8/hqdefault.jpg" alt="" class="h-full w-full object-cover" loading="lazy" />' +
+            '<img src="https://img.youtube.com/vi/' +
+            escAttrUrl(yid) +
+            '/hqdefault.jpg" alt="" class="h-full w-full object-cover" loading="lazy" />' +
             '<div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20"></div>' +
             '<span class="pointer-events-none absolute bottom-2 left-2 rounded bg-red-600 px-1.5 py-0.5 text-[0.625rem] font-semibold text-white">YouTube</span>' +
-            '<span class="pointer-events-none absolute bottom-2 right-2 rounded-md bg-black/65 px-1.5 py-0.5 text-2xs font-medium text-white">18:42</span>' +
             '<div class="pointer-events-none absolute inset-0 flex items-center justify-center">' +
             '<span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-zinc-900 shadow-lg">' +
             '<svg class="ml-1 h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div></a></div>';
@@ -755,7 +725,7 @@
             })
             .join('') +
           '</div>';
-        document.title = '클래스루프 — 카테고리';
+        document.title = '모아집 — 카테고리';
         return;
       }
 
@@ -770,13 +740,13 @@
       var L = LABEL[c];
       h1.textContent = L.name;
       desc.textContent = L.desc;
-      document.title = '클래스루프 — ' + L.name;
+      document.title = '모아집 — ' + L.name;
       wrap.classList.remove('hidden');
 
       var rows = userPostsByCat(c).concat(ITEMS[c] || []);
       if (!rows.length) {
         root.innerHTML =
-          '<div class="rounded-2xl border border-dashed border-zinc-700 bg-zinc-900/40 px-6 py-14 text-center"><p class="text-sm font-semibold text-zinc-200">아직 글이 없어요</p><a href="compose.html" class="mt-4 inline-flex rounded-full bg-sky-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-sky-900/30 hover:bg-sky-500">글 작성하기</a></div>';
+          '<div class="py-10 text-center"><p class="text-sm text-zinc-500">아직 게시글이 없습니다.</p><a href="compose.html" class="mt-3 inline-flex text-sm font-semibold text-sky-400 hover:text-sky-300">글 작성하기</a></div>';
         return;
       }
 
@@ -792,6 +762,17 @@
     }
 
     function wireBrowseInteractions() {
+      var root = document.getElementById('root');
+      if (root && !root.dataset.cardWired) {
+        root.dataset.cardWired = '1';
+        root.addEventListener('click', function (e) {
+          var card = e.target.closest('.post-card');
+          if (!card || !root.contains(card)) return;
+          if (e.target.closest('button, a, video, input, textarea')) return;
+          var link = card.querySelector('a[href*="post-detail.html?slug="]');
+          if (link) window.location.href = link.getAttribute('href');
+        });
+      }
       function formatCompact(n) {
         if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
         return String(n);

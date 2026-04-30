@@ -3,10 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>모아집 — 홈</title>
+    <title>모닥 — 홈</title>
     <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-posts.js"></script>
     <script>
       tailwind.config = {
+        safelist: [
+          'flex',
+          'flex-col',
+          'gap-3',
+          'bg-sky-600/25',
+          'text-sky-100',
+          'bg-gradient-to-br',
+          'from-slate-600',
+          'to-sky-700',
+          'shadow-inner',
+          'shadow-black/25',
+          'shadow-black/30',
+          'h-5',
+          'w-5',
+          'text-[0.5625rem]',
+          'leading-none',
+          'opacity-95',
+          'font-semibold',
+        ],
         theme: {
           extend: {
             fontFamily: {
@@ -29,6 +50,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
     />
+    <link rel="stylesheet" href="feed-view-shared.css" />
     <style>
       body {
         font-feature-settings: 'ss01' on;
@@ -65,6 +87,27 @@
           height: 12.5rem;
         }
       }
+      /* 상단 카테고리 칩: 전부 동일 중립 스타일 (선택 시에만 스카이 강조) */
+      .feed-chip {
+        border-width: 1px;
+        border-style: solid;
+        border-color: rgb(63 63 70 / 0.9);
+        background: rgb(24 24 27 / 0.55);
+        color: rgb(161 161 170);
+        transition:
+          border-color 0.15s ease,
+          background-color 0.15s ease,
+          color 0.15s ease;
+      }
+      .feed-chip:hover:not(.feed-chip--active) {
+        border-color: rgb(82 82 91 / 0.95);
+        color: rgb(228 228 231);
+      }
+      .feed-chip.feed-chip--active {
+        border-color: rgb(56 189 248 / 0.55);
+        background: rgb(12 74 110 / 0.55);
+        color: rgb(224 242 254);
+      }
     </style>
   </head>
   <body
@@ -78,16 +121,16 @@
       <div class="flex h-14 items-center gap-2 border-b border-zinc-800/80 px-4">
         <a
           href="project.html"
-          class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sky-600 text-xs font-bold text-white"
-          >AI</a
+          class="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-zinc-950 ring-1 ring-zinc-700/80"
+          ><img src="assets/modak-logo.png" alt="모닥" width="36" height="36" class="h-full w-full object-contain p-0.5" /></a
         >
         <div class="min-w-0">
           <a
             href="project.html"
             class="block truncate text-sm font-semibold tracking-tight text-zinc-100"
-            >모아집</a
+            >모닥</a
           >
-          <p class="truncate text-2xs text-zinc-500">교육 콘텐츠 피드</p>
+          <p class="truncate text-2xs text-zinc-500">모여서 빛나는 콘텐츠</p>
         </div>
       </div>
       <nav class="flex flex-1 flex-col gap-1 px-2 py-3 text-sm">
@@ -161,13 +204,13 @@
           <div class="flex shrink-0 items-center gap-2 xl:hidden">
             <a
               href="project.html"
-              class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-sky-600 text-xs font-bold text-white"
-              >AI</a
+              class="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-zinc-950 ring-1 ring-zinc-700/80"
+              ><img src="assets/modak-logo.png" alt="모닥" width="32" height="32" class="h-full w-full object-contain p-0.5" /></a
             >
             <a
               href="project.html"
               class="max-w-[5.5rem] truncate text-sm font-semibold tracking-tight text-zinc-100 sm:max-w-none"
-              >모아집</a
+              >모닥</a
             >
           </div>
           <form
@@ -176,6 +219,7 @@
             action="search.html"
             method="get"
             role="search"
+            data-feed-local-search="1"
           >
             <div class="relative w-full">
               <svg
@@ -234,96 +278,155 @@
         </div>
         <div class="border-t border-zinc-800/80">
           <div
-            class="no-scrollbar mx-auto flex max-w-[1400px] gap-1.5 overflow-x-auto px-4 py-2.5"
+            id="feed-filter-chips"
+            class="no-scrollbar mx-auto flex max-w-[1400px] flex-wrap gap-2 px-4 py-2.5"
+            role="tablist"
+            aria-label="피드 주제 필터"
           >
-            <a
-              href="project.html"
-              class="shrink-0 rounded-full bg-sky-600 px-3.5 py-1.5 text-2xs font-semibold text-white"
-              >전체</a
+            <button
+              type="button"
+              role="tab"
+              data-feed-chip="all"
+              class="feed-chip shrink-0 rounded-full px-3.5 py-1.5 text-2xs font-medium"
             >
-            <a
-              href="browse.html?c=planning"
-              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
-              >기획</a
+              전체
+            </button>
+            <button
+              type="button"
+              role="tab"
+              data-feed-chip="planning"
+              class="feed-chip shrink-0 rounded-full px-3.5 py-1.5 text-2xs font-medium"
             >
-            <a
-              href="browse.html?c=design"
-              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
-              >디자인</a
+              기획
+            </button>
+            <button
+              type="button"
+              role="tab"
+              data-feed-chip="design"
+              class="feed-chip shrink-0 rounded-full px-3.5 py-1.5 text-2xs font-medium"
             >
-            <a
-              href="browse.html?c=development"
-              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
-              >개발</a
+              디자인
+            </button>
+            <button
+              type="button"
+              role="tab"
+              data-feed-chip="development"
+              class="feed-chip shrink-0 rounded-full px-3.5 py-1.5 text-2xs font-medium"
             >
-            <a
-              href="browse.html?c=curriculum"
-              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
-              >커리큘럼</a
+              개발
+            </button>
+            <button
+              type="button"
+              role="tab"
+              data-feed-chip="curriculum"
+              class="feed-chip shrink-0 rounded-full px-3.5 py-1.5 text-2xs font-medium"
             >
-            <a
-              href="browse.html?c=video"
-              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
-              >영상</a
+              커리큘럼
+            </button>
+            <button
+              type="button"
+              role="tab"
+              data-feed-chip="video"
+              class="feed-chip shrink-0 rounded-full px-3.5 py-1.5 text-2xs font-medium"
             >
-            <a
-              href="browse.html?c=prompt"
-              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
-              >프롬프트</a
+              영상
+            </button>
+            <button
+              type="button"
+              role="tab"
+              data-feed-chip="prompt"
+              class="feed-chip shrink-0 rounded-full px-3.5 py-1.5 text-2xs font-medium"
             >
-            <a
-              href="browse.html?c=output"
-              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
-              >결과물</a
+              프롬프트
+            </button>
+            <button
+              type="button"
+              role="tab"
+              data-feed-chip="output"
+              class="feed-chip shrink-0 rounded-full px-3.5 py-1.5 text-2xs font-medium"
             >
-            <a
-              href="browse.html?c=insight"
-              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
-              >인사이트</a
+              결과물
+            </button>
+            <button
+              type="button"
+              role="tab"
+              data-feed-chip="insight"
+              class="feed-chip shrink-0 rounded-full px-3.5 py-1.5 text-2xs font-medium"
             >
-            <a
-              href="browse.html?c=community"
-              class="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-900/50 px-3.5 py-1.5 text-2xs font-medium text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
-              >커뮤니티</a
+              인사이트
+            </button>
+            <button
+              type="button"
+              role="tab"
+              data-feed-chip="community"
+              class="feed-chip shrink-0 rounded-full px-3.5 py-1.5 text-2xs font-medium"
             >
+              커뮤니티
+            </button>
           </div>
         </div>
       </header>
 
     <main class="mx-auto max-w-[1400px] px-4 pb-28 pt-4 sm:pt-5">
-      <!-- 피드 툴바 -->
-      <div
-        class="mb-4 flex flex-col gap-3 sm:mb-5 sm:flex-row sm:items-end sm:justify-between sm:gap-4"
-      >
-        <div class="min-w-0">
-          <h1 class="text-xl font-bold tracking-tight text-zinc-100 sm:text-2xl">
+      <!-- 피드 툴바 (보드·리스트 공통) -->
+      <div class="mb-6 flex flex-wrap items-end justify-between gap-3 sm:gap-4">
+        <div class="min-w-0 flex-1">
+          <h1 id="sec-latest-heading" class="text-xl font-bold tracking-tight text-zinc-100 sm:text-2xl">
             최신 피드
           </h1>
-          <p id="feed-sub" class="mt-0.5 text-2xs text-zinc-500">
+          <p id="feed-sub" class="mt-1 text-2xs text-zinc-500">
             내가 올린 글만 표시됩니다.
           </p>
+          <p class="mt-0.5 text-2xs text-zinc-600">방금 올린 글부터 모았어요 · 상단 검색·주제 칩으로 좁혀 볼 수 있어요.</p>
+        </div>
+        <div class="flex shrink-0 items-center justify-end">
+          <div
+            class="inline-flex rounded-lg border border-zinc-700/90 bg-zinc-950/80 p-0.5"
+            role="group"
+            aria-label="보기 형식"
+          >
+              <button
+                id="feed-view-grid"
+                type="button"
+                class="inline-flex h-8 w-9 items-center justify-center rounded-md text-zinc-400 transition hover:text-zinc-200"
+                aria-pressed="true"
+                aria-label="카드형 보기"
+                title="카드형"
+              >
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" d="M4 5h6v6H4V5zm10 0h6v6h-6V5zM4 13h6v6H4v-6zm10 0h6v6h-6v-6z" />
+                </svg>
+              </button>
+              <button
+                id="feed-view-list"
+                type="button"
+                class="inline-flex h-8 w-9 items-center justify-center rounded-md text-zinc-400 transition hover:text-zinc-200"
+                aria-pressed="false"
+                aria-label="리스트형 보기"
+                title="리스트형"
+              >
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            </div>
         </div>
       </div>
 
       <div id="home-sections" class="space-y-10 sm:space-y-12">
         <section class="home-block" aria-labelledby="sec-latest-heading">
-          <div class="mb-3 flex flex-wrap items-end justify-between gap-2">
-            <div class="min-w-0">
-              <h2 id="sec-latest-heading" class="text-base font-bold tracking-tight text-zinc-100 sm:text-lg">
-                최신 피드
-              </h2>
-              <p class="mt-0.5 text-2xs text-zinc-500">방금 올린 글부터 모았어요.</p>
-            </div>
-          </div>
           <div
-            class="feed feed-all grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+            id="feed-all-container"
+            class="feed feed-all feed--grid grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
           >
             <div
               id="feed-empty"
-          class="col-span-full py-8 text-center"
+              class="col-span-full w-full py-8 text-center"
             >
-          <p class="text-sm text-zinc-500">아직 게시글이 없습니다</p>
-              <p class="mt-2 text-2xs text-zinc-500">
+              <p id="feed-empty-lead" class="text-sm text-zinc-500">
+                아직 게시글이 없습니다
+              </p>
+              <p id="feed-empty-hint" class="mt-2 text-2xs text-zinc-500">
                 링크를 붙여 올리거나
                 <a href="compose.html" class="font-medium text-sky-400 hover:text-sky-300">새 글 작성</a>으로 시작해 보세요.
               </p>
@@ -482,7 +585,7 @@
     <footer
       class="mx-auto max-w-[1400px] px-4 py-8 text-center text-2xs text-zinc-500"
     >
-      모아집 · 피드는 이 브라우저에 저장된 글만 표시합니다.
+      모닥 · 피드는 이 브라우저에 저장된 글만 표시합니다.
     </footer>
     </div>
 
@@ -521,7 +624,9 @@
             span.textContent = String(base + add);
           });
         }
+        var USER_POSTS_CACHE = null;
         function loadUserPosts() {
+          if (Array.isArray(USER_POSTS_CACHE)) return USER_POSTS_CACHE.slice();
           try {
             var raw = localStorage.getItem('eduai_posts_v1');
             var arr = JSON.parse(raw || '[]');
@@ -559,6 +664,110 @@
           if (s.length <= max) return s;
           return s.slice(0, max) + '…';
         }
+        function formatCompact(n) {
+          if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+          return String(n);
+        }
+        function parseCompact(s) {
+          s = String(s).trim();
+          if (s.endsWith('k')) return Math.round(parseFloat(s) * 1000);
+          var n = parseInt(s.replace(/,/g, ''), 10);
+          return isNaN(n) ? 0 : n;
+        }
+        var shareSvg =
+          '<svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.59 13.51L15.42 17.5M15.41 6.5L8.59 10.49M18 21a3 3 0 100-6 3 3 0 000 6zM6 14a3 3 0 100-6 3 3 0 000 6zM18 9a3 3 0 100-6 3 3 0 000 6z"/></svg>';
+        var copySvg =
+          '<svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>';
+
+        function bindFeedInteractions(root) {
+          if (!root) return;
+          root.querySelectorAll('[data-reaction]').forEach(function (btn) {
+            if (btn.getAttribute('data-bound-feed')) return;
+            btn.setAttribute('data-bound-feed', '1');
+            var raw = btn.getAttribute('data-base');
+            var base = parseInt(raw, 10);
+            if (isNaN(base)) base = parseCompact(raw);
+            var countEl = btn.querySelector('.js-react-count');
+            var outline = btn.querySelector('.ic-outline');
+            var solid = btn.querySelector('.ic-solid');
+            var active = false;
+            btn.addEventListener('click', function (e) {
+              e.preventDefault();
+              e.stopPropagation();
+              active = !active;
+              btn.setAttribute('aria-pressed', active);
+              if (outline) outline.classList.toggle('hidden', active);
+              if (solid) solid.classList.toggle('hidden', !active);
+              var kind = btn.getAttribute('data-reaction');
+              if (kind === 'like') {
+                btn.classList.toggle('text-rose-500', active);
+                btn.classList.toggle('text-zinc-500', !active);
+              }
+              if (kind === 'save') {
+                btn.classList.toggle('text-amber-500', active);
+                btn.classList.toggle('text-zinc-500', !active);
+              }
+              if (countEl) countEl.textContent = formatCompact(base + (active ? 1 : 0));
+            });
+          });
+          root.querySelectorAll('[data-share-path]').forEach(function (btn) {
+            if (btn.getAttribute('data-bound-feed')) return;
+            btn.setAttribute('data-bound-feed', '1');
+            btn.addEventListener('click', function (e) {
+              e.preventDefault();
+              e.stopPropagation();
+              var url = new URL(btn.getAttribute('data-share-path') || 'project.html', window.location.href).href;
+              var title = btn.getAttribute('data-share-title') || document.title;
+              var checkHtml = document.getElementById('icon-check-tpl').innerHTML;
+              function flash() {
+                btn.innerHTML = checkHtml;
+                btn.disabled = true;
+                setTimeout(function () {
+                  btn.innerHTML = shareSvg;
+                  btn.disabled = false;
+                }, 1400);
+              }
+              if (navigator.share) {
+                navigator.share({ title: title, url: url }).catch(function () {});
+                return;
+              }
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(flash).catch(function () {
+                  window.prompt('공유 링크:', url);
+                });
+              } else {
+                window.prompt('공유 링크:', url);
+              }
+            });
+          });
+          root.querySelectorAll('[data-copy]').forEach(function (btn) {
+            if (btn.getAttribute('data-bound-feed')) return;
+            btn.setAttribute('data-bound-feed', '1');
+            btn.addEventListener('click', function (e) {
+              e.preventDefault();
+              e.stopPropagation();
+              var text = btn.getAttribute('data-copy') || '';
+              if (!text) return;
+              var checkHtml = document.getElementById('icon-check-tpl').innerHTML;
+              function flash() {
+                btn.innerHTML = checkHtml;
+                btn.disabled = true;
+                setTimeout(function () {
+                  btn.innerHTML = copySvg;
+                  btn.disabled = false;
+                }, 1400);
+              }
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(flash).catch(function () {
+                  window.prompt('복사:', text);
+                });
+              } else {
+                window.prompt('복사:', text);
+              }
+            });
+          });
+        }
+
         function injectUserPostsIntoFeed() {
           var posts = loadUserPosts().filter(function (p) {
             return p && p.slug;
@@ -567,13 +776,78 @@
             return String(b.createdAt || b.updatedAt || '').localeCompare(String(a.createdAt || a.updatedAt || ''));
           });
           var feedAll = document.querySelector('.feed-all');
+          var homeSections = document.getElementById('home-sections');
           if (!feedAll) return;
           var emptyEl = document.getElementById('feed-empty');
+          var emptyLead = document.getElementById('feed-empty-lead');
+          var emptyHint = document.getElementById('feed-empty-hint');
           var subEl = document.getElementById('feed-sub');
-          function clearCards() {
-            feedAll.querySelectorAll('article.post-card').forEach(function (el) {
+
+          function readLs(key, fb) {
+            try {
+              var v = localStorage.getItem(key);
+              return v || fb;
+            } catch (e) {
+              return fb;
+            }
+          }
+          function writeLs(key, val) {
+            try {
+              localStorage.setItem(key, val);
+            } catch (e) {}
+          }
+
+          var feedState = {
+            filterCat: readLs('eduai_feed_filter_v1', 'all'),
+            sortDir: readLs('eduai_feed_sort_v1', 'desc'),
+            viewMode: readLs('eduai_feed_view_v1', 'grid'),
+            searchQ: '',
+          };
+          if (feedState.sortDir !== 'asc' && feedState.sortDir !== 'desc') feedState.sortDir = 'desc';
+          if (feedState.viewMode !== 'grid' && feedState.viewMode !== 'list') feedState.viewMode = 'grid';
+          var validCats = [
+            'all',
+            'planning',
+            'design',
+            'development',
+            'prompt',
+            'output',
+            'curriculum',
+            'video',
+            'insight',
+            'community',
+          ];
+          if (validCats.indexOf(feedState.filterCat) === -1) feedState.filterCat = 'all';
+
+          function formatPostDate(iso) {
+            if (!iso) return '';
+            var d = new Date(iso);
+            if (isNaN(d.getTime())) return '';
+            return d.getFullYear() + '. ' + (d.getMonth() + 1) + '. ' + d.getDate() + '.';
+          }
+          /** 리스트 행 카테고리 배지 클래스 (상단 칩과 무관, 여기만 색 적용) */
+          function listCatBadgeClass(cat) {
+            var keys = {
+              planning: 'list-cat-planning',
+              design: 'list-cat-design',
+              development: 'list-cat-development',
+              curriculum: 'list-cat-curriculum',
+              video: 'list-cat-video',
+              prompt: 'list-cat-prompt',
+              output: 'list-cat-output',
+              insight: 'list-cat-insight',
+              community: 'list-cat-community',
+            };
+            var suffix = keys[cat] || 'list-cat-fallback';
+            return 'list-cat-badge ' + suffix;
+          }
+
+          function clearMainArticles() {
+            feedAll.querySelectorAll('article.post-card, article.post-list-item').forEach(function (el) {
               el.remove();
             });
+          }
+          function clearRows() {
             ['prompt', 'output', 'curriculum'].forEach(function (k) {
               var row = document.getElementById('feed-row-' + k);
               if (row) row.innerHTML = '';
@@ -583,18 +857,80 @@
             var el = document.getElementById('feed-empty-' + key);
             if (el) el.classList.toggle('hidden', !show);
           }
-          if (!posts.length) {
-            clearCards();
-            if (emptyEl) emptyEl.classList.remove('hidden');
-            if (subEl) subEl.textContent = '내가 올린 글이 여기에 쌓여요.';
-            setRowEmpty('prompt', true);
-            setRowEmpty('output', true);
-            setRowEmpty('curriculum', true);
-            return;
+
+          function syncToolbarChips() {
+            document.querySelectorAll('[data-feed-chip]').forEach(function (btn) {
+              var cat = btn.getAttribute('data-feed-chip');
+              var on = cat === feedState.filterCat;
+              btn.classList.toggle('feed-chip--active', on);
+              btn.setAttribute('aria-selected', on ? 'true' : 'false');
+            });
           }
-          if (emptyEl) emptyEl.classList.add('hidden');
-          if (subEl) subEl.textContent = '글 ' + posts.length + '개 · 아래 주제별로도 모아 보여 드려요.';
-          clearCards();
+
+          function syncViewButtons() {
+            var bg = document.getElementById('feed-view-grid');
+            var bl = document.getElementById('feed-view-list');
+            if (!bg || !bl) return;
+            bg.setAttribute('aria-pressed', feedState.viewMode === 'grid');
+            bl.setAttribute('aria-pressed', feedState.viewMode === 'list');
+            bg.classList.toggle('bg-sky-600/25', feedState.viewMode === 'grid');
+            bg.classList.toggle('text-sky-100', feedState.viewMode === 'grid');
+            bg.classList.toggle('text-zinc-400', feedState.viewMode !== 'grid');
+            bl.classList.toggle('bg-sky-600/25', feedState.viewMode === 'list');
+            bl.classList.toggle('text-sky-100', feedState.viewMode === 'list');
+            bl.classList.toggle('text-zinc-400', feedState.viewMode !== 'list');
+          }
+
+          function syncFeedContainerClass() {
+            var GRID =
+              'feed feed-all feed--grid grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4';
+            var LIST = 'feed feed-all feed--list flex flex-col gap-3';
+            feedAll.className = feedState.viewMode === 'list' ? LIST : GRID;
+          }
+
+          function getFilteredPosts() {
+            var list = posts.slice();
+            if (feedState.filterCat !== 'all') {
+              list = list.filter(function (p) {
+                return p.cat === feedState.filterCat;
+              });
+            }
+            var q = feedState.searchQ.trim().toLowerCase();
+            if (q) {
+              list = list.filter(function (p) {
+                var title = String(p.title || '').toLowerCase();
+                var body = String(p.body || '').toLowerCase();
+                var excerpt = String(p.excerpt || '').toLowerCase();
+                return title.indexOf(q) !== -1 || body.indexOf(q) !== -1 || excerpt.indexOf(q) !== -1;
+              });
+            }
+            list.sort(function (a, b) {
+              var ta = String(a.createdAt || a.updatedAt || '');
+              var tb = String(b.createdAt || b.updatedAt || '');
+              var cmp = tb.localeCompare(ta);
+              return feedState.sortDir === 'desc' ? cmp : -cmp;
+            });
+            return list;
+          }
+
+          function updateEmptyState(totalAll, filteredLen) {
+            if (!emptyEl) return;
+            if (totalAll === 0) {
+              emptyEl.classList.remove('hidden');
+              if (emptyLead) emptyLead.textContent = '아직 게시글이 없습니다';
+              if (emptyHint) emptyHint.classList.remove('hidden');
+              return;
+            }
+            if (filteredLen === 0) {
+              emptyEl.classList.remove('hidden');
+              if (emptyLead) emptyLead.textContent = '조건에 맞는 글이 없습니다.';
+              if (emptyHint) emptyHint.classList.add('hidden');
+              return;
+            }
+            emptyEl.classList.add('hidden');
+            if (emptyHint) emptyHint.classList.remove('hidden');
+          }
+
           var map = loadCommentMap();
           function youtubeVideoId(url) {
             if (!url) return '';
@@ -783,10 +1119,53 @@
               '</div></div></article>'
             );
           }
-          var mainHtml = posts.map(function (p) {
-            return postCardHtml(p, false);
-          }).join('');
-          feedAll.insertAdjacentHTML('afterbegin', mainHtml);
+          function postListRowHtml(p) {
+            var label = catLabel(p.cat);
+            var slug = encodeURIComponent(p.slug);
+            var t = esc(p.title);
+            var dateStr = formatPostDate(p.createdAt || p.updatedAt);
+            var badgeCls = listCatBadgeClass(p.cat);
+            var iso = p.createdAt || p.updatedAt || '';
+            var rawAuthor = String((p.authorName || '세희').trim() || '세희');
+            var authorEsc = esc(rawAuthor);
+            var initialSource = rawAuthor.length ? rawAuthor : '세';
+            var initialEsc = esc(initialSource.slice(0, 1));
+            return (
+              '<article data-feed-href="post-detail.html?slug=' +
+              slug +
+              '" class="post-list-item cursor-pointer rounded-xl border border-zinc-800/90 bg-zinc-900/75 px-6 py-5 shadow-lg shadow-black/25 ring-1 ring-white/[0.05] transition hover:border-zinc-700 hover:bg-zinc-900">' +
+              '<div class="flex flex-col gap-3">' +
+              '<div class="flex flex-wrap gap-2">' +
+              '<span class="' +
+              badgeCls +
+              '">' +
+              esc(label) +
+              '</span>' +
+              '</div>' +
+              '<h2 class="text-[1.05rem] font-semibold leading-snug text-zinc-100 sm:text-[1.12rem]">' +
+              t +
+              '</h2>' +
+              '<div class="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs">' +
+              '<span class="inline-flex items-center gap-1.5">' +
+              '<span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-slate-600 to-sky-700 text-[0.5625rem] font-semibold leading-none text-white opacity-95 shadow-inner shadow-black/25">' +
+              initialEsc +
+              '</span>' +
+              '<span class="font-medium text-zinc-500">' +
+              authorEsc +
+              '</span>' +
+              '</span>' +
+              '<span class="inline-flex items-center gap-1.5 text-zinc-500">' +
+              '<svg class="h-3.5 w-3.5 shrink-0 text-zinc-600" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>' +
+              '<time class="tabular-nums text-zinc-500" datetime="' +
+              escUrlAttr(iso) +
+              '">' +
+              esc(dateStr || '방금') +
+              '</time>' +
+              '</span>' +
+              '</div></div></article>'
+            );
+          }
+
           function fillRow(rowId, emptyKey, filterFn) {
             var list = posts.filter(filterFn);
             var row = document.getElementById(rowId);
@@ -800,38 +1179,132 @@
               return postCardHtml(p, true);
             }).join('');
           }
-          fillRow('feed-row-prompt', 'prompt', function (p) {
-            return p.cat === 'prompt';
-          });
-          fillRow('feed-row-output', 'output', function (p) {
-            return p.cat === 'output';
-          });
-          fillRow('feed-row-curriculum', 'curriculum', function (p) {
-            return p.cat === 'curriculum';
-          });
-        }
 
-        function formatCompact(n) {
-          if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
-          return String(n);
+          function rebuildFeed() {
+            map = loadCommentMap();
+            clearMainArticles();
+            clearRows();
+
+            var filtered = getFilteredPosts();
+
+            updateEmptyState(posts.length, filtered.length);
+            if (subEl) {
+              if (!posts.length) {
+                subEl.textContent = '내가 올린 글이 여기에 쌓여요.';
+              } else {
+                subEl.textContent = '글 ' + posts.length + '개가 표시됩니다.';
+              }
+            }
+
+            syncToolbarChips();
+            syncViewButtons();
+            syncFeedContainerClass();
+
+            if (!posts.length) {
+              setRowEmpty('prompt', true);
+              setRowEmpty('output', true);
+              setRowEmpty('curriculum', true);
+              bindFeedInteractions(homeSections);
+              applyCommentCountFromStorage();
+              return;
+            }
+
+            if (filtered.length) {
+              var html = filtered
+                .map(function (p) {
+                  return feedState.viewMode === 'list' ? postListRowHtml(p) : postCardHtml(p, false);
+                })
+                .join('');
+              feedAll.insertAdjacentHTML('afterbegin', html);
+            }
+
+            fillRow('feed-row-prompt', 'prompt', function (p) {
+              return p.cat === 'prompt';
+            });
+            fillRow('feed-row-output', 'output', function (p) {
+              return p.cat === 'output';
+            });
+            fillRow('feed-row-curriculum', 'curriculum', function (p) {
+              return p.cat === 'curriculum';
+            });
+
+            bindFeedInteractions(homeSections);
+            applyCommentCountFromStorage();
+          }
+
+          function bindToolbarOnce() {
+            if (bindToolbarOnce.done) return;
+            bindToolbarOnce.done = true;
+            document.querySelectorAll('[data-feed-chip]').forEach(function (btn) {
+              btn.addEventListener('click', function () {
+                var cat = btn.getAttribute('data-feed-chip');
+                if (!cat || cat === feedState.filterCat) return;
+                feedState.filterCat = cat;
+                writeLs('eduai_feed_filter_v1', cat);
+                rebuildFeed();
+              });
+            });
+            var qEl = document.getElementById('top-search-q');
+            if (qEl) {
+              var tmo;
+              qEl.addEventListener('input', function () {
+                feedState.searchQ = qEl.value || '';
+                clearTimeout(tmo);
+                tmo = setTimeout(function () {
+                  rebuildFeed();
+                }, 160);
+              });
+            }
+            var searchForm = document.getElementById('top-search-form');
+            if (searchForm && searchForm.getAttribute('data-feed-local-search')) {
+              searchForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                var inp = document.getElementById('top-search-q');
+                feedState.searchQ = inp ? inp.value || '' : '';
+                rebuildFeed();
+              });
+            }
+            var vg = document.getElementById('feed-view-grid');
+            var vl = document.getElementById('feed-view-list');
+            if (vg) {
+              vg.addEventListener('click', function () {
+                if (feedState.viewMode === 'grid') return;
+                feedState.viewMode = 'grid';
+                writeLs('eduai_feed_view_v1', 'grid');
+                rebuildFeed();
+              });
+            }
+            if (vl) {
+              vl.addEventListener('click', function () {
+                if (feedState.viewMode === 'list') return;
+                feedState.viewMode = 'list';
+                writeLs('eduai_feed_view_v1', 'list');
+                rebuildFeed();
+              });
+            }
+          }
+
+          rebuildFeed();
+          bindToolbarOnce();
         }
-        function parseCompact(s) {
-          s = String(s).trim();
-          if (s.endsWith('k')) return Math.round(parseFloat(s) * 1000);
-          var n = parseInt(s.replace(/,/g, ''), 10);
-          return isNaN(n) ? 0 : n;
-        }
-        var shareSvg =
-          '<svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.59 13.51L15.42 17.5M15.41 6.5L8.59 10.49M18 21a3 3 0 100-6 3 3 0 000 6zM6 14a3 3 0 100-6 3 3 0 000 6zM18 9a3 3 0 100-6 3 3 0 000 6z"/></svg>';
-        var copySvg =
-          '<svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>';
 
         injectUserPostsIntoFeed();
+        (async function syncFeedFromDb() {
+          if (!window.MoaPostsDB || !window.MoaPostsDB.fetchPosts) return;
+          try {
+            await window.MoaPostsDB.migrateLocalPostsOnce();
+            USER_POSTS_CACHE = await window.MoaPostsDB.fetchPosts();
+            injectUserPostsIntoFeed();
+            applyCommentCountFromStorage();
+          } catch (e) {
+            console.warn('project supabase sync failed:', e);
+          }
+        })();
         (function () {
           var root = document.getElementById('home-sections');
           if (!root) return;
           root.addEventListener('click', function (e) {
-            var card = e.target.closest('.post-card');
+            var card = e.target.closest('.post-card, .post-list-item');
             if (!card || !root.contains(card)) return;
             if (card.classList.contains('post-card--video')) return;
             if (e.target.closest('button, a, video, input, textarea')) return;
@@ -844,87 +1317,6 @@
             if (la) window.location.href = la.getAttribute('href');
           });
         })();
-        document.querySelectorAll('[data-reaction]').forEach(function (btn) {
-          var raw = btn.getAttribute('data-base');
-          var base = parseInt(raw, 10);
-          if (isNaN(base)) base = parseCompact(raw);
-          var countEl = btn.querySelector('.js-react-count');
-          var outline = btn.querySelector('.ic-outline');
-          var solid = btn.querySelector('.ic-solid');
-          var active = false;
-          btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            active = !active;
-            btn.setAttribute('aria-pressed', active);
-            if (outline) outline.classList.toggle('hidden', active);
-            if (solid) solid.classList.toggle('hidden', !active);
-            var kind = btn.getAttribute('data-reaction');
-            if (kind === 'like') {
-              btn.classList.toggle('text-rose-500', active);
-              btn.classList.toggle('text-zinc-500', !active);
-            }
-            if (kind === 'save') {
-              btn.classList.toggle('text-amber-500', active);
-              btn.classList.toggle('text-zinc-500', !active);
-            }
-            if (countEl) countEl.textContent = formatCompact(base + (active ? 1 : 0));
-          });
-        });
-
-        document.querySelectorAll('[data-share-path]').forEach(function (btn) {
-          btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            var url = new URL(btn.getAttribute('data-share-path') || 'project.html', window.location.href).href;
-            var title = btn.getAttribute('data-share-title') || document.title;
-            var checkHtml = document.getElementById('icon-check-tpl').innerHTML;
-            function flash() {
-              btn.innerHTML = checkHtml;
-              btn.disabled = true;
-              setTimeout(function () {
-                btn.innerHTML = shareSvg;
-                btn.disabled = false;
-              }, 1400);
-            }
-            if (navigator.share) {
-              navigator.share({ title: title, url: url }).catch(function () {});
-              return;
-            }
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-              navigator.clipboard.writeText(url).then(flash).catch(function () {
-                window.prompt('공유 링크:', url);
-              });
-            } else {
-              window.prompt('공유 링크:', url);
-            }
-          });
-        });
-
-        document.querySelectorAll('[data-copy]').forEach(function (btn) {
-          btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            var text = btn.getAttribute('data-copy') || '';
-            if (!text) return;
-            var checkHtml = document.getElementById('icon-check-tpl').innerHTML;
-            function flash() {
-              btn.innerHTML = checkHtml;
-              btn.disabled = true;
-              setTimeout(function () {
-                btn.innerHTML = copySvg;
-                btn.disabled = false;
-              }, 1400);
-            }
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-              navigator.clipboard.writeText(text).then(flash).catch(function () {
-                window.prompt('복사:', text);
-              });
-            } else {
-              window.prompt('복사:', text);
-            }
-          });
-        });
         applyCommentCountFromStorage();
       })();
     </script>

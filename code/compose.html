@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>모아집 — 새 글</title>
+  <title>모닥 — 새 글</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-posts.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -31,16 +33,16 @@
       <div class="flex h-14 items-center gap-2 border-b border-zinc-800/80 px-4">
         <a
           href="project.html"
-          class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sky-600 text-xs font-bold text-white"
-          >AI</a
+          class="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-zinc-950 ring-1 ring-zinc-700/80"
+          ><img src="assets/modak-logo.png" alt="모닥" width="36" height="36" class="h-full w-full object-contain p-0.5" /></a
         >
         <div class="min-w-0">
           <a
             href="project.html"
             class="block truncate text-sm font-semibold tracking-tight text-zinc-100"
-            >모아집</a
+            >모닥</a
           >
-          <p class="truncate text-2xs text-zinc-500">교육 콘텐츠 피드</p>
+          <p class="truncate text-2xs text-zinc-500">모여서 빛나는 콘텐츠</p>
         </div>
       </div>
       <nav class="flex flex-1 flex-col gap-1 px-2 py-3 text-sm">
@@ -114,13 +116,13 @@
           <div class="flex shrink-0 items-center gap-2 xl:hidden">
             <a
               href="project.html"
-              class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-sky-600 text-xs font-bold text-white"
-              >AI</a
+              class="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-zinc-950 ring-1 ring-zinc-700/80"
+              ><img src="assets/modak-logo.png" alt="모닥" width="32" height="32" class="h-full w-full object-contain p-0.5" /></a
             >
             <a
               href="project.html"
               class="max-w-[5.5rem] truncate text-sm font-semibold tracking-tight text-zinc-100 sm:max-w-none"
-              >모아집</a
+              >모닥</a
             >
           </div>
           <form
@@ -370,20 +372,9 @@
     }
     function nowIso() { return new Date().toISOString(); }
 
-    var LS_POSTS = 'eduai_posts_v1';
-    function loadPosts() {
-      var raw = localStorage.getItem(LS_POSTS);
-      var arr = safeJsonParse(raw, []);
-      return Array.isArray(arr) ? arr : [];
-    }
-    function savePosts(arr) {
-      localStorage.setItem(LS_POSTS, JSON.stringify(arr));
-    }
-
-    function findPost(slug) {
-      var posts = loadPosts();
-      for (var i = 0; i < posts.length; i++) {
-        if (posts[i] && posts[i].slug === slug) return posts[i];
+    async function findPost(slug) {
+      if (window.MoaPostsDB && window.MoaPostsDB.fetchPostBySlug) {
+        return await window.MoaPostsDB.fetchPostBySlug(slug);
       }
       return null;
     }
@@ -400,7 +391,11 @@
       }
     }
 
-    function publish() {
+    async function publish() {
+      if (!window.MoaPostsDB || !window.MoaPostsDB.upsertPost) {
+        alert('Supabase 연결 스크립트를 불러오지 못했습니다.');
+        return;
+      }
       var title = (document.getElementById('in-title').value || '').trim();
       var excerpt = (document.getElementById('in-excerpt').value || '').trim();
       var body = (document.getElementById('in-body').value || '').trim();
@@ -409,26 +404,23 @@
       if (!title) { alert('제목을 입력해 주세요.'); document.getElementById('in-title').focus(); return; }
       if (!body) { alert('본문을 입력해 주세요.'); document.getElementById('in-body').focus(); return; }
 
-      var posts = loadPosts();
       if (EDIT_SLUG) {
-        var found = false;
-        for (var i = 0; i < posts.length; i++) {
-          if (posts[i] && posts[i].slug === EDIT_SLUG) {
-            posts[i].cat = SELECTED_CAT;
-            posts[i].title = title;
-            posts[i].excerpt = excerpt;
-            posts[i].body = body;
-            posts[i].link = link;
-            posts[i].updatedAt = nowIso();
-            found = true;
-            break;
-          }
-        }
-        if (!found) {
+        var prev = await findPost(EDIT_SLUG);
+        if (!prev) {
           alert('수정할 글을 찾지 못했습니다.');
           return;
         }
-        savePosts(posts);
+        await window.MoaPostsDB.upsertPost({
+          slug: EDIT_SLUG,
+          cat: SELECTED_CAT,
+          title: title,
+          excerpt: excerpt,
+          body: body,
+          link: link,
+          authorName: prev.authorName || '세희',
+          createdAt: prev.createdAt || nowIso(),
+          updatedAt: nowIso(),
+        });
         window.location.replace('post-detail.html?slug=' + encodeURIComponent(EDIT_SLUG));
         return;
       }
@@ -436,8 +428,7 @@
       var base = slugifyAscii(title).slice(0, 24);
       var slug = 'u-' + Date.now() + '-' + base;
       var post = { slug: slug, cat: SELECTED_CAT, title: title, excerpt: excerpt, body: body, link: link, authorName: '세희', createdAt: nowIso() };
-      posts.unshift(post);
-      savePosts(posts);
+      await window.MoaPostsDB.upsertPost(post);
       var blob = title + '\n' + excerpt + '\n' + body;
       var mn = parseMentionNames(blob);
       if (mn.length) {
@@ -451,15 +442,33 @@
       window.location.replace('post-detail.html?slug=' + encodeURIComponent(slug));
     }
 
-    // edit mode init
-    if (EDIT_SLUG) {
-      var p = findPost(EDIT_SLUG);
+    async function initEditMode() {
+      if (!window.MoaPostsDB || !window.MoaPostsDB.migrateLocalPostsOnce) return;
+      try {
+        await window.MoaPostsDB.migrateLocalPostsOnce();
+      } catch (e) {
+        console.warn('Supabase migration skipped:', e);
+      }
+      if (!EDIT_SLUG) return;
+      var p = await findPost(EDIT_SLUG);
       if (p) {
+        var uid = null;
+        if (window.MoaPostsDB && window.MoaPostsDB.getCurrentUserId) {
+          try { uid = await window.MoaPostsDB.getCurrentUserId(); } catch (e) {}
+        }
+        if (p.authorId && uid && p.authorId !== uid) {
+          document.getElementById('page-title').textContent = '글 수정';
+          document.getElementById('btn-publish').textContent = '저장';
+          document.getElementById('page-sub').textContent = '작성자 본인만 수정할 수 있습니다.';
+          document.getElementById('btn-publish').disabled = true;
+          document.getElementById('btn-publish').classList.add('opacity-40');
+          return;
+        }
         document.getElementById('page-title').textContent = '글 수정';
-        document.title = '모아집 — 글 수정';
+        document.title = '모닥 — 글 수정';
         document.getElementById('btn-publish').textContent = '저장';
         document.getElementById('page-sub').textContent = '수정 사항을 저장합니다';
-        document.getElementById('save-hint').textContent = '저장하면 이 브라우저에 반영됩니다.';
+        document.getElementById('save-hint').textContent = '저장하면 즉시 반영됩니다.';
         document.getElementById('in-title').value = p.title || '';
         document.getElementById('in-excerpt').value = p.excerpt || '';
         document.getElementById('in-body').value = p.body || '';
@@ -480,7 +489,7 @@
     var BUG_MODE = params.get('bug') === '1';
     if (!EDIT_SLUG && BUG_MODE) {
       document.getElementById('page-title').textContent = '버그 제보';
-      document.title = '모아집 — 버그 제보';
+      document.title = '모닥 — 버그 제보';
       document.getElementById('page-sub').textContent = '문제가 발생한 화면 정보를 함께 남겨 주세요';
       document.getElementById('in-title').value = '[버그 제보] ';
       document.getElementById('in-body').value = [
@@ -497,10 +506,18 @@
       setCatUI('community');
     }
 
-    document.getElementById('btn-publish').addEventListener('click', publish);
-    document.addEventListener('keydown', function (e) {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') publish();
+    document.getElementById('btn-publish').addEventListener('click', function () {
+      publish().catch(function (e) {
+        console.error(e);
+        alert('저장 중 오류가 발생했습니다. 콘솔 로그를 확인해 주세요.');
+      });
     });
+    document.addEventListener('keydown', function (e) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+        publish().catch(function () {});
+      }
+    });
+    initEditMode();
 
     (function mentionPicker() {
       var MENTION_PEOPLE = ['순용', '민수', '태호', '상현', '인선', '선민', '이준', '세희'];

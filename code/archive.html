@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>모아집 — 아카이브</title>
+  <title>모닥 — 아카이브</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-posts.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -16,6 +18,7 @@
     };
   </script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="feed-view-shared.css" />
   <style>
     body { font-feature-settings: "ss01" on; -webkit-tap-highlight-color: transparent; }
     .feed-card-media { height: 11.25rem; }
@@ -27,10 +30,10 @@
 <body class="min-h-screen bg-[#0c0c0e] font-sans text-zinc-100 antialiased">
   <aside class="fixed inset-y-0 left-0 z-40 hidden w-[232px] flex-col border-r border-zinc-800/90 bg-zinc-950 xl:flex xl:flex-col" aria-label="주 메뉴">
     <div class="flex h-14 items-center gap-2 border-b border-zinc-800/80 px-4">
-      <a href="project.html" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sky-600 text-xs font-bold text-white">AI</a>
+      <a href="project.html" class="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-zinc-950 ring-1 ring-zinc-700/80"><img src="assets/modak-logo.png" alt="모닥" width="36" height="36" class="h-full w-full object-contain p-0.5" /></a>
       <div class="min-w-0">
-        <a href="project.html" class="block truncate text-sm font-semibold tracking-tight text-zinc-100">모아집</a>
-        <p class="truncate text-2xs text-zinc-500">교육 콘텐츠 피드</p>
+        <a href="project.html" class="block truncate text-sm font-semibold tracking-tight text-zinc-100">모닥</a>
+        <p class="truncate text-2xs text-zinc-500">모여서 빛나는 콘텐츠</p>
       </div>
     </div>
     <nav class="flex flex-1 flex-col gap-1 px-2 py-3 text-sm">
@@ -57,7 +60,7 @@
     <header class="sticky top-0 z-50 border-b border-zinc-800/90 bg-[#0c0c0e]/95 backdrop-blur-xl">
       <div class="mx-auto flex max-w-[1400px] items-center justify-between gap-3 px-4 py-3">
         <div class="flex items-center gap-2">
-          <a href="project.html" class="flex h-8 w-8 items-center justify-center rounded-xl bg-sky-600 text-xs font-bold text-white xl:hidden">AI</a>
+          <a href="project.html" class="flex h-8 w-8 items-center justify-center overflow-hidden rounded-xl bg-zinc-950 ring-1 ring-zinc-700/80 xl:hidden"><img src="assets/modak-logo.png" alt="모닥" width="32" height="32" class="h-full w-full object-contain p-0.5" /></a>
           <h1 class="text-base font-semibold tracking-tight text-zinc-100 sm:text-lg">아카이브</h1>
         </div>
         <a href="compose.html" class="inline-flex items-center rounded-lg border border-zinc-700/90 bg-zinc-900/60 px-3 py-1.5 text-xs font-semibold text-zinc-100 hover:bg-zinc-800/80">새 글 작성</a>
@@ -71,10 +74,24 @@
           <h2 class="mt-1 text-lg font-bold text-zinc-100 sm:text-xl">저장된 게시글 모아보기</h2>
           <p class="mt-1 text-sm text-zinc-400">작성된 게시글만 최신순으로 표시합니다.</p>
         </div>
-        <p id="archive-count" class="rounded-full bg-zinc-800/80 px-3 py-1 text-xs font-semibold text-zinc-200">0개</p>
+        <div class="flex shrink-0 flex-wrap items-center justify-end gap-2">
+          <p id="archive-count" class="rounded-full bg-zinc-800/80 px-3 py-1 text-xs font-semibold text-zinc-200">0개</p>
+          <div class="flex items-center gap-2" role="group" aria-label="보기 방식">
+            <button type="button" id="arch-v-list" class="view-btn inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900/80 text-zinc-400 shadow-sm transition hover:border-zinc-600 hover:bg-zinc-800 hover:text-zinc-100" aria-label="리스트로 보기" title="리스트">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10" />
+              </svg>
+            </button>
+            <button type="button" id="arch-v-grid" class="view-btn inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900/80 text-zinc-400 shadow-sm transition hover:border-zinc-600 hover:bg-zinc-800 hover:text-zinc-100" aria-label="카드로 보기" title="카드">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zM14 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
 
-      <div id="archive-list" class="mt-4 grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"></div>
+      <div id="archive-list" class="mt-4"></div>
       <div id="archive-empty" class="hidden mt-4 rounded-xl border border-zinc-800/90 bg-zinc-900/60 px-4 py-12 text-center">
         <p class="text-sm text-zinc-400">아직 저장된 게시글이 없습니다.</p>
         <a href="compose.html" class="mt-3 inline-flex text-sm font-semibold text-sky-400 hover:text-sky-300">첫 글 작성하기</a>
@@ -82,6 +99,7 @@
     </main>
   </div>
 
+  <script src="feed-view-shared.js"></script>
   <script>
     (function () {
       var CAT_LABEL = {
@@ -380,21 +398,116 @@
         return String(b.createdAt || b.updatedAt || '').localeCompare(String(a.createdAt || a.updatedAt || ''));
       });
 
-      countEl.textContent = posts.length + '개';
-      listEl.innerHTML = '';
+      var viewMode = MoaFeedView.getView();
 
-      if (!posts.length) {
-        emptyEl.classList.remove('hidden');
-        return;
+      function wireArchiveCardInteractions() {
+        listEl.querySelectorAll('[data-reaction]').forEach(function (btn) {
+          var raw = btn.getAttribute('data-base');
+          var base = parseInt(raw, 10);
+          if (isNaN(base)) base = parseCompact(raw);
+          var countElBtn = btn.querySelector('.js-react-count');
+          var outline = btn.querySelector('.ic-outline');
+          var solid = btn.querySelector('.ic-solid');
+          var active = false;
+          btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            active = !active;
+            btn.setAttribute('aria-pressed', active);
+            if (outline) outline.classList.toggle('hidden', active);
+            if (solid) solid.classList.toggle('hidden', !active);
+            var kind = btn.getAttribute('data-reaction');
+            if (kind === 'like') {
+              btn.classList.toggle('text-rose-500', active);
+              btn.classList.toggle('text-zinc-500', !active);
+            }
+            if (kind === 'save') {
+              btn.classList.toggle('text-amber-500', active);
+              btn.classList.toggle('text-zinc-500', !active);
+            }
+            if (countElBtn) countElBtn.textContent = formatCompact(base + (active ? 1 : 0));
+          });
+        });
+        listEl.querySelectorAll('[data-share-path]').forEach(function (btn) {
+          btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var url = new URL(btn.getAttribute('data-share-path') || 'project.html', window.location.href).href;
+            var title = btn.getAttribute('data-share-title') || document.title;
+            if (navigator.share) {
+              navigator.share({ title: title, url: url }).catch(function () {});
+              return;
+            }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(url).catch(function () {});
+              return;
+            }
+            window.prompt('링크를 복사하세요', url);
+          });
+        });
+        listEl.querySelectorAll('.prompt-copy-btn').forEach(function (btn) {
+          btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var txt = btn.getAttribute('data-copy') || '';
+            if (!txt) return;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(txt).catch(function () {});
+              return;
+            }
+            window.prompt('복사하세요', txt);
+          });
+        });
       }
 
-      emptyEl.classList.add('hidden');
-      var commentMap = loadCommentMap();
-      listEl.innerHTML = posts.map(function (p) {
-        return postCardHtml(p, commentMap);
-      }).join('');
+      function renderArchive() {
+        countEl.textContent = posts.length + '개';
+        listEl.innerHTML = '';
+        MoaFeedView.syncToggleButtons(viewMode, document.getElementById('arch-v-grid'), document.getElementById('arch-v-list'));
+        if (!posts.length) {
+          emptyEl.classList.remove('hidden');
+          listEl.className = 'mt-4';
+          return;
+        }
+        emptyEl.classList.add('hidden');
+        var commentMap = loadCommentMap();
+        if (viewMode === 'list') {
+          listEl.className = 'mt-4 ' + MoaFeedView.FEED_LIST_CLASS;
+          listEl.innerHTML = posts
+            .map(function (p) {
+              return MoaFeedView.postListRowHtml({
+                title: p.title,
+                slug: p.slug,
+                cat: p.cat,
+                authorName: p.authorName,
+                createdAt: p.createdAt,
+                updatedAt: p.updatedAt,
+              });
+            })
+            .join('');
+        } else {
+          listEl.className = 'mt-4 ' + MoaFeedView.FEED_GRID_CLASS;
+          listEl.innerHTML = posts.map(function (p) {
+            return postCardHtml(p, commentMap);
+          }).join('');
+          wireArchiveCardInteractions();
+        }
+      }
+
+      function setArchiveView(mode, save) {
+        viewMode = mode === 'list' ? 'list' : 'grid';
+        if (save) MoaFeedView.setView(viewMode, true);
+        renderArchive();
+      }
 
       listEl.addEventListener('click', function (e) {
+        var row = e.target.closest('.post-list-item');
+        if (row && listEl.contains(row)) {
+          if (e.target.closest('button, a, video, input, textarea')) return;
+          var h = row.getAttribute('data-feed-href');
+          if (h) window.location.href = h;
+          return;
+        }
         var card = e.target.closest('.post-card');
         if (!card || !listEl.contains(card)) return;
         if (card.classList.contains('post-card--video')) return;
@@ -402,63 +515,28 @@
         var href = card.getAttribute('data-feed-href');
         if (href) window.location.href = href;
       });
-      listEl.querySelectorAll('[data-reaction]').forEach(function (btn) {
-        var raw = btn.getAttribute('data-base');
-        var base = parseInt(raw, 10);
-        if (isNaN(base)) base = parseCompact(raw);
-        var countEl = btn.querySelector('.js-react-count');
-        var outline = btn.querySelector('.ic-outline');
-        var solid = btn.querySelector('.ic-solid');
-        var active = false;
-        btn.addEventListener('click', function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-          active = !active;
-          btn.setAttribute('aria-pressed', active);
-          if (outline) outline.classList.toggle('hidden', active);
-          if (solid) solid.classList.toggle('hidden', !active);
-          var kind = btn.getAttribute('data-reaction');
-          if (kind === 'like') {
-            btn.classList.toggle('text-rose-500', active);
-            btn.classList.toggle('text-zinc-500', !active);
-          }
-          if (kind === 'save') {
-            btn.classList.toggle('text-amber-500', active);
-            btn.classList.toggle('text-zinc-500', !active);
-          }
-          if (countEl) countEl.textContent = formatCompact(base + (active ? 1 : 0));
-        });
-      });
-      listEl.querySelectorAll('[data-share-path]').forEach(function (btn) {
-        btn.addEventListener('click', function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-          var url = new URL(btn.getAttribute('data-share-path') || 'project.html', window.location.href).href;
-          var title = btn.getAttribute('data-share-title') || document.title;
-          if (navigator.share) {
-            navigator.share({ title: title, url: url }).catch(function () {});
-            return;
-          }
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(url).catch(function () {});
-            return;
-          }
-          window.prompt('링크를 복사하세요', url);
-        });
-      });
-      listEl.querySelectorAll('.prompt-copy-btn').forEach(function (btn) {
-        btn.addEventListener('click', function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-          var txt = btn.getAttribute('data-copy') || '';
-          if (!txt) return;
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(txt).catch(function () {});
-            return;
-          }
-          window.prompt('복사하세요', txt);
-        });
-      });
+
+      var archListBtn = document.getElementById('arch-v-list');
+      var archGridBtn = document.getElementById('arch-v-grid');
+      if (archListBtn) archListBtn.addEventListener('click', function () { setArchiveView('list', true); });
+      if (archGridBtn) archGridBtn.addEventListener('click', function () { setArchiveView('grid', true); });
+
+      renderArchive();
+      (async function syncArchiveFromDb() {
+        if (!window.MoaPostsDB || !window.MoaPostsDB.fetchPosts) return;
+        try {
+          await window.MoaPostsDB.migrateLocalPostsOnce();
+          posts = (await window.MoaPostsDB.fetchPosts()).filter(function (p) {
+            return p && p.slug;
+          });
+          posts.sort(function (a, b) {
+            return String(b.createdAt || b.updatedAt || '').localeCompare(String(a.createdAt || a.updatedAt || ''));
+          });
+          renderArchive();
+        } catch (e) {
+          console.warn('archive supabase sync failed:', e);
+        }
+      })();
     })();
   </script>
 </body>

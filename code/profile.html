@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>모아집 — 프로필</title>
+  <title>모닥 — 프로필</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-posts.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -20,6 +22,17 @@
     body { font-feature-settings: "ss01" on; -webkit-tap-highlight-color: transparent; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    #modak-fire-wrap {
+      transform-origin: center bottom;
+      transition: transform 0.65s cubic-bezier(0.34, 1.35, 0.64, 1);
+    }
+    @keyframes modak-flicker {
+      0%, 100% { opacity: 0.92; filter: brightness(1); }
+      50% { opacity: 1; filter: brightness(1.12); }
+    }
+    #modak-fire-brand {
+      animation: modak-flicker 2.6s ease-in-out infinite;
+    }
   </style>
 </head>
 <body class="min-h-screen bg-[#0c0c0e] font-sans text-zinc-100 antialiased">
@@ -31,16 +44,16 @@
       <div class="flex h-14 items-center gap-2 border-b border-zinc-800/80 px-4">
         <a
           href="project.html"
-          class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sky-600 text-xs font-bold text-white"
-          >AI</a
+          class="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-zinc-950 ring-1 ring-zinc-700/80"
+          ><img src="assets/modak-logo.png" alt="모닥" width="36" height="36" class="h-full w-full object-contain p-0.5" /></a
         >
         <div class="min-w-0">
           <a
             href="project.html"
             class="block truncate text-sm font-semibold tracking-tight text-zinc-100"
-            >모아집</a
+            >모닥</a
           >
-          <p class="truncate text-2xs text-zinc-500">교육 콘텐츠 피드</p>
+          <p class="truncate text-2xs text-zinc-500">모여서 빛나는 콘텐츠</p>
         </div>
       </div>
       <nav class="flex flex-1 flex-col gap-1 px-2 py-3 text-sm">
@@ -114,13 +127,13 @@
           <div class="flex shrink-0 items-center gap-2 xl:hidden">
             <a
               href="project.html"
-              class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-sky-600 text-xs font-bold text-white"
-              >AI</a
+              class="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-zinc-950 ring-1 ring-zinc-700/80"
+              ><img src="assets/modak-logo.png" alt="모닥" width="32" height="32" class="h-full w-full object-contain p-0.5" /></a
             >
             <a
               href="project.html"
               class="max-w-[5.5rem] truncate text-sm font-semibold tracking-tight text-zinc-100 sm:max-w-none"
-              >모아집</a
+              >모닥</a
             >
           </div>
           <form
@@ -253,73 +266,62 @@
       </div>
     <!-- 히어로: 다크 배너 + 겹치는 카드 -->
     <div class="relative">
-      <div class="relative isolate overflow-visible rounded-2xl shadow-lg shadow-zinc-900/25 ring-1 ring-white/10">
-        <div class="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl bg-gradient-to-br from-zinc-800 via-zinc-900 to-zinc-950"></div>
-        <div class="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-violet-500/15 blur-3xl"></div>
-        <div class="pointer-events-none absolute -bottom-8 -left-12 h-32 w-32 rounded-full bg-emerald-500/10 blur-2xl"></div>
+      <div
+        class="relative isolate overflow-visible rounded-2xl border border-zinc-800/90 bg-zinc-950 shadow-lg shadow-black/25 ring-1 ring-white/[0.04]"
+      >
+        <div
+          class="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl bg-gradient-to-br from-zinc-900/90 via-zinc-950 to-zinc-950"
+        ></div>
+        <div
+          class="pointer-events-none absolute -right-16 top-1/3 h-44 w-44 -translate-y-1/2 rounded-full bg-amber-500/[0.055] blur-3xl"
+        ></div>
         <div class="relative mx-auto flex flex-col items-center px-6 pb-14 pt-8 text-center sm:px-8 sm:pb-16 sm:pt-10">
-          <div class="rounded-2xl bg-white/10 p-1 ring-1 ring-white/20">
+          <div
+            id="avatar-stage"
+            class="flex min-h-[14rem] w-full max-w-[min(100%,18rem)] flex-col items-center justify-center px-2 py-3 sm:min-h-[17rem] sm:max-w-[22rem] sm:py-4"
+          >
             <div
-              id="avatar-stage"
-              class="flex min-h-[9.5rem] w-[8.75rem] flex-col items-center rounded-xl bg-gradient-to-b from-zinc-600/50 to-zinc-900/80 px-3 pb-4 pt-5 sm:min-h-[10rem] sm:w-[9.25rem] sm:pt-6"
+              id="modak-fire-wrap"
+              class="relative flex w-full shrink-0 flex-col items-center justify-center"
+              style="transform: scale(1); transform-origin: center bottom;"
             >
-              <div id="layer-hat" class="flex h-10 w-full shrink-0 items-end justify-center"></div>
               <div
-                id="layer-face"
-                class="mt-2 h-11 w-11 shrink-0 rounded-full bg-zinc-800 shadow-lg ring-[3px] ring-white/90"
+                class="pointer-events-none absolute bottom-4 left-1/2 h-[8.5rem] w-[8.5rem] -translate-x-1/2 rounded-full bg-gradient-to-t from-orange-400/38 via-amber-300/22 to-transparent blur-3xl sm:bottom-5 sm:h-[11rem] sm:w-[11rem]"
+                id="modak-fire-glow"
               ></div>
-              <div id="layer-acc" class="mt-2 flex min-h-[1.5rem] w-full shrink-0 items-start justify-center"></div>
+              <img
+                id="modak-fire-brand"
+                src="assets/1.png"
+                alt="모닥 성장 단계 1"
+                width="220"
+                height="220"
+                class="relative z-[1] pointer-events-none h-[9rem] w-[9rem] max-w-full object-contain drop-shadow-[0_14px_48px_rgba(251,146,60,0.32)] sm:h-[11rem] sm:w-[11rem]"
+                draggable="false"
+              />
             </div>
           </div>
-          <h1 class="mt-4 text-2xl font-bold tracking-tight text-white sm:text-3xl">세희</h1>
-          <p class="mt-1 text-sm text-zinc-400">초등 교사 · 생성형 AI 동아리</p>
-        </div>
-      </div>
-
-      <div class="relative z-10 -mt-8 px-0 sm:-mt-10">
-        <div class="rounded-2xl border border-zinc-800/90 bg-zinc-900/50 p-5 shadow-lg shadow-black/20 ring-1 ring-white/[0.04] sm:p-6">
-          <p class="text-2xs leading-relaxed text-zinc-500">올린 글은 이 브라우저에만 저장됩니다. 다른 기기에서는 보이지 않을 수 있어요.</p>
-          <div class="mt-5 border-t border-zinc-800/80 pt-5 text-center">
-            <p class="text-2xs text-zinc-400">내가 올린 글</p>
-            <p id="profile-stat-posts" class="mt-1 text-2xl font-bold tabular-nums text-zinc-100">0</p>
+          <h1 class="mt-5 text-2xl font-bold tracking-tight text-white sm:text-3xl">세희</h1>
+          <p class="mt-2 text-xs text-zinc-500">모여서 빛나는 콘텐츠</p>
+          <p id="modak-fire-hint" class="mt-2 text-2xs text-orange-200/75">글을 올리면 성장 단계(1~5)가 올라가요</p>
+          <div class="mt-9 w-full border-t border-zinc-800/80 pt-6 text-center sm:mt-10 sm:pt-7">
+            <p class="text-2xs font-medium text-zinc-400">내가 올린 글</p>
+            <p id="profile-stat-posts" class="mt-2 text-3xl font-bold tabular-nums text-zinc-100">0</p>
           </div>
         </div>
       </div>
     </div>
 
     <!-- 내가 쓴 글 -->
-    <section class="mt-4 rounded-2xl border border-zinc-800/90 bg-zinc-900/50 p-5 shadow-lg shadow-black/20 ring-1 ring-white/[0.04] sm:p-6">
-      <div class="flex items-center justify-between gap-2">
-        <h2 class="text-sm font-bold text-zinc-100">내가 쓴 글</h2>
-        <a href="compose.html" class="text-2xs font-medium text-sky-400 hover:text-sky-300">새 글</a>
+    <section class="mt-6 rounded-2xl border border-zinc-800/90 bg-zinc-900/50 p-6 shadow-lg shadow-black/20 ring-1 ring-white/[0.04] sm:p-7">
+      <div class="flex items-center justify-between gap-3 border-b border-zinc-800/80 pb-4">
+        <h2 class="text-base font-bold text-zinc-100">내가 쓴 글</h2>
+        <a href="compose.html" class="shrink-0 rounded-full bg-zinc-800/90 px-3 py-1.5 text-2xs font-semibold text-sky-400 ring-1 ring-zinc-700/80 hover:bg-zinc-800 hover:text-sky-300">새 글</a>
       </div>
-      <ul id="profile-posts" class="mt-4 space-y-0 divide-y divide-zinc-800/80"></ul>
+      <ul id="profile-posts" class="mt-4 flex flex-col gap-2"></ul>
       <p id="profile-posts-empty" class="mt-4 hidden text-center text-sm text-zinc-500">
         아직 글이 없습니다.
         <a href="compose.html" class="font-medium text-sky-400 hover:text-sky-300">새 글</a>을 올려 보세요.
       </p>
-    </section>
-
-    <!-- 꾸미기 -->
-    <section class="mt-4 rounded-2xl border border-zinc-800/90 bg-zinc-900/50 p-5 shadow-lg shadow-black/20 ring-1 ring-white/[0.04] sm:p-6">
-      <div class="flex items-start justify-between gap-3">
-        <div>
-          <h2 class="text-sm font-bold text-zinc-100">캐릭터</h2>
-          <p class="mt-1 text-2xs text-zinc-500">레벨에 따라 해금 · 활동 보상과 연결됩니다.</p>
-        </div>
-        <button type="button" id="btn-reset-look" class="text-2xs font-medium text-zinc-400 hover:text-zinc-700">초기화</button>
-      </div>
-      <div class="mt-5 grid gap-6 sm:grid-cols-2">
-        <div>
-          <p class="text-2xs font-medium text-zinc-400">모자</p>
-          <div id="opts-hat" class="mt-2 flex flex-wrap gap-2"></div>
-        </div>
-        <div>
-          <p class="text-2xs font-medium text-zinc-400">악세서리</p>
-          <div id="opts-acc" class="mt-2 flex flex-wrap gap-2"></div>
-        </div>
-      </div>
-      <p id="toast-hint" class="mt-4 hidden text-2xs font-medium text-sky-400"></p>
     </section>
 
   </main>
@@ -330,7 +332,7 @@
       else location.href = 'project.html';
     });
 
-    (function renderProfilePosts() {
+    (async function renderProfilePosts() {
       var CAT_LABEL = {
         planning: '기획',
         design: '디자인',
@@ -343,23 +345,50 @@
         community: '커뮤니티',
       };
       var CAT_BADGE = {
-        planning: 'bg-indigo-50 text-indigo-800',
-        design: 'bg-pink-50 text-pink-900',
-        development: 'bg-teal-50 text-teal-900',
-        curriculum: 'bg-emerald-50 text-emerald-900',
-        video: 'bg-violet-50 text-violet-900',
-        prompt: 'bg-fuchsia-50 text-fuchsia-900',
-        output: 'bg-orange-50 text-orange-900',
-        insight: 'bg-amber-50 text-amber-900',
-        community: 'bg-rose-50 text-rose-900',
+        planning: 'bg-indigo-900/55 text-indigo-100 ring-1 ring-indigo-500/20',
+        design: 'bg-pink-900/50 text-pink-100 ring-1 ring-pink-500/20',
+        development: 'bg-teal-900/50 text-teal-100 ring-1 ring-teal-500/20',
+        curriculum: 'bg-emerald-900/50 text-emerald-100 ring-1 ring-emerald-500/20',
+        video: 'bg-violet-900/50 text-violet-100 ring-1 ring-violet-500/20',
+        prompt: 'bg-fuchsia-900/50 text-fuchsia-100 ring-1 ring-fuchsia-500/20',
+        output: 'bg-orange-900/50 text-orange-100 ring-1 ring-orange-500/20',
+        insight: 'bg-amber-900/50 text-amber-100 ring-1 ring-amber-500/20',
+        community: 'bg-rose-900/50 text-rose-100 ring-1 ring-rose-500/20',
       };
+      function growthStageFromPostCount(count) {
+        var n = Math.max(0, Number(count) || 0);
+        if (n <= 0) return 1;
+        if (n <= 2) return 2;
+        if (n <= 5) return 3;
+        if (n <= 9) return 4;
+        return 5;
+      }
+      function updateModakGrowthVisual(postCount) {
+        var wrap = document.getElementById('modak-fire-wrap');
+        var glow = document.getElementById('modak-fire-glow');
+        var img = document.getElementById('modak-fire-brand');
+        if (!wrap || !img) return;
+        var stage = growthStageFromPostCount(postCount);
+        img.src = 'assets/' + stage + '.png';
+        img.alt = '모닥 성장 단계 ' + stage;
+        wrap.style.transform = 'scale(1)';
+        if (glow) {
+          glow.style.opacity = String(Math.min(0.28 + stage * 0.11, 0.82));
+        }
+      }
       function esc(s) {
         return String(s)
           .replace(/&/g, '&amp;')
           .replace(/</g, '&lt;')
           .replace(/"/g, '&quot;');
       }
-      function loadPosts() {
+      async function loadPosts() {
+        if (window.MoaPostsDB && window.MoaPostsDB.migrateLocalPostsOnce) {
+          try { await window.MoaPostsDB.migrateLocalPostsOnce(); } catch (e) {}
+        }
+        if (window.MoaPostsDB && window.MoaPostsDB.fetchPosts) {
+          return await window.MoaPostsDB.fetchPosts();
+        }
         try {
           var raw = localStorage.getItem('eduai_posts_v1');
           var arr = JSON.parse(raw || '[]');
@@ -378,13 +407,14 @@
       var emptyEl = document.getElementById('profile-posts-empty');
       var statEl = document.getElementById('profile-stat-posts');
       if (!ul) return;
-      var posts = loadPosts().filter(function (p) {
+      var posts = (await loadPosts()).filter(function (p) {
         return p && p.slug;
       });
       posts.sort(function (a, b) {
         return String(b.createdAt || '').localeCompare(String(a.createdAt || ''));
       });
       if (statEl) statEl.textContent = String(posts.length);
+      updateModakGrowthVisual(posts.length);
       ul.innerHTML = '';
       if (!posts.length) {
         if (emptyEl) emptyEl.classList.remove('hidden');
@@ -403,7 +433,7 @@
         li.innerHTML =
           '<a href="' +
           href +
-          '" class="flex gap-3 py-3 first:pt-0 transition hover:bg-zinc-800/40 -mx-2 px-2 rounded-xl">' +
+          '" class="flex gap-3 rounded-xl border border-transparent py-4 px-3 transition hover:border-zinc-700/70 hover:bg-zinc-800/35">' +
           '<span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-zinc-800 text-zinc-300">' +
           icon +
           '</span>' +
@@ -422,76 +452,6 @@
         ul.appendChild(li);
       });
     })();
-
-    var LS = 'eduai_avatar_v1';
-    var USER_LEVEL = 8;
-    var HATS = [
-      { id: 'none', label: '없음', minLv: 1, html: '' },
-      { id: 'sprout', label: '새싹', minLv: 1, html: '<div class="flex gap-1"><span class="h-5 w-2.5 rounded-full bg-emerald-500"></span><span class="h-6 w-2.5 -translate-y-0.5 rounded-full bg-emerald-400"></span><span class="h-5 w-2.5 rounded-full bg-emerald-500"></span></div>' },
-      { id: 'book', label: '책 모자', minLv: 6, html: '<div class="h-7 w-14 rounded-b-lg rounded-t-md bg-amber-700 shadow-sm"></div>' },
-      { id: 'crown', label: '왕관', minLv: 12, html: '<div class="h-4 w-12 rounded-t-lg bg-amber-400"></div>' },
-    ];
-    var ACCS = [
-      { id: 'none', label: '없음', minLv: 1, html: '' },
-      { id: 'glasses', label: '안경', minLv: 1, html: '<div class="flex justify-center"><div class="flex gap-0.5 rounded-full border-2 border-zinc-600 px-2 py-0.5"><span class="h-2 w-5 rounded-full border border-zinc-500"></span><span class="h-2 w-5 rounded-full border border-zinc-500"></span></div></div>' },
-      { id: 'star', label: '별 핀', minLv: 10, html: '<div class="text-center text-lg">⭐</div>' },
-    ];
-    function loadState() {
-      try { var r = localStorage.getItem(LS); if (r) return JSON.parse(r); } catch (e) {}
-      return { hat: 'sprout', acc: 'none' };
-    }
-    function saveState(s) { try { localStorage.setItem(LS, JSON.stringify(s)); } catch (e) {} }
-    function renderAvatar(state) {
-      var hat = HATS.find(function (h) { return h.id === state.hat; }) || HATS[0];
-      var acc = ACCS.find(function (a) { return a.id === state.acc; }) || ACCS[0];
-      document.getElementById('layer-hat').innerHTML = hat.html;
-      document.getElementById('layer-acc').innerHTML = acc.html;
-    }
-    function optCls(on, locked) {
-      var b = 'rounded-lg px-3 py-2 text-2xs font-medium ring-1 transition ';
-      if (locked) return b + 'cursor-not-allowed bg-zinc-900 text-zinc-500 ring-zinc-800';
-      if (on) return b + 'bg-zinc-900 text-white ring-zinc-900';
-      return b + 'bg-zinc-800/80 text-zinc-300 ring-zinc-700/80 hover:bg-zinc-700';
-    }
-    var state = loadState();
-    renderAvatar(state);
-    function build(container, items, key, onLocked) {
-      container.innerHTML = '';
-      items.forEach(function (it) {
-        var locked = USER_LEVEL < it.minLv;
-        var on = state[key] === it.id;
-        var btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = optCls(on, locked);
-        btn.textContent = it.label + (locked ? ' · Lv.' + it.minLv : '');
-        btn.addEventListener('click', function () {
-          if (locked) { onLocked(it); return; }
-          state[key] = it.id;
-          saveState(state);
-          renderAvatar(state);
-          build(container, items, key, onLocked);
-        });
-        container.appendChild(btn);
-      });
-    }
-    var toastEl = document.getElementById('toast-hint');
-    var tt;
-    function flash(m) {
-      toastEl.textContent = m;
-      toastEl.classList.remove('hidden');
-      clearTimeout(tt);
-      tt = setTimeout(function () { toastEl.classList.add('hidden'); }, 2000);
-    }
-    build(document.getElementById('opts-hat'), HATS, 'hat', function (it) { flash('레벨 ' + it.minLv + ' 이상에서 해금됩니다.'); });
-    build(document.getElementById('opts-acc'), ACCS, 'acc', function (it) { flash('레벨 ' + it.minLv + ' 이상에서 해금됩니다.'); });
-    document.getElementById('btn-reset-look').addEventListener('click', function () {
-      state = { hat: 'sprout', acc: 'none' };
-      saveState(state);
-      renderAvatar(state);
-      build(document.getElementById('opts-hat'), HATS, 'hat', function (it) { flash('레벨 ' + it.minLv + ' 이상에서 해금됩니다.'); });
-      build(document.getElementById('opts-acc'), ACCS, 'acc', function (it) { flash('레벨 ' + it.minLv + ' 이상에서 해금됩니다.'); });
-      flash('기본 꾸미기로 초기화했습니다.');
-    });
   </script>
     </div>
   <div id="floating-actions" class="fixed bottom-5 right-5 z-[70] flex flex-col items-end gap-2 xl:right-6">

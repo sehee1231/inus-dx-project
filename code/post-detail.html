@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>모아집 — 글</title>
+  <title>모닥 — 글</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-posts.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -16,6 +18,7 @@
     };
   </script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="feed-view-shared.css" />
   <style>
     body { font-feature-settings: "ss01" on; -webkit-tap-highlight-color: transparent; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -31,16 +34,16 @@
       <div class="flex h-14 items-center gap-2 border-b border-zinc-800/80 px-4">
         <a
           href="project.html"
-          class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sky-600 text-xs font-bold text-white"
-          >AI</a
+          class="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-zinc-950 ring-1 ring-zinc-700/80"
+          ><img src="assets/modak-logo.png" alt="모닥" width="36" height="36" class="h-full w-full object-contain p-0.5" /></a
         >
         <div class="min-w-0">
           <a
             href="project.html"
             class="block truncate text-sm font-semibold tracking-tight text-zinc-100"
-            >모아집</a
+            >모닥</a
           >
-          <p class="truncate text-2xs text-zinc-500">교육 콘텐츠 피드</p>
+          <p class="truncate text-2xs text-zinc-500">모여서 빛나는 콘텐츠</p>
         </div>
       </div>
       <nav class="flex flex-1 flex-col gap-1 px-2 py-3 text-sm">
@@ -114,13 +117,13 @@
           <div class="flex shrink-0 items-center gap-2 xl:hidden">
             <a
               href="project.html"
-              class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-sky-600 text-xs font-bold text-white"
-              >AI</a
+              class="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-zinc-950 ring-1 ring-zinc-700/80"
+              ><img src="assets/modak-logo.png" alt="모닥" width="32" height="32" class="h-full w-full object-contain p-0.5" /></a
             >
             <a
               href="project.html"
               class="max-w-[5.5rem] truncate text-sm font-semibold tracking-tight text-zinc-100 sm:max-w-none"
-              >모아집</a
+              >모닥</a
             >
           </div>
           <form
@@ -280,12 +283,31 @@
           <p class="mt-2 text-2xs text-zinc-500">이 브라우저에 저장됩니다.</p>
         </div>
       </section>
+      <section id="related-posts" class="mt-8 hidden scroll-mt-4 rounded-2xl border border-zinc-800/90 bg-zinc-900/40 p-4 sm:p-6">
+        <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <h2 class="text-base font-bold text-zinc-100">다른 글</h2>
+          <div class="flex items-center gap-2" role="group" aria-label="보기 방식">
+            <button type="button" id="rel-v-list" class="view-btn inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900/80 text-zinc-400 shadow-sm transition hover:border-zinc-600 hover:bg-zinc-800 hover:text-zinc-100" aria-label="리스트로 보기" title="리스트">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10" />
+              </svg>
+            </button>
+            <button type="button" id="rel-v-grid" class="view-btn inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900/80 text-zinc-400 shadow-sm transition hover:border-zinc-600 hover:bg-zinc-800 hover:text-zinc-100" aria-label="카드로 보기" title="카드">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zM14 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div id="related-feed"></div>
+      </section>
     </div>
   </main>
 
-  <footer class="mx-auto max-w-[960px] px-4 py-8 text-center text-2xs text-zinc-500">모아집 · 글은 브라우저 저장소에만 있습니다.</footer>
+  <footer class="mx-auto max-w-[960px] px-4 py-8 text-center text-2xs text-zinc-500">모닥 · 글은 브라우저 저장소에만 있습니다.</footer>
     </div>
 
+  <script src="feed-view-shared.js"></script>
   <template id="icon-copy">
     <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
   </template>
@@ -488,6 +510,62 @@
       var arr = safeJsonParse(localStorage.getItem(LS_POSTS), []);
       return Array.isArray(arr) ? arr : [];
     }
+
+    function initRelatedPosts(currentSlug) {
+      if (!window.MoaFeedView) return;
+      var others = loadUserPosts()
+        .filter(function (p) {
+          return p && p.slug && p.slug !== currentSlug;
+        })
+        .sort(function (a, b) {
+          return String(b.createdAt || b.updatedAt || '').localeCompare(String(a.createdAt || a.updatedAt || ''));
+        })
+        .slice(0, 12);
+      if (!others.length) return;
+      var sec = document.getElementById('related-posts');
+      var root = document.getElementById('related-feed');
+      var bList = document.getElementById('rel-v-list');
+      var bGrid = document.getElementById('rel-v-grid');
+      if (!sec || !root || !bList || !bGrid) return;
+      sec.classList.remove('hidden');
+
+      function renderRelated() {
+        var mode = MoaFeedView.getView();
+        MoaFeedView.syncToggleButtons(mode, bGrid, bList);
+        if (mode === 'list') {
+          root.className = MoaFeedView.FEED_LIST_CLASS;
+          root.innerHTML = others
+            .map(function (p) {
+              return MoaFeedView.postListRowHtml({
+                title: p.title,
+                slug: p.slug,
+                cat: p.cat,
+                authorName: p.authorName,
+                createdAt: p.createdAt,
+                updatedAt: p.updatedAt,
+              });
+            })
+            .join('');
+        } else {
+          root.className = MoaFeedView.FEED_GRID_CLASS;
+          root.innerHTML = others.map(function (p) {
+            return MoaFeedView.relatedGridCardHtml(p);
+          }).join('');
+        }
+        MoaFeedView.bindFeedRowClick(root);
+      }
+
+      bList.addEventListener('click', function () {
+        MoaFeedView.setView('list', true);
+        renderRelated();
+      });
+      bGrid.addEventListener('click', function () {
+        MoaFeedView.setView('grid', true);
+        renderRelated();
+      });
+      renderRelated();
+    }
+
     function findUserPost(slug) {
       var posts = loadUserPosts();
       for (var i = 0; i < posts.length; i++) {
@@ -693,7 +771,7 @@
     } else {
       document.getElementById('post-root').classList.remove('hidden');
       document.getElementById('article-main').innerHTML = renderArticle(post, slug);
-      document.title = '모아집 — ' + post.title;
+      document.title = '모닥 — ' + post.title;
       var copyBtn = document.querySelector('.js-prompt-copy');
       if (copyBtn && post.promptText) copyBtn.setAttribute('data-copy', post.promptText);
       function renderAllComments() {
@@ -886,24 +964,45 @@
       if (userPost) {
         var bEdit = document.getElementById('btn-edit');
         var bDel = document.getElementById('btn-delete');
-        bEdit.classList.remove('hidden');
-        bDel.classList.remove('hidden');
-        bEdit.addEventListener('click', function () {
-          location.href = 'compose.html?edit=' + encodeURIComponent(userPost.slug);
-        });
-        bDel.addEventListener('click', function () {
-          if (!confirm('이 글을 삭제할까요? (댓글도 함께 삭제됩니다)')) return;
-          var posts = loadUserPosts();
-          var next = posts.filter(function (p) { return p && p.slug !== userPost.slug; });
-          localStorage.setItem(LS_POSTS, JSON.stringify(next));
-          // delete comments for this slug
-          var all = safeJsonParse(localStorage.getItem(LS_COMMENTS), {});
-          if (all && typeof all === 'object') {
-            delete all[userPost.slug];
-            localStorage.setItem(LS_COMMENTS, JSON.stringify(all));
+        (async function bindPostManageButtons() {
+          var canManage = true;
+          if (userPost.authorId && window.MoaPostsDB && window.MoaPostsDB.getCurrentUserId) {
+            try {
+              var uid = await window.MoaPostsDB.getCurrentUserId();
+              canManage = !!uid && userPost.authorId === uid;
+            } catch (e) {
+              canManage = false;
+            }
           }
-          location.href = 'project.html';
-        });
+          if (!canManage) return;
+          bEdit.classList.remove('hidden');
+          bDel.classList.remove('hidden');
+          bEdit.addEventListener('click', function () {
+            location.href = 'compose.html?edit=' + encodeURIComponent(userPost.slug);
+          });
+          bDel.addEventListener('click', async function () {
+            if (!confirm('이 글을 삭제할까요? (댓글도 함께 삭제됩니다)')) return;
+            if (window.MoaPostsDB && window.MoaPostsDB.deletePostBySlug) {
+              try {
+                await window.MoaPostsDB.deletePostBySlug(userPost.slug);
+              } catch (e) {
+                alert('작성자 본인만 삭제할 수 있습니다.');
+                return;
+              }
+            } else {
+              var posts = loadUserPosts();
+              var next = posts.filter(function (p) { return p && p.slug !== userPost.slug; });
+              localStorage.setItem(LS_POSTS, JSON.stringify(next));
+            }
+            // delete comments for this slug
+            var all = safeJsonParse(localStorage.getItem(LS_COMMENTS), {});
+            if (all && typeof all === 'object') {
+              delete all[userPost.slug];
+              localStorage.setItem(LS_COMMENTS, JSON.stringify(all));
+            }
+            location.href = 'project.html';
+          });
+        })();
       }
 
       function scrollToCommentsIfHash() {
@@ -917,6 +1016,7 @@
           requestAnimationFrame(go);
         });
       }
+      initRelatedPosts(slug);
       scrollToCommentsIfHash();
       window.addEventListener('hashchange', scrollToCommentsIfHash);
     }

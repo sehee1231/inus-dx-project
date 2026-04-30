@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>모아집 — 카테고리</title>
+  <title>모닥 — 카테고리</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-posts.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -16,6 +18,7 @@
     };
   </script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="feed-view-shared.css" />
   <style>
     body { font-feature-settings: "ss01" on; -webkit-tap-highlight-color: transparent; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -35,16 +38,16 @@
       <div class="flex h-14 items-center gap-2 border-b border-zinc-800/80 px-4">
         <a
           href="project.html"
-          class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sky-600 text-xs font-bold text-white"
-          >AI</a
+          class="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-zinc-950 ring-1 ring-zinc-700/80"
+          ><img src="assets/modak-logo.png" alt="모닥" width="36" height="36" class="h-full w-full object-contain p-0.5" /></a
         >
         <div class="min-w-0">
           <a
             href="project.html"
             class="block truncate text-sm font-semibold tracking-tight text-zinc-100"
-            >모아집</a
+            >모닥</a
           >
-          <p class="truncate text-2xs text-zinc-500">교육 콘텐츠 피드</p>
+          <p class="truncate text-2xs text-zinc-500">모여서 빛나는 콘텐츠</p>
         </div>
       </div>
       <nav class="flex flex-1 flex-col gap-1 px-2 py-3 text-sm">
@@ -118,13 +121,13 @@
           <div class="flex shrink-0 items-center gap-2 xl:hidden">
             <a
               href="project.html"
-              class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-sky-600 text-xs font-bold text-white"
-              >AI</a
+              class="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-zinc-950 ring-1 ring-zinc-700/80"
+              ><img src="assets/modak-logo.png" alt="모닥" width="32" height="32" class="h-full w-full object-contain p-0.5" /></a
             >
             <a
               href="project.html"
               class="max-w-[5.5rem] truncate text-sm font-semibold tracking-tight text-zinc-100 sm:max-w-none"
-              >모아집</a
+              >모닥</a
             >
           </div>
           <form
@@ -283,6 +286,7 @@
     <svg class="h-4 w-4 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
   </template>
 
+  <script src="feed-view-shared.js"></script>
   <script>
     var LABEL = {
       curriculum: { name: '커리큘럼', desc: '로드맵·학습 설계 중심 글입니다.' },
@@ -337,7 +341,9 @@
     function fakeStats() {
       return { like: 0, cmt: 0, save: 0 };
     }
+    var USER_POSTS_CACHE = null;
     function loadUserPosts() {
+      if (Array.isArray(USER_POSTS_CACHE)) return USER_POSTS_CACHE.slice();
       try {
         var raw = localStorage.getItem('eduai_posts_v1');
         var arr = JSON.parse(raw || '[]');
@@ -355,6 +361,8 @@
             t: p.title || '제목 없음',
             sub: (p.authorName || '세희') + ' · ' + (LABEL[cat] ? LABEL[cat].name : '커뮤니티'),
             link: (p.link || '').trim(),
+            createdAt: p.createdAt,
+            updatedAt: p.updatedAt,
           };
         });
     }
@@ -651,22 +659,12 @@
       );
     }
 
-    function rowList(it) {
-      return (
-        '<li><a class="flex items-center justify-between rounded-2xl border border-zinc-800/90 bg-zinc-900/50 px-4 py-3 text-sm font-medium text-zinc-100 shadow-md ring-1 ring-white/[0.04] hover:bg-zinc-800/40" href="post-detail.html?slug=' +
-        encodeURIComponent(it.slug) +
-        '">' +
-        '<span class="min-w-0 pr-2">' +
-        esc(it.t) +
-        '</span><span class="shrink-0 text-zinc-500">→</span></a></li>'
-      );
-    }
-
     var params = new URLSearchParams(location.search);
     var c = params.get('c') || '';
-    var LS_KEY = 'eduai_browse_view';
-    var viewParam = params.get('view');
-    var view = viewParam === 'feed' || viewParam === 'list' ? viewParam : localStorage.getItem(LS_KEY) || 'feed';
+    MoaFeedView.migrateBrowseViewKey();
+    var viewParamRaw = params.get('view');
+    var fromUrl = MoaFeedView.resolveViewFromUrl(params);
+    var view = fromUrl !== null ? fromUrl : MoaFeedView.getView();
 
     var keys = ['', 'planning', 'design', 'development', 'curriculum', 'video', 'prompt', 'output', 'insight', 'community'];
     var labels = ['전체', '기획', '디자인', '개발', '커리큘럼', '영상', '프롬프트', '결과물', '인사이트', '커뮤니티'];
@@ -676,30 +674,16 @@
       return '<a href="' + href + '" class="shrink-0 rounded-full px-3.5 py-1.5 text-2xs ring-1 ring-zinc-700/80 ' + (on ? 'bg-sky-600 font-semibold text-white ring-sky-500' : 'bg-zinc-900/80 font-medium text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100') + '">' + labels[i] + '</a>';
     }).join('');
 
-    var viewBtnOff =
-      'view-btn inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900/80 text-zinc-400 shadow-sm transition hover:border-zinc-600 hover:bg-zinc-800 hover:text-zinc-100';
-    var viewBtnOn =
-      'view-btn inline-flex h-10 w-10 items-center justify-center rounded-xl border border-sky-600 bg-sky-600 text-white shadow-md shadow-sky-900/30 transition';
-
     function setView(v, save) {
-      view = v;
-      if (save) {
-        try {
-          localStorage.setItem(LS_KEY, v);
-        } catch (e) {}
-      }
+      view = v === 'list' ? 'list' : 'grid';
+      if (save) MoaFeedView.setView(view, true);
       var u = new URL(window.location.href);
       if (c) {
         u.searchParams.set('c', c);
-        u.searchParams.set('view', v);
+        u.searchParams.set('view', view);
         history.replaceState({}, '', u.pathname + '?' + u.searchParams.toString());
       }
-      var bL = document.getElementById('v-list');
-      var bF = document.getElementById('v-feed');
-      bL.className = v === 'list' ? viewBtnOn : viewBtnOff;
-      bF.className = v === 'feed' ? viewBtnOn : viewBtnOff;
-      bL.setAttribute('aria-pressed', v === 'list' ? 'true' : 'false');
-      bF.setAttribute('aria-pressed', v === 'feed' ? 'true' : 'false');
+      MoaFeedView.syncToggleButtons(view, document.getElementById('v-feed'), document.getElementById('v-list'));
       render();
     }
 
@@ -732,7 +716,7 @@
             })
             .join('') +
           '</div>';
-        document.title = '모아집 — 카테고리';
+        document.title = '모닥 — 카테고리';
         return;
       }
 
@@ -747,7 +731,7 @@
       var L = LABEL[c];
       h1.textContent = L.name;
       desc.textContent = L.desc;
-      document.title = '모아집 — ' + L.name;
+      document.title = '모닥 — ' + L.name;
       wrap.classList.remove('hidden');
 
       var rows = userPostsByCat(c).concat(ITEMS[c] || []);
@@ -757,13 +741,32 @@
         return;
       }
 
-      if (view === 'feed') {
+      if (view === 'grid') {
         root.innerHTML =
-          '<div class="feed grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">' +
+          '<div class="' +
+          MoaFeedView.FEED_GRID_CLASS +
+          '">' +
           rows.map(function (it) { return cardFeed(it, c); }).join('') +
           '</div>';
       } else {
-        root.innerHTML = '<ul class="space-y-2">' + rows.map(rowList).join('') + '</ul>';
+        root.innerHTML =
+          '<div class="' +
+          MoaFeedView.FEED_LIST_CLASS +
+          '">' +
+          rows
+            .map(function (it) {
+              var auth = parseAuthor(it.sub).name;
+              return MoaFeedView.postListRowHtml({
+                title: it.t,
+                slug: it.slug,
+                cat: c,
+                authorName: auth,
+                createdAt: it.createdAt,
+                updatedAt: it.updatedAt,
+              });
+            })
+            .join('') +
+          '</div>';
       }
       wireBrowseInteractions();
     }
@@ -773,6 +776,13 @@
       if (root && !root.dataset.cardWired) {
         root.dataset.cardWired = '1';
         root.addEventListener('click', function (e) {
+          var row = e.target.closest('.post-list-item');
+          if (row && root.contains(row)) {
+            if (e.target.closest('button, a, video, input, textarea')) return;
+            var href = row.getAttribute('data-feed-href');
+            if (href) window.location.href = href;
+            return;
+          }
           var card = e.target.closest('.post-card');
           if (!card || !root.contains(card)) return;
           if (e.target.closest('button, a, video, input, textarea')) return;
@@ -857,17 +867,32 @@
       setView('list', true);
     });
     document.getElementById('v-feed').addEventListener('click', function () {
-      setView('feed', true);
+      setView('grid', true);
     });
 
-    if (viewParam !== 'feed' && viewParam !== 'list' && c) {
+    if (c && (viewParamRaw === null || viewParamRaw === '')) {
       var u0 = new URL(window.location.href);
       u0.searchParams.set('c', c);
       u0.searchParams.set('view', view);
       history.replaceState({}, '', u0.pathname + '?' + u0.searchParams.toString());
+    } else if (c && viewParamRaw === 'feed') {
+      var u1 = new URL(window.location.href);
+      u1.searchParams.set('c', c);
+      u1.searchParams.set('view', 'grid');
+      history.replaceState({}, '', u1.pathname + '?' + u1.searchParams.toString());
     }
 
     setView(view, false);
+    (async function syncPostsFromDb() {
+      if (!window.MoaPostsDB || !window.MoaPostsDB.fetchPosts) return;
+      try {
+        await window.MoaPostsDB.migrateLocalPostsOnce();
+        USER_POSTS_CACHE = await window.MoaPostsDB.fetchPosts();
+        setView(view, false);
+      } catch (e) {
+        console.warn('browse supabase sync failed:', e);
+      }
+    })();
   </script>
     </div>
   <div id="floating-actions" class="fixed bottom-5 right-5 z-[70] flex flex-col items-end gap-2 xl:right-6">

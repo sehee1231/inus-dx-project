@@ -12,8 +12,16 @@
     return client;
   }
 
+  function toAbsAppPath(path) {
+    var p = String(path || '');
+    if (!p) return '/code/project.html';
+    if (p.indexOf('/code/') === 0 || p.indexOf('/login.html') === 0) return p;
+    if (p.charAt(0) === '/') return '/code' + p;
+    return '/code/' + p.replace(/^\.?\//, '');
+  }
+
   function loginPath() {
-    return 'login.html?next=' + encodeURIComponent(location.pathname + location.search + location.hash);
+    return '/login.html?next=' + encodeURIComponent(location.pathname + location.search + location.hash);
   }
 
   async function getSessionUser() {
@@ -26,7 +34,10 @@
 
   async function requireAuth() {
     var user = await getSessionUser();
-    if (!user) {
+    if (!user || user.is_anonymous) {
+      if (user && user.is_anonymous) {
+        try { await signOut(); } catch (e) {}
+      }
       location.replace(loginPath());
       return null;
     }
@@ -37,6 +48,37 @@
     var c = getClient();
     if (!c) return;
     await c.auth.signOut();
+  }
+
+  function mountLogoutButton(user) {
+    if (!user || user.is_anonymous) return;
+    if (location.pathname.indexOf('/login.html') !== -1) return;
+    if (document.getElementById('moa-logout-btn')) return;
+    var btn = document.createElement('button');
+    btn.id = 'moa-logout-btn';
+    btn.type = 'button';
+    btn.textContent = '로그아웃';
+    btn.className = 'fixed right-4 top-4 z-[90] rounded-lg border border-zinc-700/90 bg-zinc-900/95 px-3 py-1.5 text-2xs font-semibold text-zinc-200 shadow-xl shadow-black/40 transition hover:border-zinc-500 hover:bg-zinc-800';
+    btn.addEventListener('click', async function () {
+      btn.disabled = true;
+      try {
+        await signOut();
+      } catch (e) {}
+      location.href = '/code/login.html';
+    });
+    document.body.appendChild(btn);
+  }
+
+  function normalizeNextPath(raw) {
+    var n = String(raw || '').trim();
+    if (!n) return '/code/project.html';
+    try {
+      if (/^https?:\/\//i.test(n)) {
+        var u = new URL(n);
+        return toAbsAppPath(u.pathname + (u.search || '') + (u.hash || ''));
+      }
+    } catch (e) {}
+    return toAbsAppPath(n);
   }
 
   async function ensureProfileRow(user, payload) {
@@ -70,5 +112,15 @@
     signOut: signOut,
     ensureProfileRow: ensureProfileRow,
     getMyProfile: getMyProfile,
+    normalizeNextPath: normalizeNextPath,
+    mountLogoutButton: mountLogoutButton,
   };
+
+  if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', function () {
+      getSessionUser().then(function (u) {
+        if (u && !u.is_anonymous) mountLogoutButton(u);
+      }).catch(function () {});
+    });
+  }
 })(typeof window !== 'undefined' ? window : this);

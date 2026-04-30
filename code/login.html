@@ -31,7 +31,9 @@
   <script>
     (function () {
       var params = new URLSearchParams(location.search);
-      var next = params.get('next') || 'project.html';
+      var next = (window.MoaAuth && window.MoaAuth.normalizeNextPath)
+        ? window.MoaAuth.normalizeNextPath(params.get('next'))
+        : '/code/project.html';
       var emailEl = document.getElementById('in-email');
       var passEl = document.getElementById('in-password');
       var userEl = document.getElementById('in-username');
@@ -86,7 +88,12 @@
       });
 
       window.MoaAuth.getSessionUser().then(function (u) {
-        if (u) goNext();
+        if (!u) return;
+        if (u.is_anonymous) {
+          window.MoaAuth.signOut().catch(function () {});
+          return;
+        }
+        goNext();
       }).catch(function () {});
     })();
   </script>

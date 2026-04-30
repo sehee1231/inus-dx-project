@@ -7,6 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-posts.js"></script>
+  <script src="supabase-auth.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -101,6 +102,7 @@
 
   <script src="feed-view-shared.js"></script>
   <script>
+    if (window.MoaAuth && window.MoaAuth.requireAuth) { window.MoaAuth.requireAuth(); }
     (function () {
       var CAT_LABEL = {
         planning: '기획',

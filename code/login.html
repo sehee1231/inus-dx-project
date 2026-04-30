@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>모닥 — 로그인</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-auth.js"></script>
+</head>
+<body class="min-h-screen bg-[#0c0c0e] text-zinc-100 antialiased">
+  <main class="mx-auto flex min-h-screen w-full max-w-md items-center px-4 py-10">
+    <section class="w-full rounded-2xl border border-zinc-800/90 bg-zinc-900/60 p-6 shadow-xl shadow-black/30 ring-1 ring-white/[0.04]">
+      <h1 class="text-xl font-bold tracking-tight">모닥 로그인</h1>
+      <p class="mt-1 text-sm text-zinc-400">로그인하면 내 글/마이페이지 기능을 사용할 수 있어요.</p>
+
+      <form id="auth-form" class="mt-6 space-y-3">
+        <input id="in-email" type="email" required placeholder="이메일" class="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2.5 text-sm outline-none focus:border-sky-500/70" />
+        <input id="in-password" type="password" required minlength="6" placeholder="비밀번호(6자 이상)" class="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2.5 text-sm outline-none focus:border-sky-500/70" />
+        <input id="in-username" type="text" placeholder="닉네임(회원가입 시)" class="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2.5 text-sm outline-none focus:border-sky-500/70" />
+        <input id="in-display-name" type="text" placeholder="표시 이름(선택)" class="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2.5 text-sm outline-none focus:border-sky-500/70" />
+        <div class="grid grid-cols-2 gap-2 pt-2">
+          <button id="btn-login" type="button" class="rounded-lg bg-sky-600 px-3 py-2.5 text-sm font-semibold text-white hover:bg-sky-500">로그인</button>
+          <button id="btn-signup" type="button" class="rounded-lg bg-zinc-800 px-3 py-2.5 text-sm font-semibold text-zinc-100 hover:bg-zinc-700">회원가입</button>
+        </div>
+      </form>
+      <p id="auth-msg" class="mt-3 min-h-[1.25rem] text-xs text-zinc-400"></p>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var params = new URLSearchParams(location.search);
+      var next = params.get('next') || 'project.html';
+      var emailEl = document.getElementById('in-email');
+      var passEl = document.getElementById('in-password');
+      var userEl = document.getElementById('in-username');
+      var nameEl = document.getElementById('in-display-name');
+      var msgEl = document.getElementById('auth-msg');
+      var c = window.MoaAuth.getClient();
+
+      function msg(t, isErr) {
+        msgEl.textContent = t || '';
+        msgEl.className = 'mt-3 min-h-[1.25rem] text-xs ' + (isErr ? 'text-rose-400' : 'text-zinc-400');
+      }
+
+      function goNext() {
+        location.replace(next);
+      }
+
+      async function login() {
+        msg('로그인 중...');
+        var res = await c.auth.signInWithPassword({
+          email: String(emailEl.value || '').trim(),
+          password: String(passEl.value || ''),
+        });
+        if (res.error) throw new Error(res.error.message);
+        msg('로그인 성공');
+        goNext();
+      }
+
+      async function signup() {
+        var username = String(userEl.value || '').trim();
+        if (!username) throw new Error('회원가입 시 닉네임을 입력해 주세요.');
+        msg('회원가입 중...');
+        var res = await c.auth.signUp({
+          email: String(emailEl.value || '').trim(),
+          password: String(passEl.value || ''),
+        });
+        if (res.error) throw new Error(res.error.message);
+        var user = res.data && res.data.user;
+        if (!user) throw new Error('회원 생성 결과를 확인할 수 없습니다.');
+        await window.MoaAuth.ensureProfileRow(user, {
+          username: username,
+          display_name: String(nameEl.value || '').trim() || username,
+        });
+        msg('회원가입 완료. 로그인 상태로 이동합니다.');
+        goNext();
+      }
+
+      document.getElementById('btn-login').addEventListener('click', function () {
+        login().catch(function (e) { msg(e.message || '로그인 실패', true); });
+      });
+      document.getElementById('btn-signup').addEventListener('click', function () {
+        signup().catch(function (e) { msg(e.message || '회원가입 실패', true); });
+      });
+
+      window.MoaAuth.getSessionUser().then(function (u) {
+        if (u) goNext();
+      }).catch(function () {});
+    })();
+  </script>
+</body>
+</html>

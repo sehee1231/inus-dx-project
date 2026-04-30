@@ -7,6 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-posts.js"></script>
+  <script src="supabase-auth.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -307,6 +308,7 @@
     </div>
 
   <script>
+    if (window.MoaAuth && window.MoaAuth.requireAuth) { window.MoaAuth.requireAuth(); }
     var params = new URLSearchParams(location.search);
     var EDIT_SLUG = params.get('edit') || '';
     var URL_PRE = params.get('url') || '';

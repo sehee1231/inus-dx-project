@@ -1292,11 +1292,13 @@
         (async function syncFeedFromDb() {
           if (!window.MoaPostsDB || !window.MoaPostsDB.fetchPosts) return;
           try {
-            await window.MoaPostsDB.migrateLocalPostsOnce();
+            var mig = await window.MoaPostsDB.migrateLocalPostsOnce();
+            console.log('[MIGRATE][project]', mig);
             USER_POSTS_CACHE = await window.MoaPostsDB.fetchPosts();
             injectUserPostsIntoFeed();
             applyCommentCountFromStorage();
           } catch (e) {
+            console.error('[MIGRATE][project] failed:', e);
             console.warn('project supabase sync failed:', e);
           }
         })();

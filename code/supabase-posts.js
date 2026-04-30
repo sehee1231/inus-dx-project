@@ -162,27 +162,63 @@
   }
 
   async function migrateLocalPostsOnce() {
-    if (localStorage.getItem(LS_MIGRATED) === 'done') return { migrated: 0, skipped: true };
+    console.log('[MIGRATE] start');
+    if (localStorage.getItem(LS_MIGRATED) === 'done') {
+      console.log('[MIGRATE] skipped: already done');
+      return { migrated: 0, skipped: true, reason: 'already_done' };
+    }
     var c = getClient();
-    if (!c) return { migrated: 0, skipped: true };
+    if (!c) {
+      console.log('[MIGRATE] skipped: no supabase client');
+      return { migrated: 0, skipped: true, reason: 'no_client' };
+    }
     var uid = await ensureUserId();
-    if (!uid) return { migrated: 0, skipped: true };
+    if (!uid) {
+      console.log('[MIGRATE] skipped: no auth uid');
+      return { migrated: 0, skipped: true, reason: 'no_uid' };
+    }
     var local = loadLocalPosts().filter(function (p) {
       return p && p.slug;
     });
+    console.log('[MIGRATE] local posts:', local.length);
     if (!local.length) {
-      localStorage.setItem(LS_MIGRATED, 'done');
-      return { migrated: 0, skipped: true };
+      console.log('[MIGRATE] skipped: local empty');
+      return { migrated: 0, skipped: true, reason: 'local_empty' };
     }
-    var rows = local.map(function (p) {
-      var row = toRow(p);
-      row.author_id = uid;
-      return row;
+
+    var slugs = local.map(function (p) { return p.slug; });
+    var existingRes = await c.from(TABLE).select('slug').in('slug', slugs);
+    if (existingRes.error) {
+      console.log('[MIGRATE] failed while reading existing slugs:', existingRes.error);
+      throw new Error(existingRes.error.message);
+    }
+    var existingSet = {};
+    (existingRes.data || []).forEach(function (r) { existingSet[r.slug] = true; });
+
+    var missing = local.filter(function (p) {
+      return !existingSet[p.slug];
     });
-    var res = await c.from(TABLE).upsert(rows, { onConflict: 'slug' });
-    if (res.error) throw new Error(res.error.message);
+    console.log('[MIGRATE] missing posts to insert:', missing.length);
+
+    if (missing.length) {
+      var rows = missing.map(function (p) {
+        var row = toRow(p);
+        row.author_id = uid;
+        return row;
+      });
+      var ins = await c.from(TABLE).insert(rows);
+      if (ins.error) {
+        console.log('[MIGRATE] insert failed:', ins.error);
+        throw new Error(ins.error.message);
+      }
+      console.log('[MIGRATE] success. inserted:', rows.length);
+      localStorage.setItem(LS_MIGRATED, 'done');
+      return { migrated: rows.length, skipped: false, reason: 'inserted' };
+    }
+
+    console.log('[MIGRATE] nothing to insert, marked done');
     localStorage.setItem(LS_MIGRATED, 'done');
-    return { migrated: rows.length, skipped: false };
+    return { migrated: 0, skipped: false, reason: 'no_missing' };
   }
 
   global.MoaPostsDB = {

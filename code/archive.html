@@ -525,7 +525,8 @@
       (async function syncArchiveFromDb() {
         if (!window.MoaPostsDB || !window.MoaPostsDB.fetchPosts) return;
         try {
-          await window.MoaPostsDB.migrateLocalPostsOnce();
+          var mig = await window.MoaPostsDB.migrateLocalPostsOnce();
+          console.log('[MIGRATE][archive]', mig);
           posts = (await window.MoaPostsDB.fetchPosts()).filter(function (p) {
             return p && p.slug;
           });
@@ -534,6 +535,7 @@
           });
           renderArchive();
         } catch (e) {
+          console.error('[MIGRATE][archive] failed:', e);
           console.warn('archive supabase sync failed:', e);
         }
       })();

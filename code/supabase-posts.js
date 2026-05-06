@@ -89,6 +89,15 @@
     localStorage.setItem(LS_POSTS, JSON.stringify(local));
   }
 
+  function replaceLocalMirror(posts) {
+    var arr = Array.isArray(posts) ? posts.slice() : [];
+    arr = arr.filter(function (p) { return p && p.slug; });
+    arr.sort(function (a, b) {
+      return String(b.createdAt || b.updatedAt || '').localeCompare(String(a.createdAt || a.updatedAt || ''));
+    });
+    localStorage.setItem(LS_POSTS, JSON.stringify(arr));
+  }
+
   async function fetchPosts() {
     var c = getClient();
     if (!c) return loadLocalPosts();
@@ -100,7 +109,9 @@
       console.error('[MoaPostsDB] fetchPosts error:', res.error.message);
       return loadLocalPosts();
     }
-    return (res.data || []).map(fromRow);
+    var mapped = (res.data || []).map(fromRow);
+    replaceLocalMirror(mapped);
+    return mapped;
   }
 
   async function fetchPostBySlug(slug) {
@@ -121,7 +132,10 @@
       console.error('[MoaPostsDB] fetchPostBySlug error:', res.error.message);
       return null;
     }
-    return res.data ? fromRow(res.data) : null;
+    if (!res.data) return null;
+    var mapped = fromRow(res.data);
+    upsertLocalMirror(mapped);
+    return mapped;
   }
 
   async function upsertPost(post) {

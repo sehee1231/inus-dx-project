@@ -115,11 +115,4 @@
     mountLogoutButton: mountLogoutButton,
   };
 
-  if (typeof document !== 'undefined') {
-    document.addEventListener('DOMContentLoaded', function () {
-      getSessionUser().then(function (u) {
-        if (u && !u.is_anonymous) mountLogoutButton(u);
-      }).catch(function () {});
-    });
-  }
 })(typeof window !== 'undefined' ? window : this);

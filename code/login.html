@@ -33,7 +33,7 @@
       var params = new URLSearchParams(location.search);
       var next = (window.MoaAuth && window.MoaAuth.normalizeNextPath)
         ? window.MoaAuth.normalizeNextPath(params.get('next'))
-        : '/code/project.html';
+        : '/project.html';
       var emailEl = document.getElementById('in-email');
       var passEl = document.getElementById('in-password');
       var userEl = document.getElementById('in-username');

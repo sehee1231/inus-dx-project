@@ -14,10 +14,9 @@
 
   function toAbsAppPath(path) {
     var p = String(path || '');
-    if (!p) return '/code/project.html';
-    if (p.indexOf('/code/') === 0 || p.indexOf('/login.html') === 0) return p;
-    if (p.charAt(0) === '/') return '/code' + p;
-    return '/code/' + p.replace(/^\.?\//, '');
+    if (!p) return '/project.html';
+    if (p.charAt(0) === '/') return p;
+    return '/' + p.replace(/^\.?\//, '');
   }
 
   function loginPath() {
@@ -64,14 +63,14 @@
       try {
         await signOut();
       } catch (e) {}
-      location.href = '/code/login.html';
+      location.href = '/login.html';
     });
     document.body.appendChild(btn);
   }
 
   function normalizeNextPath(raw) {
     var n = String(raw || '').trim();
-    if (!n) return '/code/project.html';
+    if (!n) return '/project.html';
     try {
       if (/^https?:\/\//i.test(n)) {
         var u = new URL(n);

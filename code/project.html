@@ -247,6 +247,13 @@
             </div>
           </form>
           <div class="ml-auto flex shrink-0 items-center gap-0.5 sm:gap-1">
+            <button
+              id="btn-logout-top"
+              type="button"
+              class="inline-flex h-9 items-center justify-center rounded-full border border-zinc-700/90 bg-zinc-900/70 px-3 text-2xs font-semibold text-zinc-300 transition hover:border-zinc-500 hover:bg-zinc-800 hover:text-zinc-100"
+            >
+              로그아웃
+            </button>
             <a
               href="notifications.html"
               class="relative flex h-9 w-9 items-center justify-center rounded-full text-zinc-400 hover:bg-zinc-800/80 hover:text-zinc-100"
@@ -1348,6 +1355,7 @@
       (function () {
         var topBtn = document.getElementById('btn-scroll-top');
         var bugBtn = document.getElementById('btn-report-bug');
+        var logoutBtn = document.getElementById('btn-logout-top');
         function updateTopBtn() {
           var show = window.scrollY > 240;
           topBtn.classList.toggle('opacity-0', !show);
@@ -1362,6 +1370,15 @@
           var u = 'compose.html?bug=1&url=' + encodeURIComponent(location.href);
           window.location.href = u;
         });
+        if (logoutBtn) {
+          logoutBtn.addEventListener('click', async function () {
+            logoutBtn.disabled = true;
+            try {
+              if (window.MoaAuth && window.MoaAuth.signOut) await window.MoaAuth.signOut();
+            } catch (e) {}
+            window.location.href = '/login.html';
+          });
+        }
       })();
     </script>
   </body>

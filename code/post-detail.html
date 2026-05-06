@@ -8,6 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-posts.js"></script>
   <script src="supabase-auth.js"></script>
+  <script src="supabase-notifications.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -364,14 +365,30 @@
       }
       return out;
     }
-    function pushMentionNotifications(fromUser, names, ctx) {
+    async function pushMentionNotifications(fromUser, names, ctx) {
       if (!names || !names.length) return;
-      var arr = safeJsonParse(localStorage.getItem(LS_MENTION_INBOX), []);
-      if (!Array.isArray(arr)) arr = [];
       var slug = ctx.postSlug || '';
       var title = ctx.postTitle || '';
       var snippet = String(ctx.snippet || '').slice(0, 160);
       var source = ctx.source || 'comment';
+      var arr = safeJsonParse(localStorage.getItem(LS_MENTION_INBOX), []);
+      if (!Array.isArray(arr)) arr = [];
+      try {
+        if (window.MoaNotifications && window.MoaNotifications.createMentionNotifications) {
+          await window.MoaNotifications.createMentionNotifications({
+            fromUserName: fromUser,
+            names: names,
+            postSlug: slug,
+            postTitle: title,
+            snippet: snippet,
+            source: source,
+            emailAlso: true,
+          });
+          return;
+        }
+      } catch (e) {
+        console.warn('[MENTION] supabase notification fallback:', e && e.message ? e.message : e);
+      }
       names.forEach(function (to) {
         if (!to || to === fromUser) return;
         arr.unshift({
@@ -875,7 +892,7 @@
         btnEl.textContent = '등록';
         cancelEl.classList.add('hidden');
       }
-      function submitComment() {
+      async function submitComment() {
         var text = (inEl.value || '').trim();
         if (!text) return;
         if (editingCommentId) {
@@ -887,7 +904,7 @@
           addUserComment(slug, '세희', text);
           var mn = parseMentionNames(text);
           if (mn.length) {
-            pushMentionNotifications('세희', mn, {
+            await pushMentionNotifications('세희', mn, {
               postSlug: slug,
               postTitle: post.title || '',
               snippet: text,
@@ -899,7 +916,11 @@
         clearEditMode();
         renderAllComments();
       }
-      btnEl.addEventListener('click', submitComment);
+      btnEl.addEventListener('click', function () {
+        submitComment().catch(function (err) {
+          console.warn('[COMMENT] submit failed:', err && err.message ? err.message : err);
+        });
+      });
       cancelEl.addEventListener('click', function () {
         inEl.value = '';
         clearEditMode();
@@ -931,7 +952,11 @@
             return hideMentionPicker();
           }
         }
-        if (e.key === 'Enter') submitComment();
+        if (e.key === 'Enter') {
+          submitComment().catch(function (err) {
+            console.warn('[COMMENT] submit failed:', err && err.message ? err.message : err);
+          });
+        }
       });
       document.addEventListener('mousedown', function (e) {
         if (!mentionState.open) return;

@@ -8,6 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-posts.js"></script>
   <script src="supabase-auth.js"></script>
+  <script src="supabase-notifications.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -342,14 +343,30 @@
       }
       return out;
     }
-    function pushMentionNotifications(fromUser, names, ctx) {
+    async function pushMentionNotifications(fromUser, names, ctx) {
       if (!names || !names.length) return;
-      var arr = safeJsonParse(localStorage.getItem(LS_MENTION_INBOX), []);
-      if (!Array.isArray(arr)) arr = [];
       var slug = ctx.postSlug || '';
       var title = ctx.postTitle || '';
       var snippet = String(ctx.snippet || '').slice(0, 160);
       var source = ctx.source || 'post';
+      var arr = safeJsonParse(localStorage.getItem(LS_MENTION_INBOX), []);
+      if (!Array.isArray(arr)) arr = [];
+      try {
+        if (window.MoaNotifications && window.MoaNotifications.createMentionNotifications) {
+          await window.MoaNotifications.createMentionNotifications({
+            fromUserName: fromUser,
+            names: names,
+            postSlug: slug,
+            postTitle: title,
+            snippet: snippet,
+            source: source,
+            emailAlso: true,
+          });
+          return;
+        }
+      } catch (e) {
+        console.warn('[MENTION] supabase notification fallback:', e && e.message ? e.message : e);
+      }
       names.forEach(function (to) {
         if (!to || to === fromUser) return;
         arr.unshift({
@@ -434,7 +451,7 @@
       var blob = title + '\n' + excerpt + '\n' + body;
       var mn = parseMentionNames(blob);
       if (mn.length) {
-        pushMentionNotifications('세희', mn, {
+        await pushMentionNotifications('세희', mn, {
           postSlug: slug,
           postTitle: title,
           snippet: body.slice(0, 120),

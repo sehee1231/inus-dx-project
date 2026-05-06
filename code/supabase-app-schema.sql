@@ -78,9 +78,24 @@ create table if not exists public.notifications (
 
 create index if not exists notifications_to_user_id_idx on public.notifications(to_user_id, created_at desc);
 
+create table if not exists public.email_jobs (
+  id uuid primary key default gen_random_uuid(),
+  notification_id uuid references public.notifications(id) on delete cascade,
+  to_user_id uuid not null references auth.users(id) on delete cascade,
+  template text not null default 'mention',
+  payload jsonb not null default '{}'::jsonb,
+  status text not null default 'queued' check (status in ('queued', 'sent', 'failed')),
+  created_by uuid not null references auth.users(id) on delete cascade default auth.uid(),
+  created_at timestamptz not null default now(),
+  sent_at timestamptz
+);
+
+create index if not exists email_jobs_status_idx on public.email_jobs(status, created_at);
+
 alter table public.profiles enable row level security;
 alter table public.posts enable row level security;
 alter table public.notifications enable row level security;
+alter table public.email_jobs enable row level security;
 
 drop policy if exists profiles_select_all on public.profiles;
 create policy profiles_select_all
@@ -181,3 +196,20 @@ on public.notifications for update
 to authenticated
 using (to_user_id = auth.uid())
 with check (to_user_id = auth.uid());
+
+drop policy if exists email_jobs_insert_authenticated on public.email_jobs;
+create policy email_jobs_insert_authenticated
+on public.email_jobs for insert
+to authenticated
+with check (created_by = auth.uid());
+
+drop policy if exists email_jobs_select_admin on public.email_jobs;
+create policy email_jobs_select_admin
+on public.email_jobs for select
+to authenticated
+using (
+  exists (
+    select 1 from public.profiles p
+    where p.id = auth.uid() and p.role = 'admin'
+  )
+);

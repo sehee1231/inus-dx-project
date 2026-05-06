@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>모닥 — 알림</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-auth.js"></script>
+  <script src="supabase-notifications.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -250,21 +253,12 @@
     <p id="notif-sub" class="mb-3 text-2xs text-zinc-500"></p>
     <ul id="notif-list" class="space-y-2"></ul>
     <p id="notif-empty" class="mt-6 hidden text-center text-sm text-zinc-500">
-      멘션 알림이 없습니다. 댓글이나 글 작성 시 <span class="text-sky-400">@세희</span>처럼 입력하면 해당 이름으로 알림이 저장됩니다. (이 기기·브라우저에만 저장)
+      멘션 알림이 없습니다. 댓글이나 글 작성 시 <span class="text-sky-400">@username</span>처럼 입력하면 Supabase 알림으로 저장됩니다.
     </p>
   </main>
     </div>
   <script>
-    (function () {
-      var ME = '세희';
-      var key = 'eduai_mention_inbox_v1';
-      function safeParse(s, fb) {
-        try {
-          return JSON.parse(s);
-        } catch (e) {
-          return fb;
-        }
-      }
+    (async function () {
       function esc(s) {
         return String(s || '')
           .replace(/&/g, '&amp;')
@@ -283,75 +277,49 @@
           return '';
         }
       }
-      var all = safeParse(localStorage.getItem(key), []);
-      if (!Array.isArray(all)) all = [];
-      var incoming = all.filter(function (n) {
-        return n && n.toUser === ME;
-      });
-      var outgoing = all.filter(function (n) {
-        return n && n.fromUser === ME;
-      });
-      var useIncoming = incoming.length > 0;
-      var rows = useIncoming ? incoming : outgoing;
+
       var subEl = document.getElementById('notif-sub');
       var listEl = document.getElementById('notif-list');
       var emptyEl = document.getElementById('notif-empty');
-      subEl.textContent = useIncoming
-        ? '회원님(' + ME + ')을 멘션한 알림입니다.'
-        : incoming.length === 0 && outgoing.length > 0
-          ? '받은 멘션이 없어, 보낸 멘션 기록을 보여 드립니다.'
-          : '멘션 알림 · 이 브라우저에 저장됩니다.';
-      if (!rows.length) {
-        emptyEl.classList.remove('hidden');
-        return;
-      }
-      emptyEl.classList.add('hidden');
-      listEl.innerHTML = rows
-        .map(function (n) {
-          var href = n.postSlug
-            ? 'post-detail.html?slug=' + encodeURIComponent(n.postSlug)
-            : 'project.html';
-          var src = n.source === 'post' ? '새 글' : '댓글';
+      try {
+        if (window.MoaAuth && window.MoaAuth.requireAuth) {
+          await window.MoaAuth.requireAuth();
+        }
+        if (!window.MoaNotifications || !window.MoaNotifications.fetchMyNotifications) {
+          throw new Error('알림 모듈을 불러오지 못했습니다.');
+        }
+        var rows = await window.MoaNotifications.fetchMyNotifications(120);
+        subEl.textContent = '나를 멘션한 알림입니다. (앱 내 + 메일 큐 연동)';
+        if (!rows.length) {
+          emptyEl.classList.remove('hidden');
+          return;
+        }
+        emptyEl.classList.add('hidden');
+        listEl.innerHTML = rows.map(function (n) {
+          var href = n.postSlug ? 'post-detail.html?slug=' + encodeURIComponent(n.postSlug) : 'project.html';
           return (
-            '<li data-notif-id="' +
-            esc(n.id) +
-            '" class="rounded-2xl border border-zinc-800/90 bg-zinc-900/50 p-4 text-sm text-zinc-200 shadow-md ring-1 ring-white/[0.04] ' +
-            (n.read ? 'opacity-75' : 'ring-sky-500/20') +
-            '"><a href="' +
-            href +
-            '" class="block hover:opacity-90"><span class="font-semibold text-sky-400">@' +
-            esc(n.toUser) +
-            '</span><span class="text-zinc-400"> ← </span><span class="font-semibold text-zinc-100">' +
-            esc(n.fromUser) +
-            '</span><span class="text-zinc-500"> · ' +
-            esc(src) +
-            '</span><span class="ml-2 text-2xs text-zinc-500">' +
-            esc(timeShort(n.at)) +
-            '</span>' +
-            (n.postTitle
-              ? '<p class="mt-1 line-clamp-1 text-2xs text-zinc-500">글: ' + esc(n.postTitle) + '</p>'
-              : '') +
-            '<p class="mt-1 line-clamp-2 text-2xs text-zinc-400">' +
-            esc(n.snippet || '') +
-            '</p></a></li>'
+            '<li data-notif-id="' + esc(n.id) + '" class="rounded-2xl border border-zinc-800/90 bg-zinc-900/50 p-4 text-sm text-zinc-200 shadow-md ring-1 ring-white/[0.04] ' +
+            (n.read ? 'opacity-75' : 'ring-sky-500/20') + '">' +
+            '<a href="' + href + '" class="block hover:opacity-90">' +
+            '<span class="font-semibold text-zinc-100">' + esc(n.fromUser) + '</span><span class="text-zinc-500"> 님이 멘션</span>' +
+            '<span class="ml-2 text-2xs text-zinc-500">' + esc(timeShort(n.at)) + '</span>' +
+            '<p class="mt-1 line-clamp-2 text-2xs text-zinc-400">' + esc(n.message || '') + '</p></a></li>'
           );
-        })
-        .join('');
-      listEl.addEventListener('mousedown', function (e) {
-        var li = e.target.closest('li[data-notif-id]');
-        if (!li) return;
-        var id = li.getAttribute('data-notif-id');
-        var next = safeParse(localStorage.getItem(key), []);
-        if (!Array.isArray(next)) return;
-        var ch = false;
-        next.forEach(function (n) {
-          if (n && n.id === id) {
-            n.read = true;
-            ch = true;
+        }).join('');
+
+        listEl.addEventListener('mousedown', function (e) {
+          var li = e.target.closest('li[data-notif-id]');
+          if (!li) return;
+          var id = li.getAttribute('data-notif-id');
+          if (window.MoaNotifications && window.MoaNotifications.markNotificationRead) {
+            window.MoaNotifications.markNotificationRead(id);
           }
         });
-        if (ch) localStorage.setItem(key, JSON.stringify(next));
-      });
+      } catch (e) {
+        subEl.textContent = '알림을 불러오지 못했습니다.';
+        emptyEl.classList.remove('hidden');
+        console.error('[NOTIFICATIONS] load error:', e && e.message ? e.message : e);
+      }
     })();
   </script>
   <div id="floating-actions" class="fixed bottom-5 right-5 z-[70] flex flex-col items-end gap-2 xl:right-6">

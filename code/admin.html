@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>모닥 — 관리자</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-auth.js"></script>
+  <style>
+    body { font-feature-settings: "ss01" on; }
+  </style>
+</head>
+<body class="min-h-screen bg-[#0c0c0e] text-zinc-100 antialiased">
+  <main class="mx-auto w-full max-w-6xl px-4 py-8">
+    <header class="mb-6 flex items-center justify-between gap-3">
+      <div>
+        <h1 class="text-2xl font-bold">관리자 페이지</h1>
+        <p id="admin-sub" class="mt-1 text-sm text-zinc-400">권한 확인 중...</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="project.html" class="rounded-lg border border-zinc-700 px-3 py-2 text-sm hover:bg-zinc-800">피드로</a>
+        <button id="btn-logout" type="button" class="rounded-lg border border-zinc-700 px-3 py-2 text-sm hover:bg-zinc-800">로그아웃</button>
+      </div>
+    </header>
+
+    <section class="mb-6 grid grid-cols-1 gap-3 md:grid-cols-4">
+      <article class="rounded-xl border border-zinc-800 bg-zinc-900/60 p-4">
+        <p class="text-xs text-zinc-500">총 사용자</p>
+        <p id="stat-users" class="mt-2 text-2xl font-semibold">-</p>
+      </article>
+      <article class="rounded-xl border border-zinc-800 bg-zinc-900/60 p-4">
+        <p class="text-xs text-zinc-500">총 게시글</p>
+        <p id="stat-posts" class="mt-2 text-2xl font-semibold">-</p>
+      </article>
+      <article class="rounded-xl border border-zinc-800 bg-zinc-900/60 p-4">
+        <p class="text-xs text-zinc-500">미확인 알림</p>
+        <p id="stat-unread" class="mt-2 text-2xl font-semibold">-</p>
+      </article>
+      <article class="rounded-xl border border-zinc-800 bg-zinc-900/60 p-4">
+        <p class="text-xs text-zinc-500">메일 큐(queued)</p>
+        <p id="stat-mail" class="mt-2 text-2xl font-semibold">-</p>
+      </article>
+    </section>
+
+    <section class="mb-6 rounded-xl border border-zinc-800 bg-zinc-900/50 p-4">
+      <h2 class="mb-3 text-lg font-semibold">사용자 관리</h2>
+      <div id="users-wrap" class="overflow-x-auto text-sm"></div>
+    </section>
+
+    <section class="rounded-xl border border-zinc-800 bg-zinc-900/50 p-4">
+      <h2 class="mb-3 text-lg font-semibold">게시글 관리</h2>
+      <div id="posts-wrap" class="overflow-x-auto text-sm"></div>
+    </section>
+  </main>
+
+  <script>
+    (async function () {
+      function esc(s) {
+        return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+      }
+      var subEl = document.getElementById('admin-sub');
+      var usersWrap = document.getElementById('users-wrap');
+      var postsWrap = document.getElementById('posts-wrap');
+      var statUsers = document.getElementById('stat-users');
+      var statPosts = document.getElementById('stat-posts');
+      var statUnread = document.getElementById('stat-unread');
+      var statMail = document.getElementById('stat-mail');
+
+      document.getElementById('btn-logout').addEventListener('click', async function () {
+        if (window.MoaAuth && window.MoaAuth.signOut) await window.MoaAuth.signOut();
+        location.replace('/login.html');
+      });
+
+      try {
+        if (!window.MoaAuth || !window.MoaAuth.requireAuth || !window.MoaAuth.getClient) {
+          throw new Error('인증 스크립트를 불러오지 못했습니다.');
+        }
+        await window.MoaAuth.requireAuth();
+        var myProfile = await window.MoaAuth.getMyProfile();
+        if (!myProfile || myProfile.role !== 'admin') {
+          subEl.textContent = '관리자만 접근할 수 있습니다.';
+          alert('관리자 권한이 필요합니다.');
+          location.replace('/project.html');
+          return;
+        }
+        subEl.textContent = '관리 권한 확인 완료';
+        var c = window.MoaAuth.getClient();
+
+        var usersRes = await c.from('profiles').select('id,username,display_name,role,created_at').order('created_at', { ascending: false }).limit(200);
+        if (usersRes.error) throw new Error(usersRes.error.message);
+        var users = usersRes.data || [];
+        statUsers.textContent = String(users.length);
+
+        usersWrap.innerHTML = [
+          '<table class="min-w-full">',
+          '<thead><tr class="border-b border-zinc-800 text-left text-zinc-400"><th class="p-2">username</th><th class="p-2">display</th><th class="p-2">role</th><th class="p-2">action</th></tr></thead>',
+          '<tbody>',
+          users.map(function (u) {
+            return '<tr class="border-b border-zinc-900">' +
+              '<td class="p-2">' + esc(u.username || '-') + '</td>' +
+              '<td class="p-2">' + esc(u.display_name || '-') + '</td>' +
+              '<td class="p-2"><span class="rounded bg-zinc-800 px-2 py-1 text-xs">' + esc(u.role || 'user') + '</span></td>' +
+              '<td class="p-2"><button data-user-id="' + esc(u.id) + '" data-role="' + esc(u.role || 'user') + '" class="btn-role rounded border border-zinc-700 px-2 py-1 text-xs hover:bg-zinc-800">권한 전환</button></td>' +
+              '</tr>';
+          }).join(''),
+          '</tbody></table>'
+        ].join('');
+
+        var postsRes = await c.from('posts').select('slug,title,author_name,created_at,visibility').order('created_at', { ascending: false }).limit(200);
+        if (postsRes.error) throw new Error(postsRes.error.message);
+        var posts = postsRes.data || [];
+        statPosts.textContent = String(posts.length);
+        postsWrap.innerHTML = [
+          '<table class="min-w-full">',
+          '<thead><tr class="border-b border-zinc-800 text-left text-zinc-400"><th class="p-2">title</th><th class="p-2">author</th><th class="p-2">visibility</th><th class="p-2">action</th></tr></thead>',
+          '<tbody>',
+          posts.map(function (p) {
+            return '<tr class="border-b border-zinc-900">' +
+              '<td class="p-2"><a class="hover:underline" href="post-detail.html?slug=' + encodeURIComponent(p.slug) + '">' + esc(p.title || p.slug) + '</a></td>' +
+              '<td class="p-2">' + esc(p.author_name || '-') + '</td>' +
+              '<td class="p-2">' + esc(p.visibility || 'public') + '</td>' +
+              '<td class="p-2"><button data-post-slug="' + esc(p.slug) + '" class="btn-del rounded border border-rose-800 px-2 py-1 text-xs text-rose-300 hover:bg-rose-950/30">삭제</button></td>' +
+              '</tr>';
+          }).join(''),
+          '</tbody></table>'
+        ].join('');
+
+        var unreadRes = await c.from('notifications').select('id', { count: 'exact', head: true }).eq('read', false);
+        statUnread.textContent = String(unreadRes.count || 0);
+        var mailRes = await c.from('email_jobs').select('id', { count: 'exact', head: true }).eq('status', 'queued');
+        statMail.textContent = String(mailRes.count || 0);
+
+        usersWrap.addEventListener('click', async function (e) {
+          var btn = e.target.closest('.btn-role');
+          if (!btn) return;
+          var userId = btn.getAttribute('data-user-id');
+          var current = btn.getAttribute('data-role') || 'user';
+          var next = current === 'admin' ? 'user' : 'admin';
+          var ok = confirm('해당 사용자를 ' + next + ' 권한으로 변경할까요?');
+          if (!ok) return;
+          var up = await c.from('profiles').update({ role: next }).eq('id', userId);
+          if (up.error) return alert('권한 변경 실패: ' + up.error.message);
+          location.reload();
+        });
+
+        postsWrap.addEventListener('click', async function (e) {
+          var btn = e.target.closest('.btn-del');
+          if (!btn) return;
+          var slug = btn.getAttribute('data-post-slug');
+          if (!slug || !confirm('게시글을 삭제할까요?')) return;
+          var del = await c.from('posts').delete().eq('slug', slug);
+          if (del.error) return alert('삭제 실패: ' + del.error.message);
+          location.reload();
+        });
+      } catch (e) {
+        subEl.textContent = '관리자 데이터를 불러오지 못했습니다.';
+        console.error('[ADMIN] failed:', e && e.message ? e.message : e);
+      }
+    })();
+  </script>
+</body>
+</html>

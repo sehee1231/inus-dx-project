@@ -104,6 +104,33 @@
     return res.data || null;
   }
 
+  function appendAdminLinkToNav(nav) {
+    if (!nav || nav.querySelector('[data-admin-menu-link]')) return;
+    var a = document.createElement('a');
+    a.href = 'admin.html';
+    a.setAttribute('data-admin-menu-link', '1');
+    a.className = 'flex items-center gap-3 rounded-lg px-3 py-2 text-zinc-400 transition hover:bg-zinc-800/80 hover:text-zinc-100';
+    a.innerHTML = '<svg class="h-5 w-5 shrink-0 opacity-80" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3l7 4v5c0 4.2-2.7 8.1-7 9-4.3-.9-7-4.8-7-9V7l7-4zm0 6a2 2 0 100 4 2 2 0 000-4zm-3 8a3 3 0 016 0"/></svg>관리자';
+    nav.appendChild(a);
+  }
+
+  async function mountAdminMenu() {
+    if (location.pathname.indexOf('/login.html') !== -1) return;
+    var user = await getSessionUser();
+    if (!user || user.is_anonymous) return;
+    var profile = null;
+    try {
+      profile = await getMyProfile();
+    } catch (e) {
+      return;
+    }
+    if (!profile || profile.role !== 'admin') return;
+    var navs = document.querySelectorAll('aside nav, nav[aria-label="주 메뉴"], nav');
+    navs.forEach(function (nav) {
+      appendAdminLinkToNav(nav);
+    });
+  }
+
   global.MoaAuth = {
     getClient: getClient,
     getSessionUser: getSessionUser,
@@ -113,6 +140,13 @@
     getMyProfile: getMyProfile,
     normalizeNextPath: normalizeNextPath,
     mountLogoutButton: mountLogoutButton,
+    mountAdminMenu: mountAdminMenu,
   };
+
+  if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', function () {
+      mountAdminMenu().catch(function () {});
+    });
+  }
 
 })(typeof window !== 'undefined' ? window : this);

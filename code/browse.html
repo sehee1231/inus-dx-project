@@ -31,6 +31,12 @@
   </style>
 </head>
 <body class="min-h-screen bg-[#0c0c0e] font-sans text-zinc-100 antialiased">
+  <script src="site-entry-gate.js"></script>
+  <script>
+    if (window.MoaSiteEntry && window.MoaSiteEntry.redirectIfFirstVisit) {
+      window.MoaSiteEntry.redirectIfFirstVisit();
+    }
+  </script>
     <!-- 좌측 사이드바 (데스크톱) -->
     <aside
       class="fixed inset-y-0 left-0 z-40 hidden w-[232px] flex-col border-r border-zinc-800/90 bg-zinc-950 xl:flex xl:flex-col"

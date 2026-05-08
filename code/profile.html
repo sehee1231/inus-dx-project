@@ -37,6 +37,12 @@
   </style>
 </head>
 <body class="min-h-screen bg-[#0c0c0e] font-sans text-zinc-100 antialiased">
+  <script src="site-entry-gate.js"></script>
+  <script>
+    if (window.MoaSiteEntry && window.MoaSiteEntry.redirectIfFirstVisit) {
+      window.MoaSiteEntry.redirectIfFirstVisit();
+    }
+  </script>
     <!-- 좌측 사이드바 (데스크톱) -->
     <aside
       class="fixed inset-y-0 left-0 z-40 hidden w-[232px] flex-col border-r border-zinc-800/90 bg-zinc-950 xl:flex xl:flex-col"
@@ -301,7 +307,7 @@
               />
             </div>
           </div>
-          <h1 class="mt-5 text-2xl font-bold tracking-tight text-white sm:text-3xl">세희</h1>
+          <h1 id="profile-hero-name" class="mt-5 text-2xl font-bold tracking-tight text-white sm:text-3xl">프로필</h1>
           <p class="mt-2 text-xs text-zinc-500">모여서 빛나는 콘텐츠</p>
           <p id="modak-fire-hint" class="mt-2 text-2xs text-orange-200/75">글을 올리면 성장 단계(1~5)가 올라가요</p>
           <div class="mt-9 w-full border-t border-zinc-800/80 pt-6 text-center sm:mt-10 sm:pt-7">
@@ -311,6 +317,29 @@
         </div>
       </div>
     </div>
+
+    <section id="profile-account-wrap" class="mt-6 hidden rounded-2xl border border-zinc-800/90 bg-zinc-900/50 p-6 shadow-lg shadow-black/20 ring-1 ring-white/[0.04] sm:p-7">
+      <h2 class="text-base font-bold text-zinc-100">계정 설정</h2>
+      <p class="mt-1 text-xs text-zinc-500">승인이 완료된 뒤 이름과 비밀번호를 바꿀 수 있어요.</p>
+      <div class="mt-5 space-y-4">
+        <div>
+          <label class="mb-1 block text-2xs font-medium text-zinc-500">이름</label>
+          <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <input type="text" id="profile-in-name" class="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm outline-none focus:border-sky-500/70" autocomplete="name" />
+            <button type="button" id="profile-btn-save-name" class="shrink-0 rounded-lg bg-zinc-800 px-4 py-2 text-2xs font-semibold text-zinc-100 ring-1 ring-zinc-700/80 hover:bg-zinc-700">이름 저장</button>
+          </div>
+        </div>
+        <div class="border-t border-zinc-800/80 pt-4">
+          <p class="mb-2 text-2xs font-medium text-zinc-500">비밀번호 변경</p>
+          <div class="space-y-2">
+            <input type="password" id="profile-in-pw1" autocomplete="new-password" placeholder="새 비밀번호 (6자 이상)" class="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm outline-none focus:border-sky-500/70" />
+            <input type="password" id="profile-in-pw2" autocomplete="new-password" placeholder="새 비밀번호 확인" class="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm outline-none focus:border-sky-500/70" />
+            <button type="button" id="profile-btn-save-pw" class="rounded-lg bg-zinc-800 px-4 py-2 text-2xs font-semibold text-zinc-100 ring-1 ring-zinc-700/80 hover:bg-zinc-700">비밀번호 변경</button>
+          </div>
+        </div>
+        <p id="profile-account-msg" class="text-2xs"></p>
+      </div>
+    </section>
 
     <!-- 내가 쓴 글 -->
     <section class="mt-6 rounded-2xl border border-zinc-800/90 bg-zinc-900/50 p-6 shadow-lg shadow-black/20 ring-1 ring-white/[0.04] sm:p-7">
@@ -328,7 +357,67 @@
   </main>
 
   <script>
-    if (window.MoaAuth && window.MoaAuth.requireAuth) { window.MoaAuth.requireAuth(); }
+    (async function profileBoot() {
+      if (!window.MoaAuth || !window.MoaAuth.requireAuth) return;
+      var user = await window.MoaAuth.requireAuth();
+      if (!user) return;
+      try {
+        var pr = await window.MoaAuth.getMyProfile();
+        var hn = document.getElementById('profile-hero-name');
+        if (hn && pr && (pr.display_name || pr.username)) {
+          hn.textContent = String(pr.display_name || pr.username || '').trim() || '프로필';
+        }
+        var wrap = document.getElementById('profile-account-wrap');
+        if (wrap && window.MoaAuth.isProfileApproved && window.MoaAuth.isProfileApproved(pr)) {
+          wrap.classList.remove('hidden');
+          var nameIn = document.getElementById('profile-in-name');
+          if (nameIn) nameIn.value = String(pr.display_name || pr.username || '');
+        }
+      } catch (e) {}
+
+      var msgEl = document.getElementById('profile-account-msg');
+      function accMsg(t, ok) {
+        if (!msgEl) return;
+        msgEl.textContent = t || '';
+        msgEl.className = 'text-2xs ' + (ok ? 'text-emerald-400' : t ? 'text-rose-400' : 'text-zinc-500');
+      }
+      var btnName = document.getElementById('profile-btn-save-name');
+      var btnPw = document.getElementById('profile-btn-save-pw');
+      if (btnName && window.MoaAuth.updateMyProfileName) {
+        btnName.addEventListener('click', async function () {
+          accMsg('');
+          try {
+            await window.MoaAuth.updateMyProfileName(document.getElementById('profile-in-name').value);
+            accMsg('이름이 저장되었습니다.', true);
+            var hn = document.getElementById('profile-hero-name');
+            var v = String(document.getElementById('profile-in-name').value || '').trim();
+            if (hn && v) hn.textContent = v;
+          } catch (e) {
+            accMsg(e.message || '저장 실패', false);
+          }
+        });
+      }
+      if (btnPw && window.MoaAuth.updateMyPassword) {
+        btnPw.addEventListener('click', async function () {
+          accMsg('');
+          var a = document.getElementById('profile-in-pw1').value;
+          var b = document.getElementById('profile-in-pw2').value;
+          if (a !== b) {
+            accMsg('새 비밀번호가 서로 다릅니다.', false);
+            return;
+          }
+          try {
+            await window.MoaAuth.updateMyPassword(a);
+            document.getElementById('profile-in-pw1').value = '';
+            document.getElementById('profile-in-pw2').value = '';
+            accMsg('비밀번호가 변경되었습니다.', true);
+          } catch (e) {
+            accMsg(e.message || '변경 실패', false);
+          }
+        });
+      }
+    })();
+
     document.getElementById('btn-back').addEventListener('click', function () {
       if (history.length > 1) history.back();
       else location.href = 'project.html';
@@ -412,6 +501,19 @@
       var posts = (await loadPosts()).filter(function (p) {
         return p && p.slug;
       });
+      var myId = null;
+      if (window.MoaPostsDB && window.MoaPostsDB.getCurrentUserId) {
+        try {
+          myId = await window.MoaPostsDB.getCurrentUserId();
+        } catch (e) {}
+      }
+      if (myId) {
+        posts = posts.filter(function (p) {
+          return p.authorId === myId;
+        });
+      } else {
+        posts = [];
+      }
       posts.sort(function (a, b) {
         return String(b.createdAt || '').localeCompare(String(a.createdAt || ''));
       });

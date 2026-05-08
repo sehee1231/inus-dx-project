@@ -12,20 +12,31 @@
     return client;
   }
 
+  function sameDirPage(file) {
+    try {
+      return new URL(String(file || ''), location.href).href;
+    } catch (e) {
+      return String(file || '');
+    }
+  }
+
   function toAbsAppPath(path) {
     var p = String(path || '');
-    if (!p) return '/project.html';
+    if (!p) return sameDirPage('project.html');
     if (p.charAt(0) === '/') return p;
     return '/' + p.replace(/^\.?\//, '');
   }
 
   function loginPath() {
-    return '/login.html?next=' + encodeURIComponent(location.pathname + location.search + location.hash);
+    return sameDirPage('login.html') + '?next=' + encodeURIComponent(location.pathname + location.search + location.hash);
   }
 
   async function getSessionUser() {
     var c = getClient();
     if (!c) return null;
+    var sessionRes = await c.auth.getSession();
+    var su = sessionRes && sessionRes.data && sessionRes.data.session && sessionRes.data.session.user;
+    if (su) return su;
     var res = await c.auth.getUser();
     if (res && res.data && res.data.user) return res.data.user;
     return null;
@@ -51,7 +62,7 @@
 
   function mountLogoutButton(user) {
     if (!user || user.is_anonymous) return;
-    if (location.pathname.indexOf('/login.html') !== -1) return;
+    if (location.pathname.indexOf('login.html') !== -1) return;
     if (document.getElementById('moa-logout-btn')) return;
     var btn = document.createElement('button');
     btn.id = 'moa-logout-btn';
@@ -63,14 +74,14 @@
       try {
         await signOut();
       } catch (e) {}
-      location.href = '/login.html';
+      location.href = sameDirPage('login.html');
     });
     document.body.appendChild(btn);
   }
 
   function normalizeNextPath(raw) {
     var n = String(raw || '').trim();
-    if (!n) return '/project.html';
+    if (!n) return sameDirPage('project.html');
     try {
       if (/^https?:\/\//i.test(n)) {
         var u = new URL(n);
@@ -90,18 +101,67 @@
       username: username || null,
       display_name: displayName || username || null,
     };
-    var res = await c.from('profiles').upsert(row, { onConflict: 'id' }).select('id,username,display_name,role').single();
+    var res = await c.from('profiles').upsert(row, { onConflict: 'id' }).select('id,username,display_name,role,approval_status').single();
     if (res.error) throw new Error(res.error.message);
     return res.data;
+  }
+
+  async function ensureProfileRowIfMissing(user, payload) {
+    var c = getClient();
+    if (!c || !user || !user.id) return null;
+    var chk = await c.from('profiles').select('id').eq('id', user.id).maybeSingle();
+    if (chk.error) throw new Error(chk.error.message);
+    if (chk.data) return chk.data;
+    var email = String(user.email || '').trim();
+    var base = email ? email.split('@')[0].replace(/[^a-zA-Z0-9._-]/g, '').slice(0, 20) : 'user';
+    if (!base) base = 'user';
+    var auto = {
+      username: base + '_' + String(user.id).replace(/-/g, '').slice(0, 8),
+      display_name: email || base,
+    };
+    var hasCustom = payload && (String(payload.username || '').trim() || String(payload.display_name || '').trim());
+    return ensureProfileRow(user, hasCustom ? payload : auto);
   }
 
   async function getMyProfile() {
     var c = getClient();
     var user = await getSessionUser();
     if (!c || !user || !user.id) return null;
-    var res = await c.from('profiles').select('id,username,display_name,role').eq('id', user.id).maybeSingle();
+    var res = await c.from('profiles').select('id,username,display_name,role,approval_status').eq('id', user.id).maybeSingle();
     if (res.error) throw new Error(res.error.message);
     return res.data || null;
+  }
+
+  function isProfileApproved(profile) {
+    if (!profile) return false;
+    if (profile.role === 'admin') return true;
+    var s = profile.approval_status;
+    if (s === undefined || s === null || s === '') return true;
+    return s === 'approved';
+  }
+
+  function approvalExemptPath() {
+    if (typeof location === 'undefined') return true;
+    var p = location.pathname || '';
+    if (p.indexOf('login.html') !== -1) return true;
+    if (p.indexOf('signup.html') !== -1) return true;
+    if (p.indexOf('pending-approval.html') !== -1) return true;
+    return false;
+  }
+
+  async function gateApprovalOrRedirect() {
+    if (approvalExemptPath()) return;
+    var user = await getSessionUser();
+    if (!user || user.is_anonymous) return;
+    var profile;
+    try {
+      profile = await getMyProfile();
+    } catch (e) {
+      return;
+    }
+    if (isProfileApproved(profile)) return;
+    var q = profile && profile.approval_status === 'rejected' ? '?reason=rejected' : '';
+    location.replace(sameDirPage('pending-approval.html') + q);
   }
 
   function appendAdminLinkToNav(nav) {
@@ -115,29 +175,59 @@
   }
 
   async function mountAdminMenu() {
-    if (location.pathname.indexOf('/login.html') !== -1) return;
+    if (location.pathname.indexOf('login.html') !== -1) return;
+    if (location.pathname.indexOf('signup.html') !== -1) return;
     var user = await getSessionUser();
     if (!user || user.is_anonymous) return;
     var profile = null;
     try {
       profile = await getMyProfile();
     } catch (e) {
+      console.warn('[MoaAuth] mountAdminMenu profile load failed:', e && e.message ? e.message : e);
       return;
     }
-    if (!profile || profile.role !== 'admin') return;
+    if (!profile || !isProfileApproved(profile) || profile.role !== 'admin') return;
     var navs = document.querySelectorAll('aside nav, nav[aria-label="주 메뉴"], nav');
     navs.forEach(function (nav) {
       appendAdminLinkToNav(nav);
     });
   }
 
+  async function updateMyPassword(newPassword) {
+    var c = getClient();
+    if (!c) throw new Error('연결할 수 없습니다.');
+    var pw = String(newPassword || '');
+    if (pw.length < 6) throw new Error('비밀번호는 6자 이상이어야 합니다.');
+    var res = await c.auth.updateUser({ password: pw });
+    if (res.error) throw new Error(res.error.message);
+  }
+
+  async function updateMyProfileName(displayName) {
+    var c = getClient();
+    var user = await getSessionUser();
+    if (!c || !user || !user.id || user.is_anonymous) throw new Error('로그인이 필요합니다.');
+    var clean = String(displayName || '').trim();
+    if (!clean) throw new Error('이름을 입력해 주세요.');
+    var slug = clean.replace(/[^\uac00-\ud7a3a-zA-Z0-9._-]/g, '').slice(0, 20);
+    if (!slug) slug = 'user';
+    var username = slug + '_' + String(user.id).replace(/-/g, '').slice(0, 8);
+    var res = await c.from('profiles').update({ display_name: clean, username: username }).eq('id', user.id);
+    if (res.error) throw new Error(res.error.message);
+  }
+
   global.MoaAuth = {
+    projectUrl: PROJECT_URL,
     getClient: getClient,
     getSessionUser: getSessionUser,
     requireAuth: requireAuth,
     signOut: signOut,
     ensureProfileRow: ensureProfileRow,
+    ensureProfileRowIfMissing: ensureProfileRowIfMissing,
     getMyProfile: getMyProfile,
+    isProfileApproved: isProfileApproved,
+    gateApprovalOrRedirect: gateApprovalOrRedirect,
+    updateMyPassword: updateMyPassword,
+    updateMyProfileName: updateMyProfileName,
     normalizeNextPath: normalizeNextPath,
     mountLogoutButton: mountLogoutButton,
     mountAdminMenu: mountAdminMenu,
@@ -145,7 +235,15 @@
 
   if (typeof document !== 'undefined') {
     document.addEventListener('DOMContentLoaded', function () {
+      gateApprovalOrRedirect().catch(function () {});
       mountAdminMenu().catch(function () {});
+      var c = getClient();
+      if (c && c.auth && c.auth.onAuthStateChange) {
+        c.auth.onAuthStateChange(function () {
+          gateApprovalOrRedirect().catch(function () {});
+          mountAdminMenu().catch(function () {});
+        });
+      }
     });
   }
 

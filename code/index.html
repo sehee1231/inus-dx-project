@@ -2,12 +2,30 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="refresh" content="0; url=/project.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>모닥</title>
+  <script src="site-entry-gate.js"></script>
 </head>
-<body>
+<body class="bg-[#0c0c0e] text-zinc-100">
   <script>
-    window.location.href = "/project.html";
+    (function () {
+      try {
+        var key = window.MoaSiteEntry && window.MoaSiteEntry.enteredKey;
+        var ph = window.MoaSiteEntry && window.MoaSiteEntry.pageHref;
+        if (!ph) {
+          location.replace('signup.html');
+          return;
+        }
+        if (!key || !localStorage.getItem(key)) {
+          location.replace(ph('signup.html'));
+        } else {
+          location.replace(ph('project.html'));
+        }
+      } catch (e) {
+        location.replace('project.html');
+      }
+    })();
   </script>
+  <p class="p-6 text-center text-sm text-zinc-500">이동 중…</p>
 </body>
 </html>

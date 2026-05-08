@@ -53,9 +53,25 @@
     };
   }
 
+  async function getAuthenticatedUserId() {
+    if (global.MoaAuth && global.MoaAuth.getSessionUser) {
+      var mu = await global.MoaAuth.getSessionUser();
+      if (mu && mu.id && !mu.is_anonymous) return mu.id;
+      return null;
+    }
+    var c = getClient();
+    if (!c) return null;
+    var got = await c.auth.getUser();
+    var wu = got && got.data && got.data.user;
+    if (wu && wu.id && !wu.is_anonymous) return wu.id;
+    return null;
+  }
+
   async function ensureUserId() {
     var c = getClient();
     if (!c) return null;
+    var authed = await getAuthenticatedUserId();
+    if (authed) return authed;
     var got = await c.auth.getUser();
     var u = got && got.data && got.data.user;
     if (u && u.id) return u.id;
@@ -144,13 +160,14 @@
       upsertLocalMirror(post);
       return post;
     }
-    var uid = await ensureUserId();
-    if (!uid) throw new Error('로그인 정보를 확인할 수 없습니다.');
+    var uid = await getAuthenticatedUserId();
+    if (!uid) throw new Error('로그인 후 글을 작성하거나 수정할 수 있습니다.');
     var existing = await c.from(TABLE).select('slug,author_id,created_at').eq('slug', post.slug).maybeSingle();
     if (existing.error && existing.error.code !== 'PGRST116') throw new Error(existing.error.message);
     var ex = existing.data || null;
-    if (ex && ex.author_id && ex.author_id !== uid) {
-      throw new Error('작성자만 수정할 수 있습니다.');
+    if (ex) {
+      if (!ex.author_id) throw new Error('작성자 정보가 없는 글은 수정할 수 없습니다.');
+      if (ex.author_id !== uid) throw new Error('작성자만 수정할 수 있습니다.');
     }
     var row = toRow(post);
     row.author_id = ex && ex.author_id ? ex.author_id : uid;
@@ -169,8 +186,8 @@
     });
     localStorage.setItem(LS_POSTS, JSON.stringify(local));
     if (!c) return;
-    var uid = await ensureUserId();
-    if (!uid) throw new Error('로그인 정보를 확인할 수 없습니다.');
+    var uid = await getAuthenticatedUserId();
+    if (!uid) throw new Error('로그인 후 삭제할 수 있습니다.');
     var res = await c.from(TABLE).delete().eq('slug', slug).eq('author_id', uid);
     if (res.error) throw new Error(res.error.message);
   }
@@ -241,6 +258,6 @@
     upsertPost: upsertPost,
     deletePostBySlug: deletePostBySlug,
     migrateLocalPostsOnce: migrateLocalPostsOnce,
-    getCurrentUserId: ensureUserId,
+    getCurrentUserId: getAuthenticatedUserId,
   };
 })(typeof window !== 'undefined' ? window : this);

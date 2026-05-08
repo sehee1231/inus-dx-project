@@ -27,6 +27,12 @@
   </style>
 </head>
 <body class="min-h-screen bg-[#0c0c0e] font-sans text-zinc-100 antialiased">
+  <script src="site-entry-gate.js"></script>
+  <script>
+    if (window.MoaSiteEntry && window.MoaSiteEntry.redirectIfFirstVisit) {
+      window.MoaSiteEntry.redirectIfFirstVisit();
+    }
+  </script>
     <!-- 좌측 사이드바 (데스크톱) -->
     <aside
       class="fixed inset-y-0 left-0 z-40 hidden w-[232px] flex-col border-r border-zinc-800/90 bg-zinc-950 xl:flex xl:flex-col"
@@ -309,7 +315,6 @@
     </div>
 
   <script>
-    if (window.MoaAuth && window.MoaAuth.requireAuth) { window.MoaAuth.requireAuth(); }
     var params = new URLSearchParams(location.search);
     var EDIT_SLUG = params.get('edit') || '';
     var URL_PRE = params.get('url') || '';
@@ -423,6 +428,16 @@
       if (!title) { alert('제목을 입력해 주세요.'); document.getElementById('in-title').focus(); return; }
       if (!body) { alert('본문을 입력해 주세요.'); document.getElementById('in-body').focus(); return; }
 
+      var authorLabel = '세희';
+      if (window.MoaAuth && window.MoaAuth.getMyProfile) {
+        try {
+          var prof = await window.MoaAuth.getMyProfile();
+          if (prof && (prof.display_name || prof.username)) {
+            authorLabel = String(prof.display_name || prof.username || authorLabel).trim() || authorLabel;
+          }
+        } catch (e) {}
+      }
+
       if (EDIT_SLUG) {
         var prev = await findPost(EDIT_SLUG);
         if (!prev) {
@@ -436,7 +451,8 @@
           excerpt: excerpt,
           body: body,
           link: link,
-          authorName: prev.authorName || '세희',
+          authorName: prev.authorName || authorLabel,
+          authorId: prev.authorId || undefined,
           createdAt: prev.createdAt || nowIso(),
           updatedAt: nowIso(),
         });
@@ -446,12 +462,12 @@
 
       var base = slugifyAscii(title).slice(0, 24);
       var slug = 'u-' + Date.now() + '-' + base;
-      var post = { slug: slug, cat: SELECTED_CAT, title: title, excerpt: excerpt, body: body, link: link, authorName: '세희', createdAt: nowIso() };
+      var post = { slug: slug, cat: SELECTED_CAT, title: title, excerpt: excerpt, body: body, link: link, authorName: authorLabel, createdAt: nowIso() };
       await window.MoaPostsDB.upsertPost(post);
       var blob = title + '\n' + excerpt + '\n' + body;
       var mn = parseMentionNames(blob);
       if (mn.length) {
-        await pushMentionNotifications('세희', mn, {
+        await pushMentionNotifications(authorLabel, mn, {
           postSlug: slug,
           postTitle: title,
           snippet: body.slice(0, 120),
@@ -475,7 +491,23 @@
         if (window.MoaPostsDB && window.MoaPostsDB.getCurrentUserId) {
           try { uid = await window.MoaPostsDB.getCurrentUserId(); } catch (e) {}
         }
-        if (p.authorId && uid && p.authorId !== uid) {
+        if (!p.authorId) {
+          document.getElementById('page-title').textContent = '글 수정';
+          document.getElementById('btn-publish').textContent = '저장';
+          document.getElementById('page-sub').textContent = '작성자 정보가 없는 글은 수정할 수 없습니다.';
+          document.getElementById('btn-publish').disabled = true;
+          document.getElementById('btn-publish').classList.add('opacity-40');
+          return;
+        }
+        if (!uid) {
+          document.getElementById('page-title').textContent = '글 수정';
+          document.getElementById('btn-publish').textContent = '저장';
+          document.getElementById('page-sub').textContent = '로그인한 뒤 작성자 본인만 수정할 수 있습니다.';
+          document.getElementById('btn-publish').disabled = true;
+          document.getElementById('btn-publish').classList.add('opacity-40');
+          return;
+        }
+        if (p.authorId !== uid) {
           document.getElementById('page-title').textContent = '글 수정';
           document.getElementById('btn-publish').textContent = '저장';
           document.getElementById('page-sub').textContent = '작성자 본인만 수정할 수 있습니다.';
@@ -528,7 +560,7 @@
     document.getElementById('btn-publish').addEventListener('click', function () {
       publish().catch(function (e) {
         console.error(e);
-        alert('저장 중 오류가 발생했습니다. 콘솔 로그를 확인해 주세요.');
+        alert(e && e.message ? e.message : '저장 중 오류가 발생했습니다.');
       });
     });
     document.addEventListener('keydown', function (e) {
@@ -536,7 +568,13 @@
         publish().catch(function () {});
       }
     });
-    initEditMode();
+    (async function bootCompose() {
+      if (window.MoaAuth && window.MoaAuth.requireAuth) {
+        var u = await window.MoaAuth.requireAuth();
+        if (!u) return;
+      }
+      await initEditMode();
+    })();
 
     (function mentionPicker() {
       var MENTION_PEOPLE = ['순용', '민수', '태호', '상현', '인선', '선민', '이준', '세희'];

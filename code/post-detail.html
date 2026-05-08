@@ -28,6 +28,12 @@
   </style>
 </head>
 <body class="min-h-screen bg-[#0c0c0e] font-sans text-zinc-100 antialiased">
+  <script src="site-entry-gate.js"></script>
+  <script>
+    if (window.MoaSiteEntry && window.MoaSiteEntry.redirectIfFirstVisit) {
+      window.MoaSiteEntry.redirectIfFirstVisit();
+    }
+  </script>
     <!-- 좌측 사이드바 (데스크톱) -->
     <aside
       class="fixed inset-y-0 left-0 z-40 hidden w-[232px] flex-col border-r border-zinc-800/90 bg-zinc-950 xl:flex xl:flex-col"
@@ -986,20 +992,16 @@
         renderAllComments();
       });
 
-      // 내 글 편집/삭제
+      // 내 글 편집/삭제 (author_id 가 일치할 때만)
       if (userPost) {
         var bEdit = document.getElementById('btn-edit');
         var bDel = document.getElementById('btn-delete');
         (async function bindPostManageButtons() {
-          var canManage = true;
-          if (userPost.authorId && window.MoaPostsDB && window.MoaPostsDB.getCurrentUserId) {
-            try {
-              var uid = await window.MoaPostsDB.getCurrentUserId();
-              canManage = !!uid && userPost.authorId === uid;
-            } catch (e) {
-              canManage = false;
-            }
+          var uid = null;
+          if (window.MoaPostsDB && window.MoaPostsDB.getCurrentUserId) {
+            try { uid = await window.MoaPostsDB.getCurrentUserId(); } catch (e) {}
           }
+          var canManage = !!(uid && userPost.authorId && userPost.authorId === uid);
           if (!canManage) return;
           bEdit.classList.remove('hidden');
           bDel.classList.remove('hidden');
@@ -1012,7 +1014,7 @@
               try {
                 await window.MoaPostsDB.deletePostBySlug(userPost.slug);
               } catch (e) {
-                alert('작성자 본인만 삭제할 수 있습니다.');
+                alert(e.message || '작성자 본인만 삭제할 수 있습니다.');
                 return;
               }
             } else {

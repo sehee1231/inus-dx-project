@@ -8,8 +8,27 @@ create table if not exists public.profiles (
   username text unique,
   display_name text,
   role text not null default 'user' check (role in ('user', 'admin')),
+  approval_status text not null default 'pending',
   created_at timestamptz not null default now()
 );
+
+alter table public.profiles add column if not exists approval_status text;
+alter table public.profiles alter column approval_status set default 'pending';
+
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint where conname = 'profiles_approval_status_check'
+  ) then
+    alter table public.profiles
+      add constraint profiles_approval_status_check
+      check (approval_status in ('pending', 'approved', 'rejected'));
+  end if;
+exception when duplicate_object then null;
+end$$;
+
+update public.profiles set approval_status = 'pending' where approval_status is null;
+alter table public.profiles alter column approval_status set not null;
 
 create table if not exists public.posts (
   id uuid primary key default gen_random_uuid(),
@@ -107,7 +126,10 @@ drop policy if exists profiles_insert_self on public.profiles;
 create policy profiles_insert_self
 on public.profiles for insert
 to authenticated
-with check (id = auth.uid());
+with check (
+  id = auth.uid()
+  and coalesce(approval_status, 'pending') = 'pending'
+);
 
 drop policy if exists profiles_update_self_or_admin on public.profiles;
 create policy profiles_update_self_or_admin
@@ -133,7 +155,17 @@ create policy posts_select_public_or_owner_or_admin
 on public.posts for select
 to anon, authenticated
 using (
-  visibility = 'public'
+  (
+    visibility = 'public'
+    and (
+      auth.uid() is null
+      or exists (
+        select 1 from public.profiles p
+        where p.id = auth.uid()
+          and (p.approval_status = 'approved' or p.role = 'admin')
+      )
+    )
+  )
   or author_id = auth.uid()
   or exists (
     select 1 from public.profiles p
@@ -145,21 +177,39 @@ drop policy if exists posts_insert_owner_only on public.posts;
 create policy posts_insert_owner_only
 on public.posts for insert
 to authenticated
-with check (author_id = auth.uid());
+with check (
+  author_id = auth.uid()
+  and exists (
+    select 1 from public.profiles p
+    where p.id = auth.uid() and (p.approval_status = 'approved' or p.role = 'admin')
+  )
+);
 
 drop policy if exists posts_update_owner_or_admin on public.posts;
 create policy posts_update_owner_or_admin
 on public.posts for update
 to authenticated
 using (
-  author_id = auth.uid()
+  (
+    author_id = auth.uid()
+    and exists (
+      select 1 from public.profiles p
+      where p.id = auth.uid() and (p.approval_status = 'approved' or p.role = 'admin')
+    )
+  )
   or exists (
     select 1 from public.profiles p
     where p.id = auth.uid() and p.role = 'admin'
   )
 )
 with check (
-  author_id = auth.uid()
+  (
+    author_id = auth.uid()
+    and exists (
+      select 1 from public.profiles p
+      where p.id = auth.uid() and (p.approval_status = 'approved' or p.role = 'admin')
+    )
+  )
   or exists (
     select 1 from public.profiles p
     where p.id = auth.uid() and p.role = 'admin'
@@ -171,7 +221,13 @@ create policy posts_delete_owner_or_admin
 on public.posts for delete
 to authenticated
 using (
-  author_id = auth.uid()
+  (
+    author_id = auth.uid()
+    and exists (
+      select 1 from public.profiles p
+      where p.id = auth.uid() and (p.approval_status = 'approved' or p.role = 'admin')
+    )
+  )
   or exists (
     select 1 from public.profiles p
     where p.id = auth.uid() and p.role = 'admin'
@@ -182,26 +238,56 @@ drop policy if exists notifications_select_owner on public.notifications;
 create policy notifications_select_owner
 on public.notifications for select
 to authenticated
-using (to_user_id = auth.uid());
+using (
+  to_user_id = auth.uid()
+  and exists (
+    select 1 from public.profiles p
+    where p.id = auth.uid() and (p.approval_status = 'approved' or p.role = 'admin')
+  )
+);
 
 drop policy if exists notifications_insert_authenticated on public.notifications;
 create policy notifications_insert_authenticated
 on public.notifications for insert
 to authenticated
-with check (from_user_id = auth.uid());
+with check (
+  from_user_id = auth.uid()
+  and exists (
+    select 1 from public.profiles p
+    where p.id = auth.uid() and (p.approval_status = 'approved' or p.role = 'admin')
+  )
+);
 
 drop policy if exists notifications_update_owner on public.notifications;
 create policy notifications_update_owner
 on public.notifications for update
 to authenticated
-using (to_user_id = auth.uid())
-with check (to_user_id = auth.uid());
+using (
+  to_user_id = auth.uid()
+  and exists (
+    select 1 from public.profiles p
+    where p.id = auth.uid() and (p.approval_status = 'approved' or p.role = 'admin')
+  )
+)
+with check (
+  to_user_id = auth.uid()
+  and exists (
+    select 1 from public.profiles p
+    where p.id = auth.uid() and (p.approval_status = 'approved' or p.role = 'admin')
+  )
+);
 
 drop policy if exists email_jobs_insert_authenticated on public.email_jobs;
 create policy email_jobs_insert_authenticated
 on public.email_jobs for insert
 to authenticated
-with check (created_by = auth.uid());
+with check (
+  created_by = auth.uid()
+  and exists (
+    select 1 from public.profiles p
+    where p.id = auth.uid() and (p.approval_status = 'approved' or p.role = 'admin')
+  )
+);
 
 drop policy if exists email_jobs_select_admin on public.email_jobs;
 create policy email_jobs_select_admin
@@ -213,3 +299,28 @@ using (
     where p.id = auth.uid() and p.role = 'admin'
   )
 );
+
+create or replace function public.profiles_guard_approval_status()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if tg_op = 'UPDATE' and new.approval_status is distinct from old.approval_status then
+    if not exists (
+      select 1 from public.profiles p
+      where p.id = auth.uid() and p.role = 'admin'
+    ) then
+      raise exception 'forbidden: only admin can change approval_status';
+    end if;
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists profiles_guard_approval_status_trg on public.profiles;
+create trigger profiles_guard_approval_status_trg
+before update on public.profiles
+for each row
+execute function public.profiles_guard_approval_status();

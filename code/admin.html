@@ -6,6 +6,7 @@
   <title>모닥 — 관리자</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="site-entry-gate.js"></script>
   <script src="supabase-auth.js"></script>
   <style>
     body { font-feature-settings: "ss01" on; }
@@ -24,10 +25,14 @@
       </div>
     </header>
 
-    <section class="mb-6 grid grid-cols-1 gap-3 md:grid-cols-4">
+    <section class="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
       <article class="rounded-xl border border-zinc-800 bg-zinc-900/60 p-4">
         <p class="text-xs text-zinc-500">총 사용자</p>
         <p id="stat-users" class="mt-2 text-2xl font-semibold">-</p>
+      </article>
+      <article class="rounded-xl border border-amber-900/40 bg-zinc-900/60 p-4">
+        <p class="text-xs text-amber-200/80">승인 대기</p>
+        <p id="stat-pending" class="mt-2 text-2xl font-semibold text-amber-100">-</p>
       </article>
       <article class="rounded-xl border border-zinc-800 bg-zinc-900/60 p-4">
         <p class="text-xs text-zinc-500">총 게시글</p>
@@ -56,6 +61,11 @@
 
   <script>
     (async function () {
+      function ph(name) {
+        return window.MoaSiteEntry && window.MoaSiteEntry.pageHref
+          ? window.MoaSiteEntry.pageHref(name)
+          : name;
+      }
       function esc(s) {
         return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
       }
@@ -63,45 +73,73 @@
       var usersWrap = document.getElementById('users-wrap');
       var postsWrap = document.getElementById('posts-wrap');
       var statUsers = document.getElementById('stat-users');
+      var statPending = document.getElementById('stat-pending');
       var statPosts = document.getElementById('stat-posts');
       var statUnread = document.getElementById('stat-unread');
       var statMail = document.getElementById('stat-mail');
 
       document.getElementById('btn-logout').addEventListener('click', async function () {
         if (window.MoaAuth && window.MoaAuth.signOut) await window.MoaAuth.signOut();
-        location.replace('/login.html');
+        location.replace(ph('login.html'));
       });
 
       try {
         if (!window.MoaAuth || !window.MoaAuth.requireAuth || !window.MoaAuth.getClient) {
           throw new Error('인증 스크립트를 불러오지 못했습니다.');
         }
-        await window.MoaAuth.requireAuth();
+        var user = await window.MoaAuth.requireAuth();
+        if (!user) return;
+        if (window.MoaAuth.ensureProfileRowIfMissing) {
+          await window.MoaAuth.ensureProfileRowIfMissing(user);
+        }
         var myProfile = await window.MoaAuth.getMyProfile();
-        if (!myProfile || myProfile.role !== 'admin') {
-          subEl.textContent = '관리자만 접근할 수 있습니다.';
-          alert('관리자 권한이 필요합니다.');
-          location.replace('/project.html');
+        if (!myProfile || myProfile.role !== 'admin' || (typeof window.MoaAuth.isProfileApproved === 'function' && !window.MoaAuth.isProfileApproved(myProfile))) {
+          var uid = user.id || '';
+          var proj = window.MoaAuth.projectUrl || '';
+          var hint = !myProfile
+            ? 'profiles 테이블에 이 계정 행이 없을 수 있습니다. 방금 로그인 시 자동 생성되었는지 확인하거나, 아래 UUID로 Supabase에서 insert/upsert 하세요.'
+            : ('현재 role은 "' + String(myProfile.role) + '" 입니다. SQL에서 이 UUID의 role을 정확히 admin(소문자)으로 저장했는지, 그리고 프로젝트가 앱과 동일한지 확인하세요.');
+          subEl.textContent = '관리자만 접근할 수 있습니다. ' + hint + ' UUID: ' + uid;
+          alert(
+            '관리자 권한이 필요합니다.\n\n' + hint +
+            '\n\n로그인 UUID:\n' + uid +
+            (proj ? '\n\n앱에 연결된 Supabase:\n' + proj : '')
+          );
+          location.replace(ph('project.html'));
           return;
         }
         subEl.textContent = '관리 권한 확인 완료';
         var c = window.MoaAuth.getClient();
 
-        var usersRes = await c.from('profiles').select('id,username,display_name,role,created_at').order('created_at', { ascending: false }).limit(200);
+        var usersRes = await c.from('profiles').select('id,username,display_name,role,approval_status,created_at').order('created_at', { ascending: false }).limit(200);
         if (usersRes.error) throw new Error(usersRes.error.message);
         var users = usersRes.data || [];
         statUsers.textContent = String(users.length);
+        var nPending = users.filter(function (x) { return (x.approval_status || 'pending') === 'pending'; }).length;
+        statPending.textContent = String(nPending);
 
         usersWrap.innerHTML = [
           '<table class="min-w-full">',
-          '<thead><tr class="border-b border-zinc-800 text-left text-zinc-400"><th class="p-2">username</th><th class="p-2">display</th><th class="p-2">role</th><th class="p-2">action</th></tr></thead>',
+          '<thead><tr class="border-b border-zinc-800 text-left text-zinc-400"><th class="p-2">username</th><th class="p-2">display</th><th class="p-2">role</th><th class="p-2">승인</th><th class="p-2">action</th></tr></thead>',
           '<tbody>',
           users.map(function (u) {
+            var ap = u.approval_status || 'pending';
+            var apClass = ap === 'approved' ? 'bg-emerald-900/50 text-emerald-200' : ap === 'rejected' ? 'bg-rose-900/40 text-rose-200' : 'bg-amber-900/40 text-amber-100';
+            var actions = [
+              '<button type="button" data-user-id="' + esc(u.id) + '" data-role="' + esc(u.role || 'user') + '" class="btn-role rounded border border-zinc-700 px-2 py-1 text-xs hover:bg-zinc-800">권한</button>'
+            ];
+            if (ap !== 'approved') {
+              actions.push('<button type="button" data-user-id="' + esc(u.id) + '" class="btn-approve ml-1 rounded border border-emerald-800 px-2 py-1 text-xs text-emerald-300 hover:bg-emerald-950/40">승인</button>');
+            }
+            if (ap !== 'rejected') {
+              actions.push('<button type="button" data-user-id="' + esc(u.id) + '" class="btn-reject ml-1 rounded border border-rose-800 px-2 py-1 text-xs text-rose-300 hover:bg-rose-950/30">거절</button>');
+            }
             return '<tr class="border-b border-zinc-900">' +
               '<td class="p-2">' + esc(u.username || '-') + '</td>' +
               '<td class="p-2">' + esc(u.display_name || '-') + '</td>' +
               '<td class="p-2"><span class="rounded bg-zinc-800 px-2 py-1 text-xs">' + esc(u.role || 'user') + '</span></td>' +
-              '<td class="p-2"><button data-user-id="' + esc(u.id) + '" data-role="' + esc(u.role || 'user') + '" class="btn-role rounded border border-zinc-700 px-2 py-1 text-xs hover:bg-zinc-800">권한 전환</button></td>' +
+              '<td class="p-2"><span class="rounded px-2 py-1 text-xs ' + apClass + '">' + esc(ap) + '</span></td>' +
+              '<td class="p-2 whitespace-nowrap">' + actions.join('') + '</td>' +
               '</tr>';
           }).join(''),
           '</tbody></table>'
@@ -132,6 +170,25 @@
         statMail.textContent = String(mailRes.count || 0);
 
         usersWrap.addEventListener('click', async function (e) {
+          var approveBtn = e.target.closest('.btn-approve');
+          if (approveBtn) {
+            var aid = approveBtn.getAttribute('data-user-id');
+            if (!aid || !confirm('이 회원을 승인할까요?')) return;
+            var ap = await c.from('profiles').update({ approval_status: 'approved' }).eq('id', aid);
+            if (ap.error) return alert('승인 실패: ' + ap.error.message);
+            location.reload();
+            return;
+          }
+          var rejectBtn = e.target.closest('.btn-reject');
+          if (rejectBtn) {
+            var rid = rejectBtn.getAttribute('data-user-id');
+            if (!rid || rid === user.id) return alert('본인 계정은 거절할 수 없습니다.');
+            if (!confirm('이 회원을 거절할까요? 로그인은 되지만 서비스를 쓸 수 없게 됩니다.')) return;
+            var rj = await c.from('profiles').update({ approval_status: 'rejected' }).eq('id', rid);
+            if (rj.error) return alert('거절 처리 실패: ' + rj.error.message);
+            location.reload();
+            return;
+          }
           var btn = e.target.closest('.btn-role');
           if (!btn) return;
           var userId = btn.getAttribute('data-user-id');
@@ -139,7 +196,9 @@
           var next = current === 'admin' ? 'user' : 'admin';
           var ok = confirm('해당 사용자를 ' + next + ' 권한으로 변경할까요?');
           if (!ok) return;
-          var up = await c.from('profiles').update({ role: next }).eq('id', userId);
+          var patch = { role: next };
+          if (next === 'admin') patch.approval_status = 'approved';
+          var up = await c.from('profiles').update(patch).eq('id', userId);
           if (up.error) return alert('권한 변경 실패: ' + up.error.message);
           location.reload();
         });

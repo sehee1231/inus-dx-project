@@ -149,10 +149,29 @@
     return false;
   }
 
+  async function gateAuthOrRedirect() {
+    if (approvalExemptPath()) return null;
+    var user = await getSessionUser();
+    if (user && !user.is_anonymous) return user;
+    if (user && user.is_anonymous) {
+      try { await signOut(); } catch (e) {}
+    }
+    var hasEntered = false;
+    try {
+      var entryKey = (global.MoaSiteEntry && global.MoaSiteEntry.enteredKey) || 'moa_site_entry_v2';
+      hasEntered = !!localStorage.getItem(entryKey);
+    } catch (e) {}
+    var goLogin = hasEntered;
+    var base = goLogin ? sameDirPage('login.html') : sameDirPage('signup.html');
+    var nextQ = goLogin ? ('?next=' + encodeURIComponent(location.pathname + location.search + location.hash)) : '';
+    location.replace(base + nextQ);
+    return null;
+  }
+
   async function gateApprovalOrRedirect() {
     if (approvalExemptPath()) return;
-    var user = await getSessionUser();
-    if (!user || user.is_anonymous) return;
+    var user = await gateAuthOrRedirect();
+    if (!user) return;
     var profile;
     try {
       profile = await getMyProfile();

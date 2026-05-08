@@ -91,6 +91,22 @@
     return toAbsAppPath(n);
   }
 
+  function isMissingApprovalStatusError(err) {
+    var msg = err && err.message ? String(err.message) : '';
+    return msg.indexOf('approval_status') !== -1;
+  }
+
+  async function getProfileByUserId(c, userId) {
+    var withApproval = await c.from('profiles').select('id,username,display_name,role,approval_status').eq('id', userId).maybeSingle();
+    if (!withApproval.error) return withApproval.data || null;
+    if (!isMissingApprovalStatusError(withApproval.error)) throw new Error(withApproval.error.message);
+    var legacy = await c.from('profiles').select('id,username,display_name,role').eq('id', userId).maybeSingle();
+    if (legacy.error) throw new Error(legacy.error.message);
+    if (!legacy.data) return null;
+    legacy.data.approval_status = 'approved';
+    return legacy.data;
+  }
+
   async function ensureProfileRow(user, payload) {
     var c = getClient();
     if (!c || !user || !user.id) return null;
@@ -101,9 +117,9 @@
       username: username || null,
       display_name: displayName || username || null,
     };
-    var res = await c.from('profiles').upsert(row, { onConflict: 'id' }).select('id,username,display_name,role,approval_status').single();
-    if (res.error) throw new Error(res.error.message);
-    return res.data;
+    var up = await c.from('profiles').upsert(row, { onConflict: 'id' });
+    if (up.error) throw new Error(up.error.message);
+    return await getProfileByUserId(c, user.id);
   }
 
   async function ensureProfileRowIfMissing(user, payload) {
@@ -127,9 +143,7 @@
     var c = getClient();
     var user = await getSessionUser();
     if (!c || !user || !user.id) return null;
-    var res = await c.from('profiles').select('id,username,display_name,role,approval_status').eq('id', user.id).maybeSingle();
-    if (res.error) throw new Error(res.error.message);
-    return res.data || null;
+    return await getProfileByUserId(c, user.id);
   }
 
   function isProfileApproved(profile) {

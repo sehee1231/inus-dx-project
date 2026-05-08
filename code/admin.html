@@ -69,6 +69,17 @@
       function esc(s) {
         return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
       }
+      function isMissingApprovalStatusError(err) {
+        var msg = err && err.message ? String(err.message) : '';
+        return msg.indexOf('approval_status') !== -1;
+      }
+      function isUndefinedTableError(err) {
+        var msg = err && err.message ? String(err.message) : '';
+        return msg.indexOf('does not exist') !== -1 || msg.indexOf('relation') !== -1;
+      }
+      function errMsg(err) {
+        return err && err.message ? String(err.message) : String(err || 'unknown error');
+      }
       var subEl = document.getElementById('admin-sub');
       var usersWrap = document.getElementById('users-wrap');
       var postsWrap = document.getElementById('posts-wrap');
@@ -89,9 +100,6 @@
         }
         var user = await window.MoaAuth.requireAuth();
         if (!user) return;
-        if (window.MoaAuth.ensureProfileRowIfMissing) {
-          await window.MoaAuth.ensureProfileRowIfMissing(user);
-        }
         var myProfile = await window.MoaAuth.getMyProfile();
         if (!myProfile || myProfile.role !== 'admin' || (typeof window.MoaAuth.isProfileApproved === 'function' && !window.MoaAuth.isProfileApproved(myProfile))) {
           var uid = user.id || '';
@@ -110,12 +118,26 @@
         }
         subEl.textContent = '관리 권한 확인 완료';
         var c = window.MoaAuth.getClient();
+        var warns = [];
 
+        var hasApprovalColumn = true;
         var usersRes = await c.from('profiles').select('id,username,display_name,role,approval_status,created_at').order('created_at', { ascending: false }).limit(200);
-        if (usersRes.error) throw new Error(usersRes.error.message);
+        if (usersRes.error && isMissingApprovalStatusError(usersRes.error)) {
+          hasApprovalColumn = false;
+          usersRes = await c.from('profiles').select('id,username,display_name,role,created_at').order('created_at', { ascending: false }).limit(200);
+          if (usersRes.error) {
+            warns.push('profiles 조회 실패: ' + errMsg(usersRes.error));
+            usersRes = { data: [] };
+          }
+        } else if (usersRes.error) {
+          warns.push('profiles 조회 실패: ' + errMsg(usersRes.error));
+          usersRes = { data: [] };
+        }
         var users = usersRes.data || [];
         statUsers.textContent = String(users.length);
-        var nPending = users.filter(function (x) { return (x.approval_status || 'pending') === 'pending'; }).length;
+        var nPending = hasApprovalColumn
+          ? users.filter(function (x) { return (x.approval_status || 'pending') === 'pending'; }).length
+          : 0;
         statPending.textContent = String(nPending);
 
         usersWrap.innerHTML = [
@@ -123,15 +145,15 @@
           '<thead><tr class="border-b border-zinc-800 text-left text-zinc-400"><th class="p-2">username</th><th class="p-2">display</th><th class="p-2">role</th><th class="p-2">승인</th><th class="p-2">action</th></tr></thead>',
           '<tbody>',
           users.map(function (u) {
-            var ap = u.approval_status || 'pending';
+            var ap = hasApprovalColumn ? (u.approval_status || 'pending') : 'approved';
             var apClass = ap === 'approved' ? 'bg-emerald-900/50 text-emerald-200' : ap === 'rejected' ? 'bg-rose-900/40 text-rose-200' : 'bg-amber-900/40 text-amber-100';
             var actions = [
               '<button type="button" data-user-id="' + esc(u.id) + '" data-role="' + esc(u.role || 'user') + '" class="btn-role rounded border border-zinc-700 px-2 py-1 text-xs hover:bg-zinc-800">권한</button>'
             ];
-            if (ap !== 'approved') {
+            if (hasApprovalColumn && ap !== 'approved') {
               actions.push('<button type="button" data-user-id="' + esc(u.id) + '" class="btn-approve ml-1 rounded border border-emerald-800 px-2 py-1 text-xs text-emerald-300 hover:bg-emerald-950/40">승인</button>');
             }
-            if (ap !== 'rejected') {
+            if (hasApprovalColumn && ap !== 'rejected') {
               actions.push('<button type="button" data-user-id="' + esc(u.id) + '" class="btn-reject ml-1 rounded border border-rose-800 px-2 py-1 text-xs text-rose-300 hover:bg-rose-950/30">거절</button>');
             }
             return '<tr class="border-b border-zinc-900">' +
@@ -146,30 +168,47 @@
         ].join('');
 
         var postsRes = await c.from('posts').select('slug,title,author_name,created_at,visibility').order('created_at', { ascending: false }).limit(200);
-        if (postsRes.error) throw new Error(postsRes.error.message);
-        var posts = postsRes.data || [];
+        var posts = [];
+        if (!postsRes.error) {
+          posts = postsRes.data || [];
+        } else if (!isUndefinedTableError(postsRes.error)) {
+          warns.push('posts 조회 실패: ' + errMsg(postsRes.error));
+        } else {
+          warns.push('posts 테이블 없음(초기화 필요)');
+        }
         statPosts.textContent = String(posts.length);
-        postsWrap.innerHTML = [
-          '<table class="min-w-full">',
-          '<thead><tr class="border-b border-zinc-800 text-left text-zinc-400"><th class="p-2">title</th><th class="p-2">author</th><th class="p-2">visibility</th><th class="p-2">action</th></tr></thead>',
-          '<tbody>',
-          posts.map(function (p) {
-            return '<tr class="border-b border-zinc-900">' +
-              '<td class="p-2"><a class="hover:underline" href="post-detail.html?slug=' + encodeURIComponent(p.slug) + '">' + esc(p.title || p.slug) + '</a></td>' +
-              '<td class="p-2">' + esc(p.author_name || '-') + '</td>' +
-              '<td class="p-2">' + esc(p.visibility || 'public') + '</td>' +
-              '<td class="p-2"><button data-post-slug="' + esc(p.slug) + '" class="btn-del rounded border border-rose-800 px-2 py-1 text-xs text-rose-300 hover:bg-rose-950/30">삭제</button></td>' +
-              '</tr>';
-          }).join(''),
-          '</tbody></table>'
-        ].join('');
+        postsWrap.innerHTML = posts.length
+          ? [
+              '<table class="min-w-full">',
+              '<thead><tr class="border-b border-zinc-800 text-left text-zinc-400"><th class="p-2">title</th><th class="p-2">author</th><th class="p-2">visibility</th><th class="p-2">action</th></tr></thead>',
+              '<tbody>',
+              posts.map(function (p) {
+                return '<tr class="border-b border-zinc-900">' +
+                  '<td class="p-2"><a class="hover:underline" href="post-detail.html?slug=' + encodeURIComponent(p.slug) + '">' + esc(p.title || p.slug) + '</a></td>' +
+                  '<td class="p-2">' + esc(p.author_name || '-') + '</td>' +
+                  '<td class="p-2">' + esc(p.visibility || 'public') + '</td>' +
+                  '<td class="p-2"><button data-post-slug="' + esc(p.slug) + '" class="btn-del rounded border border-rose-800 px-2 py-1 text-xs text-rose-300 hover:bg-rose-950/30">삭제</button></td>' +
+                  '</tr>';
+              }).join(''),
+              '</tbody></table>'
+            ].join('')
+          : '<p class="p-2 text-zinc-500">게시글 데이터가 없거나 posts 테이블이 아직 준비되지 않았습니다.</p>';
 
         var unreadRes = await c.from('notifications').select('id', { count: 'exact', head: true }).eq('read', false);
-        statUnread.textContent = String(unreadRes.count || 0);
+        if (unreadRes.error) warns.push('notifications 조회 실패: ' + errMsg(unreadRes.error));
+        statUnread.textContent = unreadRes.error ? '0' : String(unreadRes.count || 0);
         var mailRes = await c.from('email_jobs').select('id', { count: 'exact', head: true }).eq('status', 'queued');
-        statMail.textContent = String(mailRes.count || 0);
+        if (mailRes.error) warns.push('email_jobs 조회 실패: ' + errMsg(mailRes.error));
+        statMail.textContent = mailRes.error ? '0' : String(mailRes.count || 0);
+        if (warns.length) {
+          subEl.textContent = '일부 데이터 조회 실패: ' + warns.join(' | ');
+        }
 
         usersWrap.addEventListener('click', async function (e) {
+          if (!hasApprovalColumn) {
+            var maybeRole = e.target.closest('.btn-role');
+            if (!maybeRole) return;
+          }
           var approveBtn = e.target.closest('.btn-approve');
           if (approveBtn) {
             var aid = approveBtn.getAttribute('data-user-id');
@@ -197,7 +236,7 @@
           var ok = confirm('해당 사용자를 ' + next + ' 권한으로 변경할까요?');
           if (!ok) return;
           var patch = { role: next };
-          if (next === 'admin') patch.approval_status = 'approved';
+          if (hasApprovalColumn && next === 'admin') patch.approval_status = 'approved';
           var up = await c.from('profiles').update(patch).eq('id', userId);
           if (up.error) return alert('권한 변경 실패: ' + up.error.message);
           location.reload();
@@ -213,8 +252,9 @@
           location.reload();
         });
       } catch (e) {
-        subEl.textContent = '관리자 데이터를 불러오지 못했습니다.';
-        console.error('[ADMIN] failed:', e && e.message ? e.message : e);
+        var em = e && e.message ? String(e.message) : String(e || 'unknown error');
+        subEl.textContent = '관리자 데이터를 불러오지 못했습니다: ' + em;
+        console.error('[ADMIN] failed:', em);
       }
     })();
   </script>

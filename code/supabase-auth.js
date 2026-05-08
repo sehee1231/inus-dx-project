@@ -204,6 +204,12 @@
     a.setAttribute('data-admin-menu-link', '1');
     a.className = 'flex items-center gap-3 rounded-lg px-3 py-2 text-zinc-400 transition hover:bg-zinc-800/80 hover:text-zinc-100';
     a.innerHTML = '<svg class="h-5 w-5 shrink-0 opacity-80" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3l7 4v5c0 4.2-2.7 8.1-7 9-4.3-.9-7-4.8-7-9V7l7-4zm0 6a2 2 0 100 4 2 2 0 000-4zm-3 8a3 3 0 016 0"/></svg>관리자';
+    var composeLink = nav.querySelector('a[href="compose.html"]');
+    if (composeLink && composeLink.parentNode === nav) {
+      if (composeLink.nextSibling) nav.insertBefore(a, composeLink.nextSibling);
+      else nav.appendChild(a);
+      return;
+    }
     nav.appendChild(a);
   }
 

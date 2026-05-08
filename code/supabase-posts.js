@@ -153,19 +153,41 @@
       var p = fromRow(row);
       if (p.slug) map[p.slug] = p;
     });
-    var displayName = '';
+    var legacyNames = [];
     if (global.MoaAuth && global.MoaAuth.getMyProfile) {
       try {
         var pr = await global.MoaAuth.getMyProfile();
-        displayName = String((pr && (pr.display_name || pr.username)) || '').trim();
+        var n1 = String((pr && pr.display_name) || '').trim();
+        var n2 = String((pr && pr.username) || '').trim();
+        if (n1) legacyNames.push(n1);
+        if (n2) legacyNames.push(n2);
       } catch (e) {}
     }
-    if (displayName) {
+    if (global.MoaAuth && global.MoaAuth.getSessionUser) {
+      try {
+        var su = await global.MoaAuth.getSessionUser();
+        var meta = (su && su.user_metadata) || {};
+        var m1 = String(meta.full_name || '').trim();
+        var m2 = String(meta.name || '').trim();
+        var m3 = String(meta.display_name || '').trim();
+        if (m1) legacyNames.push(m1);
+        if (m2) legacyNames.push(m2);
+        if (m3) legacyNames.push(m3);
+      } catch (e2) {}
+    }
+    var legacyNameSet = {};
+    legacyNames = legacyNames.filter(function (nm) {
+      var k = String(nm || '').trim();
+      if (!k || legacyNameSet[k]) return false;
+      legacyNameSet[k] = true;
+      return true;
+    });
+    if (legacyNames.length) {
       var legacy = await c
         .from(TABLE)
         .select('slug,cat,title,excerpt,body,link,author_name,author_id,created_at,updated_at')
         .is('author_id', null)
-        .eq('author_name', displayName)
+        .in('author_name', legacyNames)
         .order('created_at', { ascending: false });
       if (!legacy.error && legacy.data) {
         legacy.data.forEach(function (row) {

@@ -57,7 +57,6 @@
     if (global.MoaAuth && global.MoaAuth.getSessionUser) {
       var mu = await global.MoaAuth.getSessionUser();
       if (mu && mu.id && !mu.is_anonymous) return mu.id;
-      return null;
     }
     var c = getClient();
     if (!c) return null;
@@ -128,6 +127,62 @@
     var mapped = (res.data || []).map(fromRow);
     replaceLocalMirror(mapped);
     return mapped;
+  }
+
+  /** 현재 로그인 사용자 글만 (author_id 일치 + 예전에 author_id 없이 저장된 글은 프로필 표시명과 author_name이 같을 때만 포함) */
+  async function fetchMyPosts() {
+    var uid = await getAuthenticatedUserId();
+    if (!uid) return [];
+    var c = getClient();
+    if (!c) {
+      return loadLocalPosts().filter(function (p) {
+        return p && p.slug && p.authorId === uid;
+      });
+    }
+    var byId = await c
+      .from(TABLE)
+      .select('slug,cat,title,excerpt,body,link,author_name,author_id,created_at,updated_at')
+      .eq('author_id', uid)
+      .order('created_at', { ascending: false });
+    if (byId.error) {
+      console.error('[MoaPostsDB] fetchMyPosts (by author_id):', byId.error.message);
+      return [];
+    }
+    var map = {};
+    (byId.data || []).forEach(function (row) {
+      var p = fromRow(row);
+      if (p.slug) map[p.slug] = p;
+    });
+    var displayName = '';
+    if (global.MoaAuth && global.MoaAuth.getMyProfile) {
+      try {
+        var pr = await global.MoaAuth.getMyProfile();
+        displayName = String((pr && (pr.display_name || pr.username)) || '').trim();
+      } catch (e) {}
+    }
+    if (displayName) {
+      var legacy = await c
+        .from(TABLE)
+        .select('slug,cat,title,excerpt,body,link,author_name,author_id,created_at,updated_at')
+        .is('author_id', null)
+        .eq('author_name', displayName)
+        .order('created_at', { ascending: false });
+      if (!legacy.error && legacy.data) {
+        legacy.data.forEach(function (row) {
+          var p = fromRow(row);
+          if (p.slug && !map[p.slug]) map[p.slug] = p;
+        });
+      } else if (legacy.error) {
+        console.warn('[MoaPostsDB] fetchMyPosts (legacy):', legacy.error.message);
+      }
+    }
+    var out = Object.keys(map).map(function (k) {
+      return map[k];
+    });
+    out.sort(function (a, b) {
+      return String(b.createdAt || '').localeCompare(String(a.createdAt || ''));
+    });
+    return out;
   }
 
   async function fetchPostBySlug(slug) {
@@ -254,6 +309,7 @@
 
   global.MoaPostsDB = {
     fetchPosts: fetchPosts,
+    fetchMyPosts: fetchMyPosts,
     fetchPostBySlug: fetchPostBySlug,
     upsertPost: upsertPost,
     deletePostBySlug: deletePostBySlug,

@@ -307,7 +307,31 @@
               />
             </div>
           </div>
-          <h1 id="profile-hero-name" class="mt-5 text-2xl font-bold tracking-tight text-white sm:text-3xl">프로필</h1>
+          <div id="profile-name-view" class="mt-5 flex items-center justify-center gap-1.5">
+            <h1 id="profile-hero-name" class="text-2xl font-bold tracking-tight text-white sm:text-3xl">프로필</h1>
+            <button
+              type="button"
+              id="profile-btn-edit-name"
+              class="hidden shrink-0 rounded-full p-2 text-zinc-500 outline-none transition hover:bg-zinc-800/90 hover:text-zinc-200 focus-visible:ring-2 focus-visible:ring-sky-500/50"
+              aria-label="이름 수정"
+            >
+              <svg class="h-5 w-5 sm:h-5 sm:w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+              </svg>
+            </button>
+          </div>
+          <div id="profile-name-edit" class="mt-4 hidden w-full max-w-md flex-col items-stretch gap-2 sm:mx-auto sm:flex-row sm:items-center sm:justify-center">
+            <input
+              type="text"
+              id="profile-hero-name-input"
+              autocomplete="name"
+              class="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2.5 text-center text-base text-zinc-100 outline-none focus:border-sky-500/70 sm:text-left"
+            />
+            <div class="flex shrink-0 justify-center gap-2">
+              <button type="button" id="profile-btn-name-cancel" class="rounded-lg border border-zinc-700 px-4 py-2 text-2xs font-semibold text-zinc-300 hover:bg-zinc-800">취소</button>
+              <button type="button" id="profile-btn-name-save" class="rounded-lg bg-sky-600 px-4 py-2 text-2xs font-semibold text-white hover:bg-sky-500">저장</button>
+            </div>
+          </div>
           <p class="mt-2 text-xs text-zinc-500">모여서 빛나는 콘텐츠</p>
           <p id="modak-fire-hint" class="mt-2 text-2xs text-orange-200/75">글을 올리면 성장 단계(1~5)가 올라가요</p>
           <div class="mt-9 w-full border-t border-zinc-800/80 pt-6 text-center sm:mt-10 sm:pt-7">
@@ -319,26 +343,16 @@
     </div>
 
     <section id="profile-account-wrap" class="mt-6 hidden rounded-2xl border border-zinc-800/90 bg-zinc-900/50 p-6 shadow-lg shadow-black/20 ring-1 ring-white/[0.04] sm:p-7">
-      <h2 class="text-base font-bold text-zinc-100">계정 설정</h2>
-      <p class="mt-1 text-xs text-zinc-500">승인이 완료된 뒤 이름과 비밀번호를 바꿀 수 있어요.</p>
-      <div class="mt-5 space-y-4">
-        <div>
-          <label class="mb-1 block text-2xs font-medium text-zinc-500">이름</label>
-          <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
-            <input type="text" id="profile-in-name" class="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm outline-none focus:border-sky-500/70" autocomplete="name" />
-            <button type="button" id="profile-btn-save-name" class="shrink-0 rounded-lg bg-zinc-800 px-4 py-2 text-2xs font-semibold text-zinc-100 ring-1 ring-zinc-700/80 hover:bg-zinc-700">이름 저장</button>
-          </div>
-        </div>
-        <div class="border-t border-zinc-800/80 pt-4">
-          <p class="mb-2 text-2xs font-medium text-zinc-500">비밀번호 변경</p>
-          <div class="space-y-2">
-            <input type="password" id="profile-in-pw1" autocomplete="new-password" placeholder="새 비밀번호 (6자 이상)" class="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm outline-none focus:border-sky-500/70" />
-            <input type="password" id="profile-in-pw2" autocomplete="new-password" placeholder="새 비밀번호 확인" class="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm outline-none focus:border-sky-500/70" />
-            <button type="button" id="profile-btn-save-pw" class="rounded-lg bg-zinc-800 px-4 py-2 text-2xs font-semibold text-zinc-100 ring-1 ring-zinc-700/80 hover:bg-zinc-700">비밀번호 변경</button>
-          </div>
-        </div>
-        <p id="profile-account-msg" class="text-2xs"></p>
-      </div>
+      <h2 class="text-base font-bold text-zinc-100">계정</h2>
+      <p class="mt-1 text-xs text-zinc-500">승인이 완료된 뒤 비밀번호를 바꿀 수 있어요. 이름은 위 연필 아이콘으로 수정할 수 있어요.</p>
+      <button
+        type="button"
+        id="profile-btn-open-pw-modal"
+        class="mt-4 w-full rounded-lg border border-zinc-700 bg-zinc-800/80 px-4 py-3 text-sm font-semibold text-zinc-100 transition hover:bg-zinc-800 sm:w-auto"
+      >
+        비밀번호 변경
+      </button>
+      <p id="profile-account-msg" class="mt-3 text-2xs"></p>
     </section>
 
     <!-- 내가 쓴 글 -->
@@ -356,66 +370,176 @@
 
   </main>
 
+  <div id="pw-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4" aria-hidden="true">
+    <button type="button" id="pw-modal-backdrop" class="absolute inset-0 bg-black/70" aria-label="닫기"></button>
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="pw-modal-title"
+      class="relative z-10 w-full max-w-md rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-2xl shadow-black/50 ring-1 ring-white/[0.06]"
+    >
+      <h2 id="pw-modal-title" class="text-lg font-bold text-zinc-100">비밀번호 변경</h2>
+      <p class="mt-1 text-xs text-zinc-500">새 비밀번호를 두 번 입력해 주세요.</p>
+      <div class="mt-4 space-y-3">
+        <label class="block">
+          <span class="mb-1 block text-2xs text-zinc-500">새 비밀번호</span>
+          <input
+            type="password"
+            id="modal-pw1"
+            autocomplete="new-password"
+            class="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2.5 text-sm outline-none focus:border-sky-500/70"
+          />
+        </label>
+        <label class="block">
+          <span class="mb-1 block text-2xs text-zinc-500">새 비밀번호 확인</span>
+          <input
+            type="password"
+            id="modal-pw2"
+            autocomplete="new-password"
+            class="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2.5 text-sm outline-none focus:border-sky-500/70"
+          />
+        </label>
+      </div>
+      <p id="modal-pw-msg" class="mt-3 min-h-[1rem] text-2xs"></p>
+      <div class="mt-4 flex justify-end gap-2">
+        <button type="button" id="modal-pw-cancel" class="rounded-lg border border-zinc-700 px-4 py-2 text-sm font-medium text-zinc-300 hover:bg-zinc-800">취소</button>
+        <button type="button" id="modal-pw-submit" class="rounded-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-500">변경</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     (async function profileBoot() {
       if (!window.MoaAuth || !window.MoaAuth.requireAuth) return;
       var user = await window.MoaAuth.requireAuth();
       if (!user) return;
-      try {
-        var pr = await window.MoaAuth.getMyProfile();
-        var hn = document.getElementById('profile-hero-name');
-        if (hn && pr && (pr.display_name || pr.username)) {
-          hn.textContent = String(pr.display_name || pr.username || '').trim() || '프로필';
-        }
-        var wrap = document.getElementById('profile-account-wrap');
-        if (wrap && window.MoaAuth.isProfileApproved && window.MoaAuth.isProfileApproved(pr)) {
-          wrap.classList.remove('hidden');
-          var nameIn = document.getElementById('profile-in-name');
-          if (nameIn) nameIn.value = String(pr.display_name || pr.username || '');
-        }
-      } catch (e) {}
+
+      var nameView = document.getElementById('profile-name-view');
+      var nameEdit = document.getElementById('profile-name-edit');
+      var hn = document.getElementById('profile-hero-name');
+      var nameInput = document.getElementById('profile-hero-name-input');
+      var btnEditName = document.getElementById('profile-btn-edit-name');
+      var btnSaveName = document.getElementById('profile-btn-name-save');
+      var btnCancelName = document.getElementById('profile-btn-name-cancel');
+
+      var pwModal = document.getElementById('pw-modal');
+      var modalPw1 = document.getElementById('modal-pw1');
+      var modalPw2 = document.getElementById('modal-pw2');
+      var modalPwMsg = document.getElementById('modal-pw-msg');
+      var btnOpenPw = document.getElementById('profile-btn-open-pw-modal');
+      var btnPwBackdrop = document.getElementById('pw-modal-backdrop');
+      var btnPwCancel = document.getElementById('modal-pw-cancel');
+      var btnPwSubmit = document.getElementById('modal-pw-submit');
 
       var msgEl = document.getElementById('profile-account-msg');
       function accMsg(t, ok) {
         if (!msgEl) return;
         msgEl.textContent = t || '';
-        msgEl.className = 'text-2xs ' + (ok ? 'text-emerald-400' : t ? 'text-rose-400' : 'text-zinc-500');
+        msgEl.className = 'mt-3 text-2xs ' + (ok ? 'text-emerald-400' : t ? 'text-rose-400' : 'text-zinc-500');
       }
-      var btnName = document.getElementById('profile-btn-save-name');
-      var btnPw = document.getElementById('profile-btn-save-pw');
-      if (btnName && window.MoaAuth.updateMyProfileName) {
-        btnName.addEventListener('click', async function () {
+      function modalPwMsgSet(t, ok) {
+        if (!modalPwMsg) return;
+        modalPwMsg.textContent = t || '';
+        modalPwMsg.className = 'mt-3 min-h-[1rem] text-2xs ' + (ok ? 'text-emerald-400' : t ? 'text-rose-400' : 'text-zinc-500');
+      }
+      function setNameEditMode(on) {
+        if (!nameView || !nameEdit || !btnEditName) return;
+        if (on) {
+          nameView.classList.add('hidden');
+          nameEdit.classList.remove('hidden');
+          nameEdit.classList.add('flex');
+        } else {
+          nameEdit.classList.add('hidden');
+          nameEdit.classList.remove('flex');
+          nameView.classList.remove('hidden');
+        }
+      }
+      function openPwModal() {
+        if (!pwModal) return;
+        modalPwMsgSet('');
+        if (modalPw1) modalPw1.value = '';
+        if (modalPw2) modalPw2.value = '';
+        pwModal.classList.remove('hidden');
+        pwModal.classList.add('flex');
+        pwModal.setAttribute('aria-hidden', 'false');
+        if (modalPw1) setTimeout(function () { modalPw1.focus(); }, 50);
+      }
+      function closePwModal() {
+        if (!pwModal) return;
+        pwModal.classList.add('hidden');
+        pwModal.classList.remove('flex');
+        pwModal.setAttribute('aria-hidden', 'true');
+        modalPwMsgSet('');
+      }
+
+      try {
+        var pr = await window.MoaAuth.getMyProfile();
+        var display = '';
+        if (hn && pr && (pr.display_name || pr.username)) {
+          display = String(pr.display_name || pr.username || '').trim() || '프로필';
+          hn.textContent = display;
+        }
+        var wrap = document.getElementById('profile-account-wrap');
+        var approved = wrap && window.MoaAuth.isProfileApproved && window.MoaAuth.isProfileApproved(pr);
+        if (approved) {
+          wrap.classList.remove('hidden');
+          if (btnEditName) btnEditName.classList.remove('hidden');
+          if (nameInput) nameInput.value = display || (hn ? hn.textContent : '');
+        }
+      } catch (e) {}
+
+      if (btnEditName) {
+        btnEditName.addEventListener('click', function () {
+          accMsg('');
+          if (nameInput && hn) nameInput.value = hn.textContent || '';
+          setNameEditMode(true);
+          if (nameInput) nameInput.focus();
+        });
+      }
+      if (btnCancelName) {
+        btnCancelName.addEventListener('click', function () {
+          setNameEditMode(false);
+        });
+      }
+      if (btnSaveName && window.MoaAuth.updateMyProfileName) {
+        btnSaveName.addEventListener('click', async function () {
           accMsg('');
           try {
-            await window.MoaAuth.updateMyProfileName(document.getElementById('profile-in-name').value);
+            var v = String(nameInput && nameInput.value ? nameInput.value : '').trim();
+            await window.MoaAuth.updateMyProfileName(v);
+            if (hn) hn.textContent = v || '프로필';
             accMsg('이름이 저장되었습니다.', true);
-            var hn = document.getElementById('profile-hero-name');
-            var v = String(document.getElementById('profile-in-name').value || '').trim();
-            if (hn && v) hn.textContent = v;
+            setNameEditMode(false);
           } catch (e) {
             accMsg(e.message || '저장 실패', false);
           }
         });
       }
-      if (btnPw && window.MoaAuth.updateMyPassword) {
-        btnPw.addEventListener('click', async function () {
-          accMsg('');
-          var a = document.getElementById('profile-in-pw1').value;
-          var b = document.getElementById('profile-in-pw2').value;
+
+      if (btnOpenPw) btnOpenPw.addEventListener('click', openPwModal);
+      if (btnPwBackdrop) btnPwBackdrop.addEventListener('click', closePwModal);
+      if (btnPwCancel) btnPwCancel.addEventListener('click', closePwModal);
+      if (btnPwSubmit && window.MoaAuth.updateMyPassword) {
+        btnPwSubmit.addEventListener('click', async function () {
+          modalPwMsgSet('');
+          var a = modalPw1 ? modalPw1.value : '';
+          var b = modalPw2 ? modalPw2.value : '';
           if (a !== b) {
-            accMsg('새 비밀번호가 서로 다릅니다.', false);
+            modalPwMsgSet('새 비밀번호가 서로 다릅니다.', false);
             return;
           }
           try {
             await window.MoaAuth.updateMyPassword(a);
-            document.getElementById('profile-in-pw1').value = '';
-            document.getElementById('profile-in-pw2').value = '';
             accMsg('비밀번호가 변경되었습니다.', true);
+            closePwModal();
           } catch (e) {
-            accMsg(e.message || '변경 실패', false);
+            modalPwMsgSet(e.message || '변경 실패', false);
           }
         });
       }
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && pwModal && !pwModal.classList.contains('hidden')) closePwModal();
+      });
     })();
 
     document.getElementById('btn-back').addEventListener('click', function () {
@@ -473,20 +597,35 @@
           .replace(/</g, '&lt;')
           .replace(/"/g, '&quot;');
       }
-      async function loadPosts() {
+      async function loadMyPostsForProfile() {
         if (window.MoaPostsDB && window.MoaPostsDB.migrateLocalPostsOnce) {
           try { await window.MoaPostsDB.migrateLocalPostsOnce(); } catch (e) {}
         }
+        if (window.MoaPostsDB && window.MoaPostsDB.fetchMyPosts) {
+          return await window.MoaPostsDB.fetchMyPosts();
+        }
+        var all = [];
         if (window.MoaPostsDB && window.MoaPostsDB.fetchPosts) {
-          return await window.MoaPostsDB.fetchPosts();
+          all = await window.MoaPostsDB.fetchPosts();
+        } else {
+          try {
+            var raw = localStorage.getItem('eduai_posts_v1');
+            all = JSON.parse(raw || '[]');
+            if (!Array.isArray(all)) all = [];
+          } catch (e) {
+            all = [];
+          }
         }
-        try {
-          var raw = localStorage.getItem('eduai_posts_v1');
-          var arr = JSON.parse(raw || '[]');
-          return Array.isArray(arr) ? arr : [];
-        } catch (e) {
-          return [];
+        var myId = null;
+        if (window.MoaPostsDB && window.MoaPostsDB.getCurrentUserId) {
+          try {
+            myId = await window.MoaPostsDB.getCurrentUserId();
+          } catch (e) {}
         }
+        if (!myId) return [];
+        return all.filter(function (p) {
+          return p && p.slug && p.authorId === myId;
+        });
       }
       function fmtWhen(iso) {
         if (!iso) return '';
@@ -498,22 +637,9 @@
       var emptyEl = document.getElementById('profile-posts-empty');
       var statEl = document.getElementById('profile-stat-posts');
       if (!ul) return;
-      var posts = (await loadPosts()).filter(function (p) {
+      var posts = (await loadMyPostsForProfile()).filter(function (p) {
         return p && p.slug;
       });
-      var myId = null;
-      if (window.MoaPostsDB && window.MoaPostsDB.getCurrentUserId) {
-        try {
-          myId = await window.MoaPostsDB.getCurrentUserId();
-        } catch (e) {}
-      }
-      if (myId) {
-        posts = posts.filter(function (p) {
-          return p.authorId === myId;
-        });
-      } else {
-        posts = [];
-      }
       posts.sort(function (a, b) {
         return String(b.createdAt || '').localeCompare(String(a.createdAt || ''));
       });

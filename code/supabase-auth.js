@@ -241,6 +241,56 @@
     if (res.error) throw new Error(res.error.message);
   }
 
+  function pickNavInitial(label) {
+    var t = String(label || '').trim();
+    if (!t) return '?';
+    var arr = Array.from(t);
+    return arr[0] || '?';
+  }
+
+  async function getNavDisplayLabel() {
+    var user = await getSessionUser();
+    if (!user || !user.id || user.is_anonymous) return '';
+    var c = getClient();
+    if (!c) return '';
+    var pr = null;
+    try {
+      pr = await getProfileByUserId(c, user.id);
+    } catch (e) {}
+    if (!pr) {
+      try {
+        await ensureProfileRowIfMissing(user, null);
+        pr = await getProfileByUserId(c, user.id);
+      } catch (e2) {}
+    }
+    var fromProfile = String((pr && (pr.display_name || pr.username)) || '').trim();
+    if (fromProfile) return fromProfile;
+    var meta = user.user_metadata || {};
+    var metaName = String(meta.full_name || meta.name || meta.display_name || '').trim();
+    if (metaName) return metaName;
+    var email = String(user.email || '').trim();
+    if (email) {
+      var local = email.split('@')[0];
+      if (local) return local;
+    }
+    return '';
+  }
+
+  async function mountNavUserLabels() {
+    var label = '';
+    try {
+      label = await getNavDisplayLabel();
+    } catch (e) {}
+    if (!label) label = '프로필';
+    var initial = pickNavInitial(label);
+    document.querySelectorAll('[data-moa-user-label]').forEach(function (el) {
+      el.textContent = label;
+    });
+    document.querySelectorAll('[data-moa-user-initial]').forEach(function (el) {
+      el.textContent = initial;
+    });
+  }
+
   async function updateMyProfileName(displayName) {
     var c = getClient();
     var user = await getSessionUser();
@@ -263,6 +313,7 @@
     ensureProfileRow: ensureProfileRow,
     ensureProfileRowIfMissing: ensureProfileRowIfMissing,
     getMyProfile: getMyProfile,
+    getNavDisplayLabel: getNavDisplayLabel,
     isProfileApproved: isProfileApproved,
     gateApprovalOrRedirect: gateApprovalOrRedirect,
     updateMyPassword: updateMyPassword,
@@ -276,11 +327,13 @@
     document.addEventListener('DOMContentLoaded', function () {
       gateApprovalOrRedirect().catch(function () {});
       mountAdminMenu().catch(function () {});
+      mountNavUserLabels().catch(function () {});
       var c = getClient();
       if (c && c.auth && c.auth.onAuthStateChange) {
         c.auth.onAuthStateChange(function () {
           gateApprovalOrRedirect().catch(function () {});
           mountAdminMenu().catch(function () {});
+          mountNavUserLabels().catch(function () {});
         });
       }
     });

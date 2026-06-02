@@ -129,31 +129,14 @@
     return mapped;
   }
 
-  /** 현재 로그인 사용자 글만 (author_id 일치 + 예전에 author_id 없이 저장된 글은 프로필 표시명과 author_name이 같을 때만 포함) */
-  async function fetchMyPosts() {
-    var uid = await getAuthenticatedUserId();
-    if (!uid) return [];
-    var c = getClient();
-    if (!c) {
-      return loadLocalPosts().filter(function (p) {
-        return p && p.slug && p.authorId === uid;
-      });
-    }
-    var byId = await c
-      .from(TABLE)
-      .select('slug,cat,title,excerpt,body,link,author_name,author_id,created_at,updated_at')
-      .eq('author_id', uid)
-      .order('created_at', { ascending: false });
-    if (byId.error) {
-      console.error('[MoaPostsDB] fetchMyPosts (by author_id):', byId.error.message);
-      return [];
-    }
-    var map = {};
-    (byId.data || []).forEach(function (row) {
-      var p = fromRow(row);
-      if (p.slug) map[p.slug] = p;
-    });
+  async function collectLegacyAuthorNames() {
     var legacyNames = [];
+    if (global.MoaAuth && global.MoaAuth.getNavDisplayLabel) {
+      try {
+        var nav = String((await global.MoaAuth.getNavDisplayLabel()) || '').trim();
+        if (nav && nav !== '프로필') legacyNames.push(nav);
+      } catch (e0) {}
+    }
     if (global.MoaAuth && global.MoaAuth.getMyProfile) {
       try {
         var pr = await global.MoaAuth.getMyProfile();
@@ -176,12 +159,95 @@
       } catch (e2) {}
     }
     var legacyNameSet = {};
-    legacyNames = legacyNames.filter(function (nm) {
+    return legacyNames.filter(function (nm) {
       var k = String(nm || '').trim();
       if (!k || legacyNameSet[k]) return false;
       legacyNameSet[k] = true;
       return true;
     });
+  }
+
+  async function isCurrentUserAdmin() {
+    if (!global.MoaAuth || !global.MoaAuth.getMyProfile) return false;
+    try {
+      var pr = await global.MoaAuth.getMyProfile();
+      return !!(pr && pr.role === 'admin');
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /** 예전 익명/다른 UUID로 저장된 글을 현재 로그인 계정으로 되돌림 (관리자는 타 UUID 글도 재할당 가능) */
+  async function reclaimMisassignedPosts() {
+    var uid = await getAuthenticatedUserId();
+    if (!uid) return { reclaimed: 0, skipped: true, reason: 'no_uid' };
+    var c = getClient();
+    if (!c) return { reclaimed: 0, skipped: true, reason: 'no_client' };
+    var names = await collectLegacyAuthorNames();
+    if (!names.length) return { reclaimed: 0, skipped: true, reason: 'no_names' };
+
+    var reclaimed = 0;
+    var isAdmin = await isCurrentUserAdmin();
+
+    if (isAdmin) {
+      var wrongOwner = await c
+        .from(TABLE)
+        .update({ author_id: uid })
+        .in('author_name', names)
+        .neq('author_id', uid)
+        .select('slug');
+      if (wrongOwner.error) {
+        console.warn('[MoaPostsDB] reclaimMisassignedPosts (admin):', wrongOwner.error.message);
+      } else {
+        reclaimed += (wrongOwner.data || []).length;
+      }
+    }
+
+    var orphan = await c
+      .from(TABLE)
+      .update({ author_id: uid })
+      .is('author_id', null)
+      .in('author_name', names)
+      .select('slug');
+    if (orphan.error) {
+      console.warn('[MoaPostsDB] reclaimMisassignedPosts (orphan):', orphan.error.message);
+    } else {
+      reclaimed += (orphan.data || []).length;
+    }
+
+    return { reclaimed: reclaimed, skipped: false, reason: reclaimed ? 'updated' : 'nothing_to_update' };
+  }
+
+  /** 현재 로그인 사용자 글만 (author_id 일치 + 예전에 author_id 없이 저장된 글은 프로필 표시명과 author_name이 같을 때만 포함) */
+  async function fetchMyPosts() {
+    var uid = await getAuthenticatedUserId();
+    if (!uid) return [];
+    var c = getClient();
+    if (!c) {
+      return loadLocalPosts().filter(function (p) {
+        return p && p.slug && p.authorId === uid;
+      });
+    }
+    try {
+      await reclaimMisassignedPosts();
+    } catch (e) {
+      console.warn('[MoaPostsDB] fetchMyPosts reclaim skipped:', e);
+    }
+    var byId = await c
+      .from(TABLE)
+      .select('slug,cat,title,excerpt,body,link,author_name,author_id,created_at,updated_at')
+      .eq('author_id', uid)
+      .order('created_at', { ascending: false });
+    if (byId.error) {
+      console.error('[MoaPostsDB] fetchMyPosts (by author_id):', byId.error.message);
+      return [];
+    }
+    var map = {};
+    (byId.data || []).forEach(function (row) {
+      var p = fromRow(row);
+      if (p.slug) map[p.slug] = p;
+    });
+    var legacyNames = await collectLegacyAuthorNames();
     if (legacyNames.length) {
       var legacy = await c
         .from(TABLE)
@@ -332,6 +398,7 @@
   global.MoaPostsDB = {
     fetchPosts: fetchPosts,
     fetchMyPosts: fetchMyPosts,
+    reclaimMisassignedPosts: reclaimMisassignedPosts,
     fetchPostBySlug: fetchPostBySlug,
     upsertPost: upsertPost,
     deletePostBySlug: deletePostBySlug,

@@ -536,9 +536,7 @@
       var headHtml =
         '<div class="relative z-[2] border-b border-zinc-800/80 px-3 pb-2.5 pt-3">' +
         '<h2 class="text-sm font-semibold leading-snug text-zinc-100">' +
-        (isVideo
-          ? '<a href="' + detailHref + '" class="transition hover:text-sky-400">' + title + '</a>'
-          : '<span>' + title + '</span>') +
+        '<span>' + title + '</span>' +
         '</h2>' +
         '<p class="mt-1 truncate text-2xs text-zinc-500">' +
         esc(au.name) +
@@ -548,14 +546,16 @@
         '</p></div>';
 
       var shellOpen =
-        '<article class="post-card ' +
-        (isVideo ? 'post-card--video ' : '') +
-        'group relative flex h-full min-h-0 flex-col overflow-hidden rounded-xl border border-zinc-800/90 bg-zinc-900/50 shadow-lg shadow-black/25 ring-1 ring-white/[0.04]">' +
+        '<article data-feed-href="' +
+        detailHref +
+        '" class="post-card group relative flex h-full min-h-0 flex-col overflow-hidden rounded-xl border border-zinc-800/90 bg-zinc-900/50 shadow-lg shadow-black/25 ring-1 ring-white/[0.04]">' +
         '<div class="relative flex min-h-0 flex-1 flex-col">';
       var overlay =
-        isVideo
+        cat === 'prompt'
           ? ''
-          : '<a href="' + detailHref + '" class="absolute inset-0 z-[1] rounded-t-xl" aria-label="글 상세 보기"></a>';
+          : window.MoaFeedView && window.MoaFeedView.cardOverlayHtml
+            ? window.MoaFeedView.cardOverlayHtml(it.slug)
+            : '<a href="' + detailHref + '" class="feed-card-overlay absolute inset-0 z-[1] rounded-t-xl" aria-label="글 상세 보기"></a>';
 
       if (cat === 'prompt') {
         var sn = PROMPT_SNIP[it.slug] || String(it.t).slice(0, 120);
@@ -606,31 +606,17 @@
 
       var media = '';
       if (isVideo) {
-        var yid = youtubeVideoId(feedUrl);
-        if (yid) {
-          media =
-            '<div class="relative z-[2] shrink-0 overflow-hidden border-t border-zinc-800/60 bg-zinc-900 feed-card-media">' +
-            '<a href="' +
-            detailHref +
-            '" class="relative block h-full min-h-[8rem]">' +
-            '<img src="https://img.youtube.com/vi/' +
-            escAttrUrl(yid) +
-            '/hqdefault.jpg" alt="" class="h-full w-full object-cover" loading="lazy" />' +
-            '<div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20"></div>' +
-            '<span class="pointer-events-none absolute bottom-2 left-2 rounded bg-red-600 px-1.5 py-0.5 text-[0.625rem] font-semibold text-white">YouTube</span>' +
-            '<div class="pointer-events-none absolute inset-0 flex items-center justify-center">' +
-            '<span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-zinc-900 shadow-lg">' +
-            '<svg class="ml-1 h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div></a></div>';
+        if (feedUrl && window.MoaFeedView && window.MoaFeedView.linkPreviewMediaHtml) {
+          media = window.MoaFeedView.linkPreviewMediaHtml(feedUrl, chip);
         } else {
+          var th = CAT_THEME[cat] || CAT_THEME.insight;
           media =
             '<div class="relative z-[2] shrink-0 overflow-hidden border-t border-zinc-800/60 bg-zinc-900 feed-card-media">' +
-            '<a href="' +
-            detailHref +
-            '" class="relative flex h-full min-h-[8rem] items-center justify-center overflow-hidden bg-gradient-to-br ' +
+            '<div class="relative flex h-full min-h-[8rem] items-center justify-center overflow-hidden bg-gradient-to-br ' +
             th.wide +
             '">' +
             '<span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-zinc-900 shadow-lg">' +
-            '<svg class="ml-1 h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></a></div>';
+            '<svg class="ml-1 h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div></div>';
         }
       } else if (cat === 'curriculum') {
         media =
@@ -783,20 +769,9 @@
       var root = document.getElementById('root');
       if (root && !root.dataset.cardWired) {
         root.dataset.cardWired = '1';
-        root.addEventListener('click', function (e) {
-          var row = e.target.closest('.post-list-item');
-          if (row && root.contains(row)) {
-            if (e.target.closest('button, a, video, input, textarea')) return;
-            var href = row.getAttribute('data-feed-href');
-            if (href) window.location.href = href;
-            return;
-          }
-          var card = e.target.closest('.post-card');
-          if (!card || !root.contains(card)) return;
-          if (e.target.closest('button, a, video, input, textarea')) return;
-          var link = card.querySelector('a[href*="post-detail.html?slug="]');
-          if (link) window.location.href = link.getAttribute('href');
-        });
+        if (window.MoaFeedView && window.MoaFeedView.bindFeedRowClick) {
+          window.MoaFeedView.bindFeedRowClick(root);
+        }
       }
       function formatCompact(n) {
         if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';

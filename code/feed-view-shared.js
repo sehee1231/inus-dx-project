@@ -164,10 +164,124 @@
     );
   }
 
-  function youtubeThumbId(link) {
-    var u = String(link || '');
+  function clipText(s, maxLen) {
+    s = String(s || '');
+    var m = maxLen || 72;
+    if (s.length > m) return s.slice(0, m - 1) + '…';
+    return s;
+  }
+
+  function youtubeVideoId(url) {
+    if (!url) return '';
+    var u = String(url);
     var m = u.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    if (m) return m[1];
+    m = u.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/);
+    if (m) return m[1];
+    m = u.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/);
+    if (m) return m[1];
+    m = u.match(/youtube\.com\/live\/([a-zA-Z0-9_-]{11})/);
     return m ? m[1] : '';
+  }
+
+  var youtubeThumbId = youtubeVideoId;
+
+  var FEED_EXTERNAL_LINK_ATTR =
+    ' target="_blank" rel="noopener noreferrer" data-feed-external="1" onclick="event.stopPropagation()"';
+
+  function postDetailHref(slug) {
+    return 'post-detail.html?slug=' + encodeURIComponent(String(slug || ''));
+  }
+
+  function cardOverlayHtml(slug) {
+    return (
+      '<a href="' +
+      escUrlAttr(postDetailHref(slug)) +
+      '" class="feed-card-overlay absolute inset-0 z-[1] rounded-t-xl" aria-label="글 상세 보기"></a>'
+    );
+  }
+
+  /** 썸네일/링크 영역: 외부 URL. 카드 나머지는 bindFeedRowClick → 글 상세 */
+  function linkPreviewMediaHtml(rawLink, labelEsc) {
+    var link = String(rawLink || '').trim();
+    if (!link) return feedVideoFallbackMediaHtml(labelEsc || '');
+    var label = labelEsc || '';
+    var yid = youtubeVideoId(link);
+    if (yid) {
+      return (
+        '<div class="relative z-[2] shrink-0 overflow-hidden border-t border-zinc-800/60 bg-zinc-950 feed-card-media">' +
+        '<a href="' +
+        escUrlAttr(link) +
+        '"' +
+        FEED_EXTERNAL_LINK_ATTR +
+        ' class="relative block min-h-[8rem]">' +
+        '<img src="https://img.youtube.com/vi/' +
+        escUrlAttr(yid) +
+        '/hqdefault.jpg" alt="" class="h-full w-full min-h-[8rem] object-cover" loading="lazy" />' +
+        '<div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20"></div>' +
+        '<span class="pointer-events-none absolute bottom-2 left-2 rounded bg-red-600 px-1.5 py-0.5 text-[0.625rem] font-semibold text-white">YouTube</span>' +
+        '<div class="pointer-events-none absolute inset-0 flex items-center justify-center">' +
+        '<span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-zinc-900 shadow-lg">' +
+        '<svg class="ml-1 h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div></a>' +
+        (label
+          ? '<span class="pointer-events-none absolute left-2 top-2 rounded-md bg-black/70 px-1.5 py-0.5 text-[0.625rem] font-medium text-zinc-200">' +
+            label +
+            '</span>'
+          : '') +
+        '</div>'
+      );
+    }
+    if (/\.(png|jpe?g|gif|webp|avif|svg)(\?.*)?$/i.test(link)) {
+      return (
+        '<a href="' +
+        escUrlAttr(link) +
+        '"' +
+        FEED_EXTERNAL_LINK_ATTR +
+        ' class="relative z-[2] block min-h-[8rem] overflow-hidden border-t border-zinc-800/60 bg-zinc-950 feed-card-media">' +
+        '<img src="' +
+        escUrlAttr(link) +
+        '" alt="" class="h-full w-full min-h-[8rem] object-cover" loading="lazy" />' +
+        '<span class="pointer-events-none absolute left-2 top-2 rounded-md bg-black/70 px-1.5 py-0.5 text-[0.625rem] font-medium text-zinc-200">이미지</span>' +
+        '</a>'
+      );
+    }
+    if (/instagram\.com/i.test(link)) {
+      return (
+        '<a href="' +
+        escUrlAttr(link) +
+        '"' +
+        FEED_EXTERNAL_LINK_ATTR +
+        ' class="relative z-[2] flex min-h-[8rem] shrink-0 flex-col items-center justify-center gap-1 border-t border-zinc-800/60 bg-zinc-900/80 feed-card-media px-3 text-center hover:bg-zinc-800/60">' +
+        '<span class="text-2xs font-semibold text-sky-400">인스타 링크</span>' +
+        '<span class="line-clamp-2 break-all text-2xs text-zinc-400">' +
+        esc(clipText(link, 72)) +
+        '</span></a>'
+      );
+    }
+    return (
+      '<a href="' +
+      escUrlAttr(link) +
+      '"' +
+      FEED_EXTERNAL_LINK_ATTR +
+      ' class="relative z-[2] flex min-h-[8rem] shrink-0 flex-col items-center justify-center gap-1 border-t border-zinc-800/60 bg-zinc-900/80 feed-card-media px-3 text-center hover:bg-zinc-800/60">' +
+      '<span class="text-2xs font-semibold text-sky-400">관련 링크</span>' +
+      '<span class="line-clamp-2 break-all text-2xs text-zinc-400">' +
+      esc(clipText(link, 72)) +
+      '</span></a>'
+    );
+  }
+
+  function feedVideoFallbackMediaHtml(labelEsc) {
+    return (
+      '<div class="relative z-[2] flex min-h-[8rem] shrink-0 items-center justify-center overflow-hidden border-t border-zinc-800/60 bg-gradient-to-br from-violet-800/90 to-indigo-950 feed-card-media">' +
+      (labelEsc
+        ? '<span class="pointer-events-none absolute left-2 top-2 rounded-md bg-black/70 px-1.5 py-0.5 text-[0.625rem] font-medium text-zinc-200">' +
+          labelEsc +
+          '</span>'
+        : '') +
+      '<span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-zinc-900 shadow-lg">' +
+      '<svg class="ml-1 h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div>'
+    );
   }
 
   /**
@@ -176,18 +290,44 @@
    */
   function relatedGridCardHtml(p) {
     var slug = encodeURIComponent(p.slug);
-    var yid = youtubeThumbId(p.link);
+    var rawLink = String(p.link || '').trim();
+    var yid = youtubeVideoId(rawLink);
     var label = catLabel(p.cat);
     var title = esc(p.title || '제목 없음');
     var when = formatPostDate(p.createdAt || p.updatedAt);
     var author = esc((p.authorName || '세희').trim() || '세희');
-    var media = yid
-      ? '<div class="relative aspect-video overflow-hidden bg-zinc-950"><img src="https://img.youtube.com/vi/' +
+    var media;
+    if (rawLink && yid) {
+      media =
+        '<div class="relative aspect-video overflow-hidden bg-zinc-950">' +
+        '<a href="' +
+        escUrlAttr(rawLink) +
+        '"' +
+        FEED_EXTERNAL_LINK_ATTR +
+        ' class="relative block h-full w-full">' +
+        '<img src="https://img.youtube.com/vi/' +
         escUrlAttr(yid) +
-        '/hqdefault.jpg" alt="" class="h-full w-full object-cover" loading="lazy" /><div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div><span class="pointer-events-none absolute bottom-2 left-2 rounded bg-red-600 px-1.5 py-0.5 text-[0.625rem] font-semibold text-white">YouTube</span></div>'
-      : '<div class="relative flex aspect-video items-center justify-center bg-gradient-to-br from-zinc-900 via-zinc-950 to-zinc-900 text-2xs font-medium text-zinc-500">' +
+        '/hqdefault.jpg" alt="" class="h-full w-full object-cover" loading="lazy" />' +
+        '<div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>' +
+        '<span class="pointer-events-none absolute bottom-2 left-2 rounded bg-red-600 px-1.5 py-0.5 text-[0.625rem] font-semibold text-white">YouTube</span>' +
+        '</a></div>';
+    } else if (rawLink) {
+      media =
+        '<a href="' +
+        escUrlAttr(rawLink) +
+        '"' +
+        FEED_EXTERNAL_LINK_ATTR +
+        ' class="relative flex aspect-video flex-col items-center justify-center gap-1 bg-zinc-900/80 px-3 text-center hover:bg-zinc-800/60">' +
+        '<span class="text-2xs font-semibold text-sky-400">관련 링크</span>' +
+        '<span class="line-clamp-2 break-all text-2xs text-zinc-400">' +
+        esc(clipText(rawLink, 48)) +
+        '</span></a>';
+    } else {
+      media =
+        '<div class="relative flex aspect-video items-center justify-center bg-gradient-to-br from-zinc-900 via-zinc-950 to-zinc-900 text-2xs font-medium text-zinc-500">' +
         esc(label) +
         '</div>';
+    }
     return (
       '<article data-feed-href="post-detail.html?slug=' +
       slug +
@@ -213,10 +353,14 @@
     root.addEventListener('click', function (e) {
       var card = e.target.closest('.post-card, .post-list-item, .related-mini-card');
       if (!card || !root.contains(card)) return;
-      if (card.classList.contains('post-card--video')) return;
       if (e.target.closest('button, a, video, input, textarea')) return;
       var href = card.getAttribute('data-feed-href');
-      if (href) window.location.href = href;
+      if (href) {
+        window.location.href = href;
+        return;
+      }
+      var la = card.querySelector('h2 a[href*="post-detail"], h3 a[href*="post-detail"]');
+      if (la) window.location.href = la.getAttribute('href');
     });
   }
 
@@ -233,6 +377,12 @@
     catLabel: catLabel,
     postListRowHtml: postListRowHtml,
     relatedGridCardHtml: relatedGridCardHtml,
+    linkPreviewMediaHtml: linkPreviewMediaHtml,
+    feedVideoFallbackMediaHtml: feedVideoFallbackMediaHtml,
+    cardOverlayHtml: cardOverlayHtml,
+    postDetailHref: postDetailHref,
+    youtubeVideoId: youtubeVideoId,
+    clipText: clipText,
     bindFeedRowClick: bindFeedRowClick,
     VIEW_BTN_OFF: VIEW_BTN_OFF,
     VIEW_BTN_ON: VIEW_BTN_ON,

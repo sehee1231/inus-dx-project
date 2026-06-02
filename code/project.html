@@ -8,6 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-posts.js"></script>
   <script src="supabase-auth.js"></script>
+  <script src="feed-view-shared.js"></script>
     <script>
       tailwind.config = {
         safelist: [
@@ -947,75 +948,14 @@
           }
 
           var map = loadCommentMap();
-          function youtubeVideoId(url) {
-            if (!url) return '';
-            var u = String(url);
-            var m = u.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-            return m ? m[1] : '';
+          var FV = window.MoaFeedView || {};
+          function linkPreviewMedia(rawLink, labelEsc) {
+            if (FV.linkPreviewMediaHtml) return FV.linkPreviewMediaHtml(rawLink, labelEsc);
+            return '';
           }
           function feedVideoFallbackMedia(labelEsc) {
-            return (
-              '<div class="relative z-[2] flex min-h-[8rem] shrink-0 items-center justify-center overflow-hidden border-t border-zinc-800/60 bg-gradient-to-br from-violet-800/90 to-indigo-950 feed-card-media">' +
-              '<span class="pointer-events-none absolute left-2 top-2 rounded-md bg-black/70 px-1.5 py-0.5 text-[0.625rem] font-medium text-zinc-200">' +
-              labelEsc +
-              '</span>' +
-              '<span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-zinc-900 shadow-lg">' +
-              '<svg class="ml-1 h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div>'
-            );
-          }
-          function linkPreviewMedia(rawLink, slug, labelEsc) {
-            var yid = youtubeVideoId(rawLink);
-            if (yid) {
-              return (
-                '<div class="relative z-[2] shrink-0 overflow-hidden border-t border-zinc-800/60 bg-zinc-950 feed-card-media">' +
-                '<a href="post-detail.html?slug=' +
-                slug +
-                '" class="relative block min-h-[8rem]">' +
-                '<img src="https://img.youtube.com/vi/' +
-                escUrlAttr(yid) +
-                '/hqdefault.jpg" alt="" class="h-full w-full min-h-[8rem] object-cover" loading="lazy" />' +
-                '<div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20"></div>' +
-                '<span class="pointer-events-none absolute bottom-2 left-2 rounded bg-red-600 px-1.5 py-0.5 text-[0.625rem] font-semibold text-white">YouTube</span>' +
-                '<div class="pointer-events-none absolute inset-0 flex items-center justify-center">' +
-                '<span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-zinc-900 shadow-lg">' +
-                '<svg class="ml-1 h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div></a>' +
-                '<span class="pointer-events-none absolute left-2 top-2 rounded-md bg-black/70 px-1.5 py-0.5 text-[0.625rem] font-medium text-zinc-200">' +
-                labelEsc +
-                '</span></div>'
-              );
-            }
-            if (/\.(png|jpe?g|gif|webp|avif|svg)(\?.*)?$/i.test(rawLink)) {
-              return (
-                '<a href="' +
-                escUrlAttr(rawLink) +
-                '" target="_blank" rel="noopener noreferrer" class="relative z-[2] block min-h-[8rem] overflow-hidden border-t border-zinc-800/60 bg-zinc-950 feed-card-media" onclick="event.stopPropagation()">' +
-                '<img src="' +
-                escUrlAttr(rawLink) +
-                '" alt="" class="h-full w-full min-h-[8rem] object-cover" loading="lazy" />' +
-                '<span class="pointer-events-none absolute left-2 top-2 rounded-md bg-black/70 px-1.5 py-0.5 text-[0.625rem] font-medium text-zinc-200">이미지</span>' +
-                '</a>'
-              );
-            }
-            if (/instagram\.com/i.test(rawLink)) {
-              return (
-                '<a href="' +
-                escUrlAttr(rawLink) +
-                '" target="_blank" rel="noopener noreferrer" class="relative z-[2] flex min-h-[8rem] shrink-0 flex-col items-center justify-center gap-1 border-t border-zinc-800/60 bg-zinc-900/80 feed-card-media px-3 text-center hover:bg-zinc-800/60" onclick="event.stopPropagation()">' +
-                '<span class="text-2xs font-semibold text-sky-400">인스타 링크</span>' +
-                '<span class="line-clamp-2 break-all text-2xs text-zinc-400">' +
-                esc(clipText(rawLink, 72)) +
-                '</span></a>'
-              );
-            }
-            return (
-              '<a href="' +
-              escUrlAttr(rawLink) +
-              '" target="_blank" rel="noopener noreferrer" class="relative z-[2] flex min-h-[8rem] shrink-0 flex-col items-center justify-center gap-1 border-t border-zinc-800/60 bg-zinc-900/80 feed-card-media px-3 text-center hover:bg-zinc-800/60" onclick="event.stopPropagation()">' +
-              '<span class="text-2xs font-semibold text-sky-400">관련 링크</span>' +
-              '<span class="line-clamp-2 break-all text-2xs text-zinc-400">' +
-              esc(clipText(rawLink, 72)) +
-              '</span></a>'
-            );
+            if (FV.feedVideoFallbackMediaHtml) return FV.feedVideoFallbackMediaHtml(labelEsc);
+            return '';
           }
           function postCardHtml(p, forRow) {
             var rowCls = forRow ? 'home-row-card ' : '';
@@ -1030,7 +970,7 @@
             var preview = esc(clipText(body || excerpt || p.title || '', 320));
             var rawLink = (p.link || '').trim();
             var isVid = p.cat === 'video';
-            var useOverlay = !isVid && p.cat !== 'prompt';
+            var useOverlay = p.cat !== 'prompt';
             var linkMeta = '';
             if (rawLink) {
               linkMeta =
@@ -1040,11 +980,9 @@
                 esc(clipText(rawLink.replace(/^https?:\/\//i, ''), 32)) +
                 '</a>';
             }
-            var titleHtml = useOverlay
-              ? '<span>' + t + '</span>'
-              : '<a href="post-detail.html?slug=' + slug + '" class="transition hover:text-sky-400">' + t + '</a>';
-            var overlayEl = useOverlay
-              ? '<a href="post-detail.html?slug=' + slug + '" class="absolute inset-0 z-[1] rounded-t-xl" aria-label="글 상세 보기"></a>'
+            var titleHtml = '<span>' + t + '</span>';
+            var overlayEl = useOverlay && FV.cardOverlayHtml ? FV.cardOverlayHtml(p.slug) : useOverlay
+              ? '<a href="post-detail.html?slug=' + slug + '" class="feed-card-overlay absolute inset-0 z-[1] rounded-t-xl" aria-label="글 상세 보기"></a>'
               : '';
             var mediaHtml;
             if (p.cat === 'prompt') {
@@ -1059,31 +997,13 @@
                 '" class="prompt-copy-btn absolute bottom-2 right-2 z-10 flex h-8 w-8 items-center justify-center rounded-lg border border-zinc-600/90 bg-zinc-900/95 text-zinc-300 shadow-md hover:bg-zinc-800" aria-label="프롬프트 복사">' +
                 '<svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></button></div>';
             } else if (isVid) {
-              var ytid = youtubeVideoId(rawLink);
-              if (ytid) {
-                mediaHtml =
-                  '<div class="relative z-[2] shrink-0 overflow-hidden border-t border-zinc-800/60 bg-zinc-950 feed-card-media">' +
-                  '<a href="post-detail.html?slug=' +
-                  slug +
-                  '" class="relative block min-h-[8rem]">' +
-                  '<img src="https://img.youtube.com/vi/' +
-                  escUrlAttr(ytid) +
-                  '/hqdefault.jpg" alt="" class="h-full w-full min-h-[8rem] object-cover" loading="lazy" />' +
-                  '<div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20"></div>' +
-                  '<span class="pointer-events-none absolute bottom-2 left-2 rounded bg-red-600 px-1.5 py-0.5 text-[0.625rem] font-semibold text-white">YouTube</span>' +
-                  '<div class="pointer-events-none absolute inset-0 flex items-center justify-center">' +
-                  '<span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-zinc-900 shadow-lg">' +
-                  '<svg class="ml-1 h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div></a>' +
-                  '<span class="pointer-events-none absolute left-2 top-2 rounded-md bg-black/70 px-1.5 py-0.5 text-[0.625rem] font-medium text-zinc-200">' +
-                  esc(label) +
-                  '</span></div>';
-              } else if (rawLink) {
-                mediaHtml = linkPreviewMedia(rawLink, slug, esc(label));
+              if (rawLink) {
+                mediaHtml = linkPreviewMedia(rawLink, esc(label));
               } else {
                 mediaHtml = feedVideoFallbackMedia(esc(label));
               }
             } else if (rawLink) {
-              mediaHtml = linkPreviewMedia(rawLink, slug, esc(label));
+              mediaHtml = linkPreviewMedia(rawLink, esc(label));
             } else {
               mediaHtml = feedVideoFallbackMedia(esc(label));
             }
@@ -1095,7 +1015,6 @@
               slug +
               '" class="post-card ' +
               rowCls +
-              (isVid ? 'post-card--video ' : '') +
               'group relative flex h-full min-h-0 flex-col overflow-hidden rounded-xl border border-zinc-800/90 bg-zinc-900/50 shadow-lg shadow-black/25 ring-1 ring-white/[0.04]">' +
               '<div class="relative flex min-h-0 flex-1 flex-col">' +
               overlayEl +
@@ -1319,20 +1238,9 @@
         })();
         (function () {
           var root = document.getElementById('home-sections');
-          if (!root) return;
-          root.addEventListener('click', function (e) {
-            var card = e.target.closest('.post-card, .post-list-item');
-            if (!card || !root.contains(card)) return;
-            if (card.classList.contains('post-card--video')) return;
-            if (e.target.closest('button, a, video, input, textarea')) return;
-            var href = card.getAttribute('data-feed-href');
-            if (href) {
-              window.location.href = href;
-              return;
-            }
-            var la = card.querySelector('h2 a[href*="post-detail"], h3 a[href*="post-detail"]');
-            if (la) window.location.href = la.getAttribute('href');
-          });
+          if (window.MoaFeedView && window.MoaFeedView.bindFeedRowClick) {
+            window.MoaFeedView.bindFeedRowClick(root);
+          }
         })();
         applyCommentCountFromStorage();
       })();

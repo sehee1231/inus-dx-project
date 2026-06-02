@@ -75,7 +75,14 @@
 }
 .feed-card-external-link {
   cursor: pointer;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
 }
 .feed-card-external-link:hover .text-sky-400 {
   text-decoration: underline;
+}
+.feed-card-media .flex.w-full {
+  justify-content: center;
+  align-items: center;
 }

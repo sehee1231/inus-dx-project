@@ -66,3 +66,16 @@
 .feed-all.feed--grid {
   display: grid;
 }
+
+/* 피드 카드: URL 링크만 호버·새 탭, 미디어 여백은 카드 클릭(글 상세) */
+.post-card.cursor-pointer,
+.post-card.group,
+.related-mini-card {
+  cursor: pointer;
+}
+.feed-card-external-link {
+  cursor: pointer;
+}
+.feed-card-external-link:hover .text-sky-400 {
+  text-decoration: underline;
+}

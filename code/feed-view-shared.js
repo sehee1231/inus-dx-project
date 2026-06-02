@@ -189,6 +189,9 @@
   var FEED_EXTERNAL_LINK_ATTR =
     ' target="_blank" rel="noopener noreferrer" data-feed-external="1" onclick="event.stopPropagation()"';
 
+  var FEED_EXTERNAL_LINK_CLASS =
+    'feed-card-external-link relative z-[3] inline-flex max-w-[min(100%,18rem)] cursor-pointer flex-col items-center gap-0.5 rounded-lg px-3 py-2 text-center transition hover:bg-zinc-800/70';
+
   function postDetailHref(slug) {
     return 'post-detail.html?slug=' + encodeURIComponent(String(slug || ''));
   }
@@ -201,7 +204,39 @@
     );
   }
 
-  /** 썸네일/링크 영역: 외부 URL. 카드 나머지는 bindFeedRowClick → 글 상세 */
+  /** URL 텍스트 링크만 새 탭. 호버·밑줄은 이 요소에만 적용 */
+  function externalUrlLinkHtml(link, opts) {
+    opts = opts || {};
+    var url = String(link || '').trim();
+    if (!url) return '';
+    var heading = opts.heading || '관련 링크';
+    var display = String(opts.display || url.replace(/^https?:\/\//i, ''));
+    return (
+      '<a href="' +
+      escUrlAttr(url) +
+      '"' +
+      FEED_EXTERNAL_LINK_ATTR +
+      ' class="' +
+      FEED_EXTERNAL_LINK_CLASS +
+      '">' +
+      '<span class="text-2xs font-semibold text-sky-400 underline-offset-2 hover:underline">' +
+      esc(heading) +
+      '</span>' +
+      '<span class="line-clamp-2 break-all text-2xs text-zinc-400">' +
+      esc(clipText(display, 56)) +
+      '</span></a>'
+    );
+  }
+
+  function mediaBlockOpen(bgClass) {
+    return (
+      '<div class="relative z-[2] shrink-0 overflow-hidden border-t border-zinc-800/60 feed-card-media ' +
+      (bgClass || 'bg-zinc-900/80') +
+      '">'
+    );
+  }
+
+  /** 미디어 박스 여백·썸네일 클릭 → 카드(글 상세). 가운데 URL 링크만 새 탭 */
   function linkPreviewMediaHtml(rawLink, labelEsc) {
     var link = String(rawLink || '').trim();
     if (!link) return feedVideoFallbackMediaHtml(labelEsc || '');
@@ -209,65 +244,54 @@
     var yid = youtubeVideoId(link);
     if (yid) {
       return (
-        '<div class="relative z-[2] shrink-0 overflow-hidden border-t border-zinc-800/60 bg-zinc-950 feed-card-media">' +
-        '<a href="' +
-        escUrlAttr(link) +
-        '"' +
-        FEED_EXTERNAL_LINK_ATTR +
-        ' class="relative block min-h-[8rem]">' +
+        mediaBlockOpen('bg-zinc-950') +
+        (label
+          ? '<span class="pointer-events-none absolute left-2 top-2 z-10 rounded-md bg-black/70 px-1.5 py-0.5 text-[0.625rem] font-medium text-zinc-200">' +
+            label +
+            '</span>'
+          : '') +
+        '<div class="relative min-h-[8rem]">' +
         '<img src="https://img.youtube.com/vi/' +
         escUrlAttr(yid) +
-        '/hqdefault.jpg" alt="" class="h-full w-full min-h-[8rem] object-cover" loading="lazy" />' +
+        '/hqdefault.jpg" alt="" class="min-h-[8rem] w-full object-cover" loading="lazy" />' +
         '<div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20"></div>' +
         '<span class="pointer-events-none absolute bottom-2 left-2 rounded bg-red-600 px-1.5 py-0.5 text-[0.625rem] font-semibold text-white">YouTube</span>' +
         '<div class="pointer-events-none absolute inset-0 flex items-center justify-center">' +
         '<span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-zinc-900 shadow-lg">' +
-        '<svg class="ml-1 h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div></a>' +
-        (label
-          ? '<span class="pointer-events-none absolute left-2 top-2 rounded-md bg-black/70 px-1.5 py-0.5 text-[0.625rem] font-medium text-zinc-200">' +
-            label +
-            '</span>'
-          : '') +
-        '</div>'
+        '<svg class="ml-1 h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div>' +
+        '<div class="pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex justify-center bg-gradient-to-t from-zinc-950/95 via-zinc-950/70 to-transparent px-2 pb-2 pt-10">' +
+        '<span class="pointer-events-auto">' +
+        externalUrlLinkHtml(link, { heading: 'YouTube 열기' }) +
+        '</span></div></div></div>'
       );
     }
     if (/\.(png|jpe?g|gif|webp|avif|svg)(\?.*)?$/i.test(link)) {
       return (
-        '<a href="' +
-        escUrlAttr(link) +
-        '"' +
-        FEED_EXTERNAL_LINK_ATTR +
-        ' class="relative z-[2] block min-h-[8rem] overflow-hidden border-t border-zinc-800/60 bg-zinc-950 feed-card-media">' +
+        mediaBlockOpen('bg-zinc-950') +
+        '<div class="relative min-h-[8rem]">' +
         '<img src="' +
         escUrlAttr(link) +
-        '" alt="" class="h-full w-full min-h-[8rem] object-cover" loading="lazy" />' +
+        '" alt="" class="min-h-[8rem] w-full object-cover" loading="lazy" />' +
         '<span class="pointer-events-none absolute left-2 top-2 rounded-md bg-black/70 px-1.5 py-0.5 text-[0.625rem] font-medium text-zinc-200">이미지</span>' +
-        '</a>'
+        '<div class="pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex justify-center bg-gradient-to-t from-zinc-950/95 via-zinc-950/70 to-transparent px-2 pb-2 pt-10">' +
+        '<span class="pointer-events-auto">' +
+        externalUrlLinkHtml(link, { heading: '이미지 열기' }) +
+        '</span></div></div></div>'
       );
     }
     if (/instagram\.com/i.test(link)) {
       return (
-        '<a href="' +
-        escUrlAttr(link) +
-        '"' +
-        FEED_EXTERNAL_LINK_ATTR +
-        ' class="relative z-[2] flex min-h-[8rem] shrink-0 flex-col items-center justify-center gap-1 border-t border-zinc-800/60 bg-zinc-900/80 feed-card-media px-3 text-center hover:bg-zinc-800/60">' +
-        '<span class="text-2xs font-semibold text-sky-400">인스타 링크</span>' +
-        '<span class="line-clamp-2 break-all text-2xs text-zinc-400">' +
-        esc(clipText(link, 72)) +
-        '</span></a>'
+        mediaBlockOpen() +
+        '<div class="flex min-h-[8rem] flex-col items-center justify-center px-3 py-4">' +
+        externalUrlLinkHtml(link, { heading: '인스타 링크' }) +
+        '</div></div>'
       );
     }
     return (
-      '<a href="' +
-      escUrlAttr(link) +
-      '"' +
-      FEED_EXTERNAL_LINK_ATTR +
-      ' class="relative z-[2] flex min-h-[8rem] shrink-0 flex-col items-center justify-center gap-1 border-t border-zinc-800/60 bg-zinc-900/80 feed-card-media px-3 text-center hover:bg-zinc-800/60">' +
-      '<span class="text-2xs font-semibold text-sky-400">관련 링크</span>' +
-      '<span class="line-clamp-2 break-all text-2xs text-zinc-400">' +
-      esc(clipText(link, 72)) +
-      '</span></a>'
+      mediaBlockOpen() +
+      '<div class="flex min-h-[8rem] flex-col items-center justify-center px-3 py-4">' +
+      externalUrlLinkHtml(link, { heading: '관련 링크' }) +
+      '</div></div>'
     );
   }
 
@@ -300,28 +324,20 @@
     if (rawLink && yid) {
       media =
         '<div class="relative aspect-video overflow-hidden bg-zinc-950">' +
-        '<a href="' +
-        escUrlAttr(rawLink) +
-        '"' +
-        FEED_EXTERNAL_LINK_ATTR +
-        ' class="relative block h-full w-full">' +
         '<img src="https://img.youtube.com/vi/' +
         escUrlAttr(yid) +
         '/hqdefault.jpg" alt="" class="h-full w-full object-cover" loading="lazy" />' +
         '<div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>' +
         '<span class="pointer-events-none absolute bottom-2 left-2 rounded bg-red-600 px-1.5 py-0.5 text-[0.625rem] font-semibold text-white">YouTube</span>' +
-        '</a></div>';
+        '<div class="pointer-events-none absolute inset-x-0 bottom-0 flex justify-center px-2 pb-2 pt-8">' +
+        '<span class="pointer-events-auto">' +
+        externalUrlLinkHtml(rawLink, { heading: 'YouTube 열기', display: clipText(rawLink.replace(/^https?:\/\//i, ''), 40) }) +
+        '</span></div></div>';
     } else if (rawLink) {
       media =
-        '<a href="' +
-        escUrlAttr(rawLink) +
-        '"' +
-        FEED_EXTERNAL_LINK_ATTR +
-        ' class="relative flex aspect-video flex-col items-center justify-center gap-1 bg-zinc-900/80 px-3 text-center hover:bg-zinc-800/60">' +
-        '<span class="text-2xs font-semibold text-sky-400">관련 링크</span>' +
-        '<span class="line-clamp-2 break-all text-2xs text-zinc-400">' +
-        esc(clipText(rawLink, 48)) +
-        '</span></a>';
+        '<div class="relative flex aspect-video flex-col items-center justify-center bg-zinc-900/80 px-3 py-4">' +
+        externalUrlLinkHtml(rawLink, { heading: '관련 링크', display: clipText(rawLink.replace(/^https?:\/\//i, ''), 40) }) +
+        '</div>';
     } else {
       media =
         '<div class="relative flex aspect-video items-center justify-center bg-gradient-to-br from-zinc-900 via-zinc-950 to-zinc-900 text-2xs font-medium text-zinc-500">' +
@@ -378,6 +394,7 @@
     postListRowHtml: postListRowHtml,
     relatedGridCardHtml: relatedGridCardHtml,
     linkPreviewMediaHtml: linkPreviewMediaHtml,
+    externalUrlLinkHtml: externalUrlLinkHtml,
     feedVideoFallbackMediaHtml: feedVideoFallbackMediaHtml,
     cardOverlayHtml: cardOverlayHtml,
     postDetailHref: postDetailHref,
